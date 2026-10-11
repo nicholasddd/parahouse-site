@@ -64,21 +64,19 @@ if (reveals.length && "IntersectionObserver" in window) {
 // ---------- Footer year ----------
 document.querySelectorAll("[data-year]").forEach((el) => (el.textContent = new Date().getFullYear()));
 
-// ---------- Home showcase: hover or focus a project name to switch the image ----------
+// ---------- Home showcase: slow crossfade between project images ----------
 const showcase = document.querySelector("[data-showcase]");
-if (showcase) {
+if (showcase && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
   const images = showcase.querySelectorAll("[data-showcase-media] img");
-  const links = showcase.querySelectorAll("[data-showcase-list] a");
-  const type = showcase.querySelector("[data-showcase-type]");
-  const activate = (index) => {
-    images.forEach((img, i) => img.classList.toggle("active", i === index));
-    links.forEach((a, i) => a.classList.toggle("active", i === index));
-    if (type) type.innerHTML = links[index].dataset.meta;
-  };
-  links.forEach((link, i) => {
-    link.addEventListener("mouseenter", () => activate(i));
-    link.addEventListener("focus", () => activate(i));
-  });
+  let current = 0;
+  if (images.length > 1) {
+    setInterval(() => {
+      if (document.hidden) return;
+      images[current].classList.remove("active");
+      current = (current + 1) % images.length;
+      images[current].classList.add("active");
+    }, 6000);
+  }
 }
 
 // ---------- Portfolio filters ----------

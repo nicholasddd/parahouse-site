@@ -96,8 +96,9 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .pill:hover { background: color-mix(in srgb, var(--pill) 88%, var(--fg)); }
 .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; transition: transform .3s ease; }
 .pill[aria-expanded="true"] .dot { transform: scale(1.6); }
-.logo { display: grid; place-items: center; width: 36px; height: 36px; padding: 0; color: var(--brand); }
-.logo svg { width: 15px; height: auto; }
+.logo { display: block; padding: 4px; color: var(--brand); }
+.logo svg { display: block; width: auto; height: clamp(40px, 4.4vw, 56px); }
+.showcase ~ * .logo, .home .logo { color: var(--brand); }
 
 /* ---------- Menu: a compact panel that grows out of the Menu pill ---------- */
 .menu-toggle { position: relative; z-index: 2; }
@@ -126,11 +127,11 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .showcase { position: relative; height: 100vh; height: 100svh; min-height: 560px; overflow: hidden; color: #fff; background: #111; }
 .showcase-media img {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-  opacity: 0; transition: opacity .6s ease, transform 1.2s ease; transform: scale(1.03);
+  opacity: 0; transition: opacity 1.4s ease, transform 7s ease-out; transform: scale(1.06);
 }
 .showcase-media img.active { opacity: 1; transform: scale(1); }
 .showcase::before { content: ""; position: absolute; inset: 0; z-index: 1; background: var(--light-tint); mix-blend-mode: var(--light-blend); pointer-events: none; transition: background-color 1.2s ease; }
-.showcase::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.42), rgba(0,0,0,0) 45%), linear-gradient(0deg, rgba(0,0,0,.35), rgba(0,0,0,0) 30%); pointer-events: none; }
+.showcase::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.22), rgba(0,0,0,0) 22%); pointer-events: none; }
 .showcase-list { position: absolute; z-index: 2; left: var(--edge); top: calc(var(--edge) + 50px); list-style: none; margin: 0; padding: 0; }
 .showcase-list a { display: block; font-family: var(--display); font-stretch: 90%; font-size: clamp(19px, 1.7vw, 26px); line-height: 1.3; font-weight: 500; letter-spacing: -0.01em; color: rgba(255,255,255,.55); transition: color .2s ease; }
 .showcase-list a:hover, .showcase-list a:focus-visible, .showcase-list a.active { color: #fff; }
