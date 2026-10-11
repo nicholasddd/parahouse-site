@@ -1,0 +1,14 @@
+{
+  "name": "parahouse-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Parahouse studio website — static pages served by Cloudflare Workers, with a contact form handler.",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
