@@ -17,17 +17,17 @@ Footer on every page (Dennis-style): "Let's work together" (no photo), a rule wi
 Home (`/`), Portfolio (`/portfolio/` + one folder per project), About (`/about/`), Contact (`/contact/`), `404.html`.
 
 ## Design rules (references: Zeroframe first, then Foucault)
-- Dark site. Tokens (colours, radius, gaps, fonts) are at the top of `public/assets/css/site.css`; use them. Ground is near-black (`--bg`), cards use `--surface`, hairlines use `--line`.
+- Dark site. Tokens (colours, radius, gaps, fonts) are at the top of `public/assets/css/site.css`; use them. Ground is a fixed, slow gradient from dark red at the top of the screen (`--bg-top`) to near-black (`--bg`) below (`body::before`); cards use `--surface`, hairlines use `--line`.
 - Lighting follows Singapore time (`data-light` = dawn | day | dusk | night on `<html>`, set in the `<head>` script and updated by `site.js`). Each phase shifts the black slightly and tints images (`--light-tint`). There is no light/dark toggle.
 - Type: Archivo at 125% width, bold, UPPERCASE for headings (`--display`: `.statement`, intro line, tile titles, service titles, menu links, footer wordmark). Geist for body text (`--font`). Geist Mono, small uppercase with letter-spacing, for labels and metadata (`--mono`: section bars, chips, buttons, pills, form labels, footer). All self-hosted in `public/assets/fonts/`.
-- Brand green `--brand` (#6fae80 on dark) is an accent only: the P logo, the current menu item, button hover.
-- Logo: the green P mark (inline SVG, a traced stand-in until the original file is supplied), top-left, no text.
+- Brand red `--brand` (#e5463b) is the accent: the P logo, round buttons, the current menu item, hovers.
+- Logo: the red P mark (inline SVG, a traced stand-in until the original file is supplied), top-left, no text.
 - Controls: glassy dark pills (`.pill`). Menu top-right opens a compact panel (`#menu`) with page links only.
 - Portfolio tiles: block-massing image (`<slug>-massing.webp`) at rest; the event photo (`<slug>-built.webp`) fades in on hover. Mono category chip, mono client, uppercase title bottom-left.
 - Brand wall: client logo files supplied by Nicholas, in `public/assets/img/brands/<slug>.svg|png|webp` (names in that folder's README), laid out as an open centred field. They render white and dim, full on hover. A brand without a file shows its name as a small mono placeholder. Only use logo files Nicholas provides; never draw or trace one.
 - Images sit in rounded tiles (`--radius`) with a tight 8px gap.
 - Motion only answers the visitor or marks one moment: hero crossfade, menu opening, tile hover, sections fading up on scroll, and the curtain. Respect `prefers-reduced-motion` (the curtain and intro are skipped entirely).
-- Curtain (after Dennis Snellenberg): first visit per browser session shows the intro: a deep green screen (`--curtain`) cycles "• Hello" through greetings, then lifts with a curved bottom edge. Internal links raise the curtain with a curved top edge and "• <page name>", then navigate; the next page opens covered and lifts. The `<head>` script sets `is-intro` / `is-entering` and `data-curtain` before paint; CSS does the lifting, `site.js` only cycles words and handles leaving. Link labels come from `data-label` (project links use the client name) or the page name.
+- Curtain (after Dennis Snellenberg): first visit per browser session shows the intro: a deep red screen (`--curtain`) cycles "• Hello" through greetings, then lifts with a curved bottom edge. Internal links raise the curtain with a curved top edge and "• <page name>", then navigate; the next page opens covered and lifts. The `<head>` script sets `is-intro` / `is-entering` and `data-curtain` before paint; CSS does the lifting, `site.js` only cycles words and handles leaving. Link labels come from `data-label` (project links use the client name) or the page name.
 
 ## Copy
 - Plain, specific, no hype words. Write in sentence case; CSS handles the uppercase for headings and labels.

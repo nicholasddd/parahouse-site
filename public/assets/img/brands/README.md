@@ -23,4 +23,3 @@ Current PNGs were cut from the logo sheet in the 2026 capabilities deck; swap in
 - Unilever: `unilever`
 - Listerine: `listerine`
 - Eucerin: `eucerin`
-- Cycle & Carriage: `cycle-carriage`
