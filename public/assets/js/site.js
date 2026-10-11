@@ -7,6 +7,12 @@ const storage = { // per-visitor conveniences only
   set(key, value) { try { localStorage.setItem(key, value); } catch {} },
 };
 
+// ---------- Top links collapse into the Menu pill once the visitor scrolls ----------
+let scrollTicking = false;
+const updateScrolled = () => { root.classList.toggle("is-scrolled", window.scrollY > 120); scrollTicking = false; };
+window.addEventListener("scroll", () => { if (!scrollTicking) { scrollTicking = true; requestAnimationFrame(updateScrolled); } }, { passive: true });
+updateScrolled();
+
 // ---------- Menu panel ----------
 const menuButton = document.querySelector("[data-menu-toggle]");
 const menu = document.getElementById("menu");
