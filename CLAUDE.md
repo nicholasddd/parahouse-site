@@ -44,3 +44,11 @@ The same `<head>` (including the inline theme script), the floating controls, th
 - All images have meaningful `alt` text and `width`/`height` attributes.
 - The menu opens, closes with Escape, the clock ticks, and each lighting phase reads well.
 - Run `npm run dev` and submit the contact form once if you touched it.
+
+## Processing a submission
+New projects arrive in `submissions/<slug>/` (outside `public/`, so never published): `project.md` (filled from `_template/project.md`), `renders/`, `photos/`.
+1. Read `project.md`. If "OK to show publicly" is No, stop and ask Nicholas.
+2. Pick images: the cleanest massing or render view for `<slug>-massing.webp` (tile resting state), the strongest event photo for `<slug>-built.webp` (tile hover and project page), plus one more render (`-render-2`) and one more photo (`-built-2`). Show Nicholas a contact sheet of the picks before publishing if the choice isn't obvious.
+3. Resize to 2000×1250 (crop to fit), WebP, under 400 KB, into `public/assets/img/projects/`.
+4. Build the project page and tile as in "Adding a project", using his wording, tightened. Add it to the home features only if he said Yes.
+5. Delete the `submissions/<slug>/` folder in the same commit.
