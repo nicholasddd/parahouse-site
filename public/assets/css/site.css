@@ -197,6 +197,10 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .media figure { margin: 0; }
 .media img { width: 100%; border-radius: var(--radius); background: var(--surface); }
 .media .half img { aspect-ratio: 4 / 5; object-fit: cover; }
+.media.gallery { grid-template-columns: 1fr 1fr; }
+@media (min-width: 900px) { .media.gallery { grid-template-columns: repeat(3, 1fr); } }
+.media.gallery .full { grid-column: 1 / -1; }
+.media .natural img { aspect-ratio: auto; }
 .media figcaption { font-size: 13px; color: var(--muted); padding: 8px 4px 0; }
 .next-pill { position: fixed; z-index: 20; left: 50%; bottom: var(--edge); transform: translateX(-50%); height: 40px; padding: 0 16px; background: var(--pill); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); color: var(--fg); border-radius: 11px; display: inline-flex; align-items: center; gap: 14px; font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; box-shadow: 0 0 0 1px rgba(255,255,255,.08); white-space: nowrap; }
 .next-pill .muted { color: var(--panel-muted); }
