@@ -308,8 +308,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 
 /* ---------- Footer: "Let's work together" (after Dennis Snellenberg) ---------- */
 .together { padding-bottom: clamp(48px, 7vw, 96px); }
-.together-title { display: flex; align-items: center; gap: clamp(14px, 2vw, 28px); font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(34px, 6.4vw, 104px); line-height: .92; letter-spacing: -0.01em; }
-.avatar { width: clamp(56px, 6.4vw, 104px); height: auto; aspect-ratio: 1; border-radius: 50%; object-fit: cover; filter: grayscale(1); }
+.together-title { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(34px, 6.4vw, 104px); line-height: .92; letter-spacing: -0.01em; }
 .together-rule { position: relative; margin: clamp(40px, 6vw, 80px) 0 clamp(28px, 4vw, 48px); border-top: 1px solid var(--line); }
 .round-button { position: absolute; right: clamp(24px, 12vw, 200px); top: 0; transform: translateY(-50%); display: grid; place-items: center; width: clamp(120px, 12vw, 180px); aspect-ratio: 1; border-radius: 50%; background: var(--brand); color: var(--brand-ink); font-family: var(--mono); font-size: 12px; letter-spacing: .07em; text-transform: uppercase; transition: transform .4s cubic-bezier(.2,.7,.2,1), background-color .25s ease; }
 .round-button:hover { transform: translateY(-50%) scale(1.06); background: var(--fg); }
@@ -322,13 +321,11 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .footer-socials { margin-left: auto; }
 .footer-socials a { margin-right: 14px; }
 .footer-socials a:hover, .footer-meta a:hover { color: var(--brand); }
-@media (max-width: 640px) { .round-button { right: 0; } .footer-socials { margin-left: 0; } }
+@media (max-width: 640px) { .together-rule { margin-top: 96px; } .round-button { right: 0; width: 108px; } .footer-socials { margin-left: 0; } }
 
 /* ---------- About (structure after Dennis Snellenberg's about page) ---------- */
 .about-title { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(30px, 5vw, 80px); line-height: .96; letter-spacing: -0.01em; max-width: 15ch; text-wrap: balance; padding-top: clamp(24px, 6vw, 96px); }
-.about-rule { position: relative; margin: clamp(48px, 7vw, 100px) 0 clamp(80px, 11vw, 160px); border-top: 1px solid var(--line); }
-.round-badge { position: absolute; right: clamp(24px, 14vw, 240px); top: 0; transform: translateY(-50%); display: grid; place-items: center; width: clamp(110px, 11vw, 170px); aspect-ratio: 1; border-radius: 50%; background: var(--brand); color: var(--brand-ink); }
-.round-badge svg { height: 42%; width: auto; }
+.about-rule { margin: clamp(36px, 5vw, 72px) 0 clamp(40px, 5.5vw, 80px); border-top: 1px solid var(--line); }
 .about-intro { display: grid; gap: 40px; align-items: start; }
 @media (min-width: 900px) { .about-intro { grid-template-columns: 4fr 7fr; gap: 6vw; } }
 .about-text { display: grid; gap: 18px; max-width: 36ch; font-size: 17px; line-height: 1.6; position: relative; }

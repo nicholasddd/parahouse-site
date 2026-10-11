@@ -10,9 +10,9 @@ Studio website for parahouse (always lowercase), a Singapore design production s
 ## Pages
 Home sections, in order: full-screen hero (logo + menu only, slow crossfade between project images, lighting tint), intro line, Selected work (one wide + two half `.feature` cards), Brands we've worked with (`.brand-wall`), What we do (`.service` accordion, numbered 001–004), footer.
 
-About follows Dennis Snellenberg's about page: big headline, a rule with a round green badge on it, intro text (with ↘) beside a large portrait of Nicholas, "We can help you with …" in numbered columns (01–04, from the same SERVICES list as home), the parahouse difference on a `--surface` band, then the brand wall.
+About follows Dennis Snellenberg's about page: big headline, a plain rule, intro text (with ↘) beside a large portrait of Nicholas, "We can help you with …" in numbered columns (01–04, from the same SERVICES list as home), the parahouse difference on a `--surface` band, then the brand wall.
 
-Footer on every page (Dennis-style): "Let's work together" with Nicholas's avatar, a rule with a round "Let's talk" button, email and phone pills (CTA block hidden on Contact), project thumbnail strip, large wordmark, and a meta row (version, local time with lighting phase, socials).
+Footer on every page (Dennis-style): "Let's work together" (no photo), a rule with a round "Let's talk" button, email and phone pills (CTA block hidden on Contact), project thumbnail strip, large wordmark, and a meta row (version, local time with lighting phase, socials).
 
 Home (`/`), Portfolio (`/portfolio/` + one folder per project), About (`/about/`), Contact (`/contact/`), `404.html`.
 
