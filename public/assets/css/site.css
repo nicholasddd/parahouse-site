@@ -272,11 +272,68 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .site-footer { padding: clamp(80px, 12vw, 180px) var(--edge) var(--edge); }
 .footer-cta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 24px; padding-bottom: 28px; }
 .footer-cta p { margin: 0; font-family: var(--display); font-weight: 500; font-size: clamp(22px, 2.4vw, 34px); letter-spacing: -0.015em; max-width: 22ch; line-height: 1.15; }
+.footer-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px 24px; padding: 32px 0; border-top: 1px solid var(--line); font-size: 14px; }
+@media (min-width: 900px) { .footer-cols { grid-template-columns: repeat(4, 1fr); } }
+.footer-cols p { margin: 0; line-height: 1.7; }
+.footer-cols a:hover { color: var(--brand); }
+.footer-strip { display: flex; align-items: end; gap: var(--gap); overflow: hidden; padding-top: 12px; }
+.strip-item { flex: 1 1 0; min-width: 0; border-radius: 12px; overflow: hidden; }
+.strip-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.strip-item:hover img { transform: scale(1.05); }
+.strip-item.s0 { height: 110px; } .strip-item.s1 { height: 160px; } .strip-item.s2 { height: 90px; } .strip-item.s3 { height: 140px; }
+@media (max-width: 640px) { .strip-item:nth-child(n+4) { display: none; } }
 .footer-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; border-top: 1px solid var(--line); padding-top: 14px; font-size: 13px; color: var(--muted); }
 .footer-row ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; }
 .footer-row li { white-space: nowrap; }
 .footer-row a:hover { color: var(--fg); }
-.footer-mark { font-family: var(--display); font-weight: 700; font-stretch: 75%; font-size: 28.6vw; line-height: .8; letter-spacing: -0.045em; margin: 32px 0 0; white-space: nowrap; overflow: hidden; color: var(--brand); }
+.footer-mark { font-family: var(--display); font-weight: 700; font-stretch: 75%; font-size: 28.6vw; line-height: .8; letter-spacing: -0.045em; margin: 28px 0 20px; white-space: nowrap; overflow: hidden; color: var(--brand); }
+
+/* ---------- Home sections ---------- */
+.intro { display: grid; gap: 24px; padding: clamp(72px, 10vw, 150px) var(--edge) 0; }
+@media (min-width: 900px) { .intro { grid-template-columns: 7fr 4fr; align-items: end; gap: 48px; } }
+.intro-line { font-family: var(--display); font-weight: 600; font-stretch: 88%; font-size: clamp(36px, 5.2vw, 84px); line-height: 1; letter-spacing: -0.03em; text-wrap: balance; max-width: 14ch; }
+.intro-sub { margin: 0; max-width: 42ch; font-size: 16px; line-height: 1.55; color: var(--muted); }
+
+.home-block { padding: clamp(72px, 9vw, 130px) var(--edge) 0; }
+.block-head { display: flex; align-items: baseline; gap: 10px; padding-bottom: 14px; margin-bottom: var(--gap); border-bottom: 1px solid var(--fg); }
+.block-head h2 { font-family: var(--display); font-weight: 600; font-stretch: 90%; font-size: clamp(22px, 2vw, 28px); letter-spacing: -0.02em; }
+.block-head .muted { font-size: 14px; }
+.text-link { margin-left: auto; font-size: 14px; font-weight: 500; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: .25em; }
+.text-link:hover { text-decoration-color: currentColor; }
+
+/* Featured work: one wide, then two side by side */
+.features { display: grid; gap: var(--gap); grid-template-columns: 1fr; padding-top: var(--gap); }
+@media (min-width: 760px) { .features { grid-template-columns: 1fr 1fr; } .feature.wide { grid-column: 1 / -1; } }
+.feature.wide { aspect-ratio: 16 / 9; }
+.feature.half { aspect-ratio: 4 / 5; }
+@media (max-width: 759px) { .feature.wide, .feature.half { aspect-ratio: 4 / 5; } }
+.feature .tile-title { font-size: clamp(26px, 3.2vw, 52px); max-width: 16ch; }
+.feature.half .tile-title { font-size: clamp(24px, 2.4vw, 38px); }
+
+/* Brand wall: placeholder wordmarks until logo files arrive; colour follows the lighting */
+.brand-wall { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); border-left: 1px solid var(--line); }
+@media (min-width: 760px) { .brand-wall { grid-template-columns: repeat(4, 1fr); } }
+.brand-wall li { display: grid; place-items: center; aspect-ratio: 2 / 1; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 16px; transition: background-color .3s ease; }
+.brand-wall li:hover { background: color-mix(in srgb, var(--fg) 4%, transparent); }
+.brand-name { font-family: var(--display); font-weight: 600; font-stretch: 85%; font-size: clamp(16px, 1.6vw, 22px); letter-spacing: -0.01em; color: var(--fg); opacity: .62; text-align: center; transition: opacity .3s ease; }
+.brand-wall li:hover .brand-name { opacity: 1; }
+.brand-wall img { max-height: 44px; width: auto; max-width: 70%; object-fit: contain; filter: grayscale(1); opacity: .7; }
+
+/* Services: numbered list that opens to show what's included */
+.services-list { border-bottom: 1px solid var(--line); }
+.service { border-top: 1px solid var(--line); }
+.service:first-child { border-top: 0; }
+.service summary { list-style: none; display: grid; grid-template-columns: 4.5em 1fr auto; align-items: baseline; gap: 16px; padding: 22px 0; cursor: pointer; }
+.service summary::-webkit-details-marker { display: none; }
+.service-no, .service-count { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.service-title { font-family: var(--display); font-weight: 600; font-stretch: 88%; font-size: clamp(24px, 3vw, 44px); line-height: 1.05; letter-spacing: -0.025em; }
+.service summary:hover .service-title { color: var(--brand); }
+.service-body { display: grid; gap: 18px; padding: 0 0 26px 4.5em; }
+@media (min-width: 900px) { .service-body { grid-template-columns: 1fr 1fr; padding-left: calc(4.5em + 16px); } }
+.service-body p { margin: 0; max-width: 46ch; color: var(--muted); font-size: 16px; }
+.chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; align-content: start; }
+.chips li { padding: 6px 11px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; }
+@media (max-width: 640px) { .service summary { grid-template-columns: 3.5em 1fr auto; } .service-body { padding-left: 0; } }
 
 /* ---------- Brands wall (About) ---------- */
 .brands { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); }

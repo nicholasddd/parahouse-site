@@ -8,6 +8,8 @@ Studio website for parahouse (always lowercase), a Singapore design production s
 - Contact form posts to `/api/contact`, which emails via the Resend API. Secret: `RESEND_API_KEY`. Vars: `CONTACT_TO`, `CONTACT_FROM`.
 
 ## Pages
+Home sections, in order: full-screen hero (logo + menu only, slow crossfade between project images, lighting tint), intro line, Selected work (one wide + two half `.feature` cards), Brands we've worked with (`.brand-wall`, text placeholders until logo files go in `public/assets/img/brands/`), What we do (`.service` accordion, numbered 001–004), footer (contact columns, project thumbnail strip, large wordmark).
+
 Home (`/`), Portfolio (`/portfolio/` + one folder per project), About (`/about/`), Contact (`/contact/`), `404.html`.
 
 ## Design rules (inspired by the Foucault Framer template)
