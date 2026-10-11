@@ -175,15 +175,9 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .filters button:hover { color: var(--fg); border-color: var(--fg); }
 .filters button[aria-pressed="true"] { background: var(--fg); border-color: var(--fg); color: var(--bg); }
 
-.tiles { display: grid; gap: var(--gap); grid-template-columns: 1fr; }
-@media (min-width: 640px) { .tiles { grid-template-columns: 1fr 1fr; } }
-@media (min-width: 1024px) { .tiles { grid-template-columns: repeat(3, 1fr); } }
 .tile { position: relative; display: block; border-radius: var(--radius); overflow: hidden; aspect-ratio: 1 / 1; background: var(--surface); color: #fff; isolation: isolate; }
-.tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .6s ease, transform 1s cubic-bezier(.2,.7,.2,1); }
-/* The block-massing render is the resting state; the event photo fades in on hover. */
-.tile .tile-photo { opacity: 0; transform: scale(1.06); }
-.tile:hover .tile-photo, .tile:focus-visible .tile-photo { opacity: 1; transform: scale(1); }
-.tile:hover .tile-massing, .tile:focus-visible .tile-massing { transform: scale(1.04); }
+.tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1s cubic-bezier(.2,.7,.2,1); }
+.tile:hover img, .tile:focus-visible img { transform: scale(1.04); }
 .tile::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(0deg, rgba(0,0,0,.62), rgba(0,0,0,.18) 34%, rgba(0,0,0,0) 55%); pointer-events: none; }
 .tile-text { position: absolute; z-index: 2; left: clamp(16px, 1.8vw, 24px); right: clamp(16px, 1.8vw, 24px); bottom: clamp(16px, 1.8vw, 24px); display: grid; gap: 10px; justify-items: start; }
 .tile-type { display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: 7px; background: rgba(0,0,0,.35); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; }
@@ -193,6 +187,66 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .tile:hover .tile-hint, .tile:focus-visible .tile-hint { opacity: .9; transform: none; }
 @media (hover: none) { .tile-hint { display: none; } }
 .tile[hidden] { display: none; }
+
+/* ---------- Portfolio shelf ----------
+   Projects stand side by side like books, each render turned edge-on. Moving the pointer along
+   the shelf turns one to face the front. The open card is chosen from the pointer's position
+   across the whole shelf (site.js), so the shelf never shifts out from under the pointer.
+   Without hover (phones, touch) or without JS, the cards simply stack, facing front. */
+.shelf { display: grid; gap: 28px; margin-top: 8px; }
+.book { position: relative; display: block; color: var(--fg); }
+.book[hidden] { display: none; }
+.book-plane { display: block; border-radius: var(--radius); overflow: hidden; background: #000; aspect-ratio: 16 / 10; }
+.book-plane img { width: 100%; height: 100%; object-fit: cover; }
+.book-spine { display: none; }
+.book-info { display: grid; gap: 8px; justify-items: start; padding-top: 12px; }
+.book-info .tile-type { background: transparent; border: 1px solid var(--line); backdrop-filter: none; -webkit-backdrop-filter: none; }
+.book-title { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(18px, 1.7vw, 26px); line-height: 1; }
+.book-hint { display: none; }
+
+@media (hover: hover) and (min-width: 900px) {
+  .js .shelf {
+    --h: clamp(320px, 56vh, 560px);
+    --w: calc(100vw - 2 * var(--edge) - 20px); /* shelf width; viewport units so it means the same inside every card */
+    --open: min(calc(var(--h) * 1.5), calc(var(--w) - (var(--n, 4) - 1) * 40px));
+    --spine: min(84px, calc((var(--w) - var(--open)) / max(var(--n, 4) - 1, 1)));
+    display: flex; gap: 0; align-items: flex-start; height: calc(var(--h) + 96px);
+    margin-top: 40px; border-bottom: 1px solid var(--line);
+    perspective: 2400px; perspective-origin: 100% 45%;
+  }
+  .js .book { flex: 0 0 var(--spine); height: 100%; transform-style: preserve-3d; transition: flex-basis .8s cubic-bezier(.65,0,.2,1); }
+  .js .book.is-open { flex-basis: var(--open); }
+  .js .book-plane {
+    position: absolute; left: 0; top: 0; width: var(--open); height: var(--h); aspect-ratio: auto;
+    transform-origin: 0 50%; transform: rotateY(72deg);
+    box-shadow: -18px 0 40px rgba(0,0,0,.5);
+    transition: transform .8s cubic-bezier(.65,0,.2,1), filter .8s ease;
+    filter: brightness(.5) saturate(.8);
+  }
+  .js .book.is-open .book-plane { transform: rotateY(0deg); filter: none; }
+  .js .book:hover .book-plane { filter: brightness(.75); }
+  .js .book.is-open:hover .book-plane { filter: none; }
+  .js .book-spine {
+    position: absolute; left: 0; top: 0; width: var(--spine); height: var(--h); z-index: 1;
+    display: flex; justify-content: space-between; align-items: center; padding: 16px 0;
+    writing-mode: vertical-rl; transform: rotate(180deg); pointer-events: none;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #fff;
+    text-shadow: 0 1px 8px rgba(0,0,0,.8); transition: opacity .4s ease;
+  }
+  .js .book.is-open .book-spine { opacity: 0; }
+  .js .book-info {
+    position: absolute; left: 0; top: calc(var(--h) + 16px); width: var(--open);
+    grid-template-columns: auto 1fr auto; align-items: end; column-gap: 16px; padding: 0;
+    opacity: 0; transform: translateY(6px); transition: opacity .3s ease, transform .3s ease; pointer-events: none;
+  }
+  .js .book.is-open .book-info { opacity: 1; transform: none; transition-delay: .35s; }
+  .js .book-info .tile-type { grid-row: 1; }
+  .js .book-title { grid-row: 1; }
+  .js .book-hint { display: block; grid-row: 1; justify-self: end; font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--brand); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .book, .js .book-plane, .js .book-info, .js .book-spine { transition: none !important; }
+}
 
 /* ---------- Project page ---------- */
 .back { display: inline-flex; margin-bottom: 28px; }
@@ -273,8 +327,8 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .features { display: grid; gap: var(--gap); grid-template-columns: 1fr; padding-top: var(--gap); }
 @media (min-width: 760px) { .features { grid-template-columns: 1fr 1fr; } .feature.wide { grid-column: 1 / -1; } }
 .feature.wide { aspect-ratio: 16 / 9; }
-.feature.half { aspect-ratio: 4 / 5; }
-@media (max-width: 759px) { .feature.wide, .feature.half { aspect-ratio: 4 / 5; } }
+.feature.half { aspect-ratio: 4 / 3; }
+@media (max-width: 759px) { .feature.wide, .feature.half { aspect-ratio: 4 / 3; } }
 .feature .tile-title { font-size: clamp(22px, 2.8vw, 44px); max-width: 18ch; }
 .feature.half .tile-title { font-size: clamp(20px, 2vw, 30px); }
 

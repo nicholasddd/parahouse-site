@@ -85,7 +85,39 @@ if (filterBar) {
     const value = button.dataset.filter;
     filterBar.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
     tiles.forEach((tile) => (tile.hidden = value !== "all" && tile.dataset.type !== value));
+    document.dispatchEvent(new Event("shelf:update"));
   });
+}
+
+// ---------- Portfolio shelf: the card under the pointer turns to face the front ----------
+// The open card comes from the pointer's position across the whole shelf. The shelf's total
+// width never changes (one open card plus spines), so the chosen card is always the one
+// under the pointer and nothing shifts away mid-sweep.
+const shelf = document.querySelector("[data-shelf]");
+if (shelf) {
+  const visible = () => [...shelf.querySelectorAll(".book")].filter((b) => !b.hidden);
+  const open = (book) => {
+    if (!book || book.classList.contains("is-open")) return;
+    shelf.querySelectorAll(".book.is-open").forEach((b) => b.classList.remove("is-open"));
+    book.classList.add("is-open");
+  };
+  const update = () => {
+    const books = visible();
+    shelf.style.setProperty("--n", Math.max(books.length, 1));
+    if (!books.some((b) => b.classList.contains("is-open"))) open(books[0]);
+  };
+  shelf.addEventListener("pointermove", (event) => {
+    if (event.pointerType !== "mouse") return;
+    const books = visible();
+    const box = shelf.getBoundingClientRect();
+    const first = books[0]?.getBoundingClientRect().left ?? box.left;
+    const last = books[books.length - 1]?.getBoundingClientRect().right ?? box.right;
+    const x = (event.clientX - first) / Math.max(last - first, 1);
+    open(books[Math.min(books.length - 1, Math.max(0, Math.floor(x * books.length)))]);
+  });
+  shelf.addEventListener("focusin", (event) => open(event.target.closest(".book")));
+  document.addEventListener("shelf:update", update);
+  update();
 }
 
 // ---------- Contact form: send with fetch so the visitor stays on the page ----------
