@@ -2,29 +2,10 @@
 const root = document.documentElement;
 root.classList.add("js");
 
-const storage = {
+const storage = { // per-visitor conveniences only
   get(key) { try { return localStorage.getItem(key); } catch { return null; } },
   set(key, value) { try { localStorage.setItem(key, value); } catch {} },
 };
-
-// ---------- Light / dark toggle ----------
-// The saved choice is applied in each page's <head> to avoid a flash; this wires up the button.
-document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
-  const label = () => {
-    const dark = root.dataset.theme
-      ? root.dataset.theme === "dark"
-      : matchMedia("(prefers-color-scheme: dark)").matches;
-    button.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
-    return dark;
-  };
-  label();
-  button.addEventListener("click", () => {
-    const next = label() ? "light" : "dark";
-    root.dataset.theme = next;
-    storage.set("theme", next);
-    label();
-  });
-});
 
 // ---------- Menu panel ----------
 const menuButton = document.querySelector("[data-menu-toggle]");
@@ -48,13 +29,36 @@ if (menuButton && menu) {
   });
 }
 
-// ---------- Studio local time (Singapore) ----------
+// ---------- Studio time and time-of-day lighting (Singapore) ----------
+// The <head> script sets the first lighting before paint; this keeps the clock ticking
+// and moves the lighting on when the hour changes while the page is open.
+const LIGHT_LABELS = { dawn: "Morning light", day: "Daylight", dusk: "Golden hour", night: "Night" };
+const hourFormat = new Intl.DateTimeFormat("en-GB", { hour: "numeric", hourCycle: "h23", timeZone: "Asia/Singapore" });
+const clockFormat = new Intl.DateTimeFormat("en-SG", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true, timeZone: "Asia/Singapore" });
+const lightFor = (h) => (h >= 6 && h < 9 ? "dawn" : h >= 9 && h < 17 ? "day" : h >= 17 && h < 19 ? "dusk" : "night");
 const clocks = document.querySelectorAll("[data-clock]");
-if (clocks.length) {
-  const format = new Intl.DateTimeFormat("en-SG", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true, timeZone: "Asia/Singapore" });
-  const tick = () => clocks.forEach((el) => (el.textContent = format.format(new Date())));
-  tick();
-  setInterval(tick, 1000);
+const lightLabels = document.querySelectorAll("[data-light-label]");
+const tick = () => {
+  const now = new Date();
+  clocks.forEach((el) => (el.textContent = clockFormat.format(now)));
+  const light = lightFor(Number(hourFormat.format(now)));
+  if (root.dataset.light !== light) root.dataset.light = light;
+  lightLabels.forEach((el) => (el.textContent = LIGHT_LABELS[light]));
+};
+tick();
+setInterval(tick, 1000);
+
+// ---------- Reveal on scroll (home portfolio) ----------
+const reveals = document.querySelectorAll(".reveal");
+if (reveals.length && "IntersectionObserver" in window) {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) { entry.target.classList.add("in"); io.unobserve(entry.target); }
+    });
+  }, { rootMargin: "0px 0px -10% 0px" });
+  reveals.forEach((el) => io.observe(el));
+} else {
+  reveals.forEach((el) => el.classList.add("in"));
 }
 
 // ---------- Footer year ----------
