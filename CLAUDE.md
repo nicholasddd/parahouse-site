@@ -12,21 +12,20 @@ Home sections, in order: full-screen hero (logo + menu only, slow crossfade betw
 
 Home (`/`), Portfolio (`/portfolio/` + one folder per project), About (`/about/`), Contact (`/contact/`), `404.html`.
 
-## Design rules (inspired by the Foucault Framer template)
-- Image-led and minimal. Tokens (colours, radius, gaps) are at the top of `public/assets/css/site.css`; use them. Light and dark themes are both defined there; check both when changing colours.
-- Brand green `--brand` (#427f53, lighter in dark mode). Buttons and active filters use it; the menu panel is deep green.
-- Headings: Bricolage Grotesque (`--display`, self-hosted, width 75–100%), sentence case, solid colour, used for `.statement`, ledes, tile titles, the home project list, menu links and the footer wordmark. Keep headings moderate in size; no outlined or giant words except the footer wordmark.
-- Body: Geist (`--font`, self-hosted), 13–16px.
-- Lighting follows Singapore time (`data-light` = dawn | day | dusk | night on `<html>`, set in the `<head>` script and updated by `site.js`). There is no light/dark toggle.
-- Logo: the green P mark (inline SVG, a traced stand-in until the original file is supplied).
-- Portfolio tiles: block-massing image (`<slug>-massing.webp`) at rest; the event photo (`<slug>-built.webp`) fades in on hover. Category chip, client and title sit bottom-left.
-- Controls are small pills (`.pill`): the P logo top-left, Menu top-right. The menu is a compact panel (`#menu`) that grows out of the Menu pill, with page links only.
-- Images sit in rounded tiles (`--radius`) with a tight 8px gap. Text on images is white with a gradient behind it for legibility.
-- About uses hairline rows with section markers (S.1, S.2…). Keep that pattern for new sections.
-- Motion only answers the visitor: menu opening, showcase image crossfade on hover, tile zoom on hover. Respect `prefers-reduced-motion`.
+## Design rules (references: Zeroframe first, then Foucault)
+- Dark site. Tokens (colours, radius, gaps, fonts) are at the top of `public/assets/css/site.css`; use them. Ground is near-black (`--bg`), cards use `--surface`, hairlines use `--line`.
+- Lighting follows Singapore time (`data-light` = dawn | day | dusk | night on `<html>`, set in the `<head>` script and updated by `site.js`). Each phase shifts the black slightly and tints images (`--light-tint`). There is no light/dark toggle.
+- Type: Archivo at 125% width, bold, UPPERCASE for headings (`--display`: `.statement`, intro line, tile titles, service titles, menu links, footer wordmark). Geist for body text (`--font`). Geist Mono, small uppercase with letter-spacing, for labels and metadata (`--mono`: section bars, chips, buttons, pills, form labels, footer). All self-hosted in `public/assets/fonts/`.
+- Brand green `--brand` (#6fae80 on dark) is an accent only: the P logo, the current menu item, button hover.
+- Logo: the green P mark (inline SVG, a traced stand-in until the original file is supplied), top-left, no text.
+- Controls: glassy dark pills (`.pill`). Menu top-right opens a compact panel (`#menu`) with page links only.
+- Portfolio tiles: block-massing image (`<slug>-massing.webp`) at rest; the event photo (`<slug>-built.webp`) fades in on hover. Mono category chip, mono client, uppercase title bottom-left.
+- Brand wall: real client logo files only, in `public/assets/img/brands/<slug>.svg|png|webp` (names listed in that folder's README). They render white and dim, full on hover. A brand without a file shows its name as a small mono placeholder. Never draw or trace a client's logo.
+- Images sit in rounded tiles (`--radius`) with a tight 8px gap.
+- Motion only answers the visitor or marks one moment: hero crossfade, menu opening, tile hover, sections fading up on scroll. Respect `prefers-reduced-motion`.
 
 ## Copy
-- Plain, specific, sentence case (except `.statement` headings, which CSS uppercases). No hype words.
+- Plain, specific, no hype words. Write in sentence case; CSS handles the uppercase for headings and labels.
 - Calls to action: "Let’s talk" (footer) and "Send brief" (form). Contact person: Nicholas.
 
 ## Every page shares
@@ -41,7 +40,7 @@ The same `<head>` (including the inline theme script), the floating controls, th
 6. Fix the `.next-pill` links so every project points to the next and the last loops to the first.
 
 ## Checks before committing
-- Every page works at 390px wide with no horizontal scroll, in light and dark.
+- Every page works at 390px wide with no horizontal scroll, in each lighting phase.
 - All images have meaningful `alt` text and `width`/`height` attributes.
 - The menu opens, closes with Escape, the clock ticks, and each lighting phase reads well.
 - Run `npm run dev` and submit the contact form once if you touched it.
