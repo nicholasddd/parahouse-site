@@ -8,7 +8,11 @@ Studio website for parahouse (always lowercase), a Singapore design production s
 - Contact form posts to `/api/contact`, which emails via the Resend API. Secret: `RESEND_API_KEY`. Vars: `CONTACT_TO`, `CONTACT_FROM`.
 
 ## Pages
-Home sections, in order: full-screen hero (logo + menu only, slow crossfade between project images, lighting tint), intro line, Selected work (one wide + two half `.feature` cards), Brands we've worked with (`.brand-wall`, text placeholders until logo files go in `public/assets/img/brands/`), What we do (`.service` accordion, numbered 001–004), footer (contact columns, project thumbnail strip, large wordmark).
+Home sections, in order: full-screen hero (logo + menu only, slow crossfade between project images, lighting tint), intro line, Selected work (one wide + two half `.feature` cards), Brands we've worked with (`.brand-wall`), What we do (`.service` accordion, numbered 001–004), footer.
+
+About follows Dennis Snellenberg's about page: big headline, a rule with a round green badge on it, intro text (with ↘) beside a large portrait of Nicholas, "We can help you with …" in numbered columns (01–04, from the same SERVICES list as home), the parahouse difference on a `--surface` band, then the brand wall.
+
+Footer on every page (Dennis-style): "Let's work together" with Nicholas's avatar, a rule with a round "Let's talk" button, email and phone pills (CTA block hidden on Contact), project thumbnail strip, large wordmark, and a meta row (version, local time with lighting phase, socials).
 
 Home (`/`), Portfolio (`/portfolio/` + one folder per project), About (`/about/`), Contact (`/contact/`), `404.html`.
 
@@ -22,7 +26,8 @@ Home (`/`), Portfolio (`/portfolio/` + one folder per project), About (`/about/`
 - Portfolio tiles: block-massing image (`<slug>-massing.webp`) at rest; the event photo (`<slug>-built.webp`) fades in on hover. Mono category chip, mono client, uppercase title bottom-left.
 - Brand wall: client logo files supplied by Nicholas, in `public/assets/img/brands/<slug>.svg|png|webp` (names in that folder's README), laid out as an open centred field. They render white and dim, full on hover. A brand without a file shows its name as a small mono placeholder. Only use logo files Nicholas provides; never draw or trace one.
 - Images sit in rounded tiles (`--radius`) with a tight 8px gap.
-- Motion only answers the visitor or marks one moment: hero crossfade, menu opening, tile hover, sections fading up on scroll. Respect `prefers-reduced-motion`.
+- Motion only answers the visitor or marks one moment: hero crossfade, menu opening, tile hover, sections fading up on scroll, and the curtain. Respect `prefers-reduced-motion` (the curtain and intro are skipped entirely).
+- Curtain (after Dennis Snellenberg): first visit per browser session shows the intro: a deep green screen (`--curtain`) cycles "• Hello" through greetings, then lifts with a curved bottom edge. Internal links raise the curtain with a curved top edge and "• <page name>", then navigate; the next page opens covered and lifts. The `<head>` script sets `is-intro` / `is-entering` and `data-curtain` before paint; CSS does the lifting, `site.js` only cycles words and handles leaving. Link labels come from `data-label` (project links use the client name) or the page name.
 
 ## Copy
 - Plain, specific, no hype words. Write in sentence case; CSS handles the uppercase for headings and labels.

@@ -10,7 +10,7 @@
   <meta property="og:title" content="Contact | parahouse">
   <meta property="og:description" content="Talk to parahouse about pitch support, 3D, renders and technical drawings for your next roadshow or exhibition.">
   <meta property="og:image" content="/assets/img/projects/tsubaki-20th-anniversary-render.webp">
-  <script>(function(){var r=document.documentElement,l='day';try{var h=+new Intl.DateTimeFormat('en-GB',{hour:'numeric',hourCycle:'h23',timeZone:'Asia/Singapore'}).format(new Date());l=h>=6&&h<9?'dawn':h<17&&h>=9?'day':h<19&&h>=17?'dusk':'night'}catch(e){}r.dataset.light=l})()</script>
+  <script>(function(){var r=document.documentElement,l='day';try{var h=+new Intl.DateTimeFormat('en-GB',{hour:'numeric',hourCycle:'h23',timeZone:'Asia/Singapore'}).format(new Date());l=h>=6&&h<9?'dawn':h<17&&h>=9?'day':h<19&&h>=17?'dusk':'night'}catch(e){}r.dataset.light=l;try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var s=sessionStorage,t=s.getItem('ph-curtain');if(t){s.removeItem('ph-curtain');r.dataset.curtain=t;r.classList.add('is-entering')}else if(!s.getItem('ph-intro')){s.setItem('ph-intro','1');r.dataset.curtain='Hello';r.classList.add('is-intro')}}catch(e){}})()</script>
   <link rel="preload" href="/assets/fonts/geist.woff" as="font" type="font/woff" crossorigin>
   <link rel="preload" href="/assets/fonts/archivo-wide.woff" as="font" type="font/woff" crossorigin>
   <link rel="preload" href="/assets/fonts/geist-mono.woff" as="font" type="font/woff" crossorigin>
@@ -74,22 +74,20 @@
     </div>
   </main>
   <footer class="site-footer">
-    <div class="footer-cols">
-      <div><h2 class="label">Contact</h2><p>Nicholas<br><a href="mailto:parahouse0@gmail.com">parahouse0@gmail.com</a><br><a href="tel:+6593269931">+65 9326 9931</a></p></div>
-      <div><h2 class="label">Studio</h2><p>Singapore<br><span data-clock>&nbsp;</span>, <span data-light-label>&nbsp;</span></p></div>
-      <div><h2 class="label">Social</h2><p><a href="https://www.instagram.com/">Instagram</a><br><a href="https://www.linkedin.com/">LinkedIn</a></p></div>
-      <div><h2 class="label">Pages</h2><p><a href="/">Home</a><br><a href="/portfolio/">Portfolio</a><br><a href="/about/">About</a><br><a href="/contact/">Contact</a></p></div>
-    </div>
     <div class="footer-strip" aria-label="Recent projects">
-        <a href="/portfolio/tsubaki-20th-anniversary/" class="strip-item s0"><img src="/assets/img/projects/tsubaki-20th-anniversary-massing.webp" alt="TSUBAKI 20th Anniversary" width="2000" height="1250" loading="lazy"></a>
-        <a href="/portfolio/ora-5-unveiling/" class="strip-item s1"><img src="/assets/img/projects/ora-5-unveiling-massing.webp" alt="Cycle &amp; Carriage ORA 5 Unveiling" width="2000" height="1250" loading="lazy"></a>
-        <a href="/portfolio/propw-token2049/" class="strip-item s2"><img src="/assets/img/projects/propw-token2049-massing.webp" alt="PropW TOKEN2049 Booth" width="2000" height="1250" loading="lazy"></a>
-        <a href="/portfolio/tsubaki-brand-refresh/" class="strip-item s3"><img src="/assets/img/projects/tsubaki-brand-refresh-massing.webp" alt="TSUBAKI Brand Refresh Activation" width="2000" height="1250" loading="lazy"></a>
-        <a href="/portfolio/tsubaki-20th-anniversary/" class="strip-item s0"><img src="/assets/img/projects/tsubaki-20th-anniversary-built.webp" alt="TSUBAKI 20th Anniversary" width="2000" height="1250" loading="lazy"></a>
-        <a href="/portfolio/ora-5-unveiling/" class="strip-item s1"><img src="/assets/img/projects/ora-5-unveiling-built.webp" alt="Cycle &amp; Carriage ORA 5 Unveiling" width="2000" height="1250" loading="lazy"></a>
+        <a href="/portfolio/tsubaki-20th-anniversary/" class="strip-item s0" data-label="TSUBAKI"><img src="/assets/img/projects/tsubaki-20th-anniversary-massing.webp" alt="TSUBAKI 20th Anniversary" width="2000" height="1250" loading="lazy"></a>
+        <a href="/portfolio/ora-5-unveiling/" class="strip-item s1" data-label="Cycle &amp; Carriage"><img src="/assets/img/projects/ora-5-unveiling-massing.webp" alt="Cycle &amp; Carriage ORA 5 Unveiling" width="2000" height="1250" loading="lazy"></a>
+        <a href="/portfolio/propw-token2049/" class="strip-item s2" data-label="PropW"><img src="/assets/img/projects/propw-token2049-massing.webp" alt="PropW TOKEN2049 Booth" width="2000" height="1250" loading="lazy"></a>
+        <a href="/portfolio/tsubaki-brand-refresh/" class="strip-item s3" data-label="TSUBAKI"><img src="/assets/img/projects/tsubaki-brand-refresh-massing.webp" alt="TSUBAKI Brand Refresh Activation" width="2000" height="1250" loading="lazy"></a>
+        <a href="/portfolio/tsubaki-20th-anniversary/" class="strip-item s0" data-label="TSUBAKI"><img src="/assets/img/projects/tsubaki-20th-anniversary-built.webp" alt="TSUBAKI 20th Anniversary" width="2000" height="1250" loading="lazy"></a>
+        <a href="/portfolio/ora-5-unveiling/" class="strip-item s1" data-label="Cycle &amp; Carriage"><img src="/assets/img/projects/ora-5-unveiling-built.webp" alt="Cycle &amp; Carriage ORA 5 Unveiling" width="2000" height="1250" loading="lazy"></a>
     </div>
     <p class="footer-mark" aria-hidden="true">parahouse</p>
-    <div class="footer-row"><span>&copy; <span data-year>2026</span> parahouse, Singapore</span><span>Design production for roadshows and exhibitions</span></div>
+    <div class="footer-meta">
+      <div><span class="label">Version</span><span>2026 &copy; Edition</span></div>
+      <div><span class="label">Local time</span><span><span data-clock>&nbsp;</span> SGT, <span data-light-label>&nbsp;</span></span></div>
+      <div class="footer-socials"><span class="label">Socials</span><span><a href="https://www.instagram.com/">Instagram</a> <a href="https://www.linkedin.com/">LinkedIn</a></span></div>
+    </div>
   </footer>
 </body>
 </html>

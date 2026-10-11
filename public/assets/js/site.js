@@ -130,3 +130,48 @@ if (form) {
     }
   });
 }
+
+// ---------- Intro greeting and page-change curtain ----------
+// First visit in a session: the <head> script shows "• Hello" on the curtain; here we cycle it
+// through greetings before the CSS lifts it. Internal links: a curtain rises with the page
+// name, then the browser navigates; the next page opens with the same curtain and lifts it.
+if (root.classList.contains("is-intro")) {
+  const words = ["Hello", "你好", "Halo", "வணக்கம்", "こんにちは", "안녕하세요", "Bonjour", "Hola", "Ciao", "Hello"];
+  let i = 0;
+  setTimeout(function step() {
+    i += 1;
+    if (i >= words.length) return;
+    root.dataset.curtain = words[i];
+    setTimeout(step, 125);
+  }, 520);
+}
+["is-intro", "is-entering"].forEach((cls) => {
+  if (root.classList.contains(cls)) setTimeout(() => root.classList.remove(cls), cls === "is-intro" ? 3200 : 1400);
+});
+
+const PAGE_NAMES = { "/": "Home", "/portfolio/": "Portfolio", "/about/": "About", "/contact/": "Contact" };
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+document.addEventListener("click", (event) => {
+  if (reduceMotion || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  const link = event.target.closest("a[href]");
+  if (!link || link.target || link.hasAttribute("download")) return;
+  const url = new URL(link.href, location.href);
+  if (url.origin !== location.origin || !/^https?:$/.test(url.protocol)) return;
+  if (url.pathname === location.pathname) return;
+  if (/\.[a-z0-9]+$/i.test(url.pathname) && !url.pathname.endsWith(".html")) return;
+  event.preventDefault();
+  const label = link.dataset.label || PAGE_NAMES[url.pathname] || link.textContent.trim().split("\n")[0] || "parahouse";
+  try { sessionStorage.setItem("ph-curtain", label); } catch {}
+  const curtain = document.createElement("div");
+  curtain.className = "curtain-leave";
+  curtain.setAttribute("aria-hidden", "true");
+  const text = document.createElement("span");
+  text.textContent = "\u2022\u2002" + label;
+  curtain.append(text);
+  document.body.append(curtain);
+  setTimeout(() => { location.href = url.href; }, 650);
+});
+// Back/forward from the browser cache: clear any curtain left from leaving.
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted) document.querySelectorAll(".curtain-leave").forEach((el) => el.remove());
+});

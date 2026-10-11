@@ -9,8 +9,8 @@
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <meta property="og:title" content="About | parahouse">
   <meta property="og:description" content="parahouse is a Singapore design production studio for roadshows and exhibitions, working behind the scenes for agencies.">
-  <meta property="og:image" content="/assets/img/projects/studio-1.webp">
-  <script>(function(){var r=document.documentElement,l='day';try{var h=+new Intl.DateTimeFormat('en-GB',{hour:'numeric',hourCycle:'h23',timeZone:'Asia/Singapore'}).format(new Date());l=h>=6&&h<9?'dawn':h<17&&h>=9?'day':h<19&&h>=17?'dusk':'night'}catch(e){}r.dataset.light=l})()</script>
+  <meta property="og:image" content="/assets/img/nicholas.webp">
+  <script>(function(){var r=document.documentElement,l='day';try{var h=+new Intl.DateTimeFormat('en-GB',{hour:'numeric',hourCycle:'h23',timeZone:'Asia/Singapore'}).format(new Date());l=h>=6&&h<9?'dawn':h<17&&h>=9?'day':h<19&&h>=17?'dusk':'night'}catch(e){}r.dataset.light=l;try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var s=sessionStorage,t=s.getItem('ph-curtain');if(t){s.removeItem('ph-curtain');r.dataset.curtain=t;r.classList.add('is-entering')}else if(!s.getItem('ph-intro')){s.setItem('ph-intro','1');r.dataset.curtain='Hello';r.classList.add('is-intro')}}catch(e){}})()</script>
   <link rel="preload" href="/assets/fonts/geist.woff" as="font" type="font/woff" crossorigin>
   <link rel="preload" href="/assets/fonts/archivo-wide.woff" as="font" type="font/woff" crossorigin>
   <link rel="preload" href="/assets/fonts/geist-mono.woff" as="font" type="font/woff" crossorigin>
@@ -35,44 +35,43 @@
   </div>
 
   <main id="main">
-    <div class="page">
-      <div class="pair">
-        <img src="/assets/img/projects/studio-1.webp" alt="Placeholder: the parahouse team at work" width="2000" height="1250" fetchpriority="high">
-        <img src="/assets/img/projects/studio-2.webp" alt="Placeholder: a 3D model review in the studio" width="2000" height="1250">
+    <div class="page about">
+      <h1 class="about-title">Helping agencies build events that match the render</h1>
+      <div class="about-rule" aria-hidden="true"><span class="round-badge"><svg viewBox="90 85 295 530" fill="currentColor" aria-hidden="true"><path d="M100 158 215 92 372 188 375 368 258 432 258 252Z"/><path d="M118 325 232 268 237 605 120 538Z"/></svg></span></div>
+
+      <div class="about-intro">
+        <div class="about-text">
+          <span class="about-arrow" aria-hidden="true">↘</span>
+          <p>parahouse is a Singapore design production studio for roadshows and exhibitions. We work behind the scenes for agencies, with 3D models, renders and build-aligned technical drawings, and we stay on through setup so what gets built matches what was approved.</p>
+          <p class="muted">Your silent backend.</p>
+        </div>
+        <figure class="about-portrait">
+          <img src="/assets/img/nicholas.webp" alt="Portrait of Nicholas, founder of parahouse" width="960" height="1200" fetchpriority="high">
+          <figcaption class="label">Nicholas, founder</figcaption>
+        </figure>
       </div>
 
-      <section class="about-statement">
-        <div class="section-bar"><span>Who we are</span><span>S.1</span></div>
-        <h1 class="statement small">Your silent backend. We don’t compete, we enable.</h1>
-        <div class="project-intro">
-          <p class="lede">parahouse is a Singapore-based design production studio specialising in roadshows and exhibitions.</p>
-          <div class="prose">
-            <p>We work behind the scenes, supporting agencies with clear, build-aligned 3D visual communication.</p>
-            <p>We plug straight into agency workflows, especially under tight timelines, large-scale rollouts or lean internal teams. Our job is to extend your in-house capability without adding friction, overhead or noise.</p>
-          </div>
-        </div>
+      <section class="about-help" aria-labelledby="help">
+        <h2 class="about-help-title" id="help">We can help you with …</h2>
+        <ol class="help-cols">
+          <li><span class="help-no">01</span><h3>3D modelling</h3><p>Models built to real dimensions from the brief, venue plan and budget, so every supplier can quote and fabricate from the same source.</p></li>
+          <li><span class="help-no">02</span><h3>Rendering</h3><p>Client-ready visuals that drive approvals early, from quick option studies to final hero images.</p></li>
+          <li><span class="help-no">03</span><h3>Technical drawings</h3><p>Build-aligned drawing sets your fabricator can price, build and install from, checked against venue rules.</p></li>
+          <li><span class="help-no">04</span><h3>On-site coordination</h3><p>Renders don’t build events. We stay involved through production and setup so the build matches what was approved.</p></li>
+        </ol>
       </section>
 
-      <section class="section" aria-labelledby="support">
-        <div class="section-bar"><span id="support">Full-suite creative support</span><span>S.2</span></div>
-        <ul class="rows">
-          <li><h3>What we deliver</h3><p>3D models, rendered visuals, build-aligned technical drawings and visual assets, from early concept exploration to production-ready outputs.</p><span class="muted">Concept to production</span></li>
-          <li><h3>Scope</h3><p>Rapid iteration and option testing across different levels of fidelity, complexity and timeline, aligned with real site and build constraints.</p><span class="muted">Fast, real-world</span></li>
-          <li><h3>Outcome</h3><p>Clearer alignment, faster approvals, earlier client commitment and a smoother handover into execution.</p><span class="muted">Fewer surprises</span></li>
-        </ul>
-      </section>
-
-      <section class="section" aria-labelledby="difference">
-        <div class="section-bar"><span id="difference">The parahouse difference</span><span>S.3</span></div>
-        <ul class="rows two">
+      <section class="about-band" aria-labelledby="difference">
+        <h2 class="label" id="difference">The parahouse difference</h2>
+        <ul class="difference">
           <li><h3>We don’t just visualise</h3><p>We embed into your workflow and think alongside your designers and project managers. If something won’t work, we say so early, before it becomes a client problem.</p></li>
           <li><h3>Approval isn’t the finish line</h3><p>Renders don’t build events. We stay involved through coordination and on-site setup, so what gets built still matches what was approved.</p></li>
-          <li><h3>No fictional renders</h3><p>All our designers are trained in 3D. Visuals are grounded in real scale, real movement and real construction: what you approve is what you can actually experience.</p></li>
+          <li><h3>No fictional renders</h3><p>All our designers are trained in 3D. Visuals are grounded in real scale, real movement and real construction: what you approve is what you can experience.</p></li>
         </ul>
       </section>
 
-      <section class="section" aria-labelledby="brands">
-        <div class="section-bar"><span id="brands">Brands we’ve worked with</span><span>S.4</span></div>
+      <section class="home-block flush" aria-labelledby="brands">
+        <div class="block-head"><h2 id="brands">Brands we’ve worked with</h2><span class="muted">(17)</span></div>
         <ul class="brand-wall">
           <li><img src="/assets/img/brands/don-julio.png" alt="Don Julio" width="301" height="163" loading="lazy"></li>
           <li><img src="/assets/img/brands/zacapa.png" alt="Zacapa" width="307" height="100" loading="lazy"></li>
@@ -93,33 +92,31 @@
           <li><span class="brand-name">Cycle &amp; Carriage</span></li>
         </ul>
       </section>
-
-      <section class="tagline" aria-label="Tagline">
-        <p class="statement">We build fast.<br>You look good.</p>
-      </section>
     </div>
   </main>
   <footer class="site-footer">
-    <div class="footer-cta">
-      <p>Need backup on an upcoming pitch, or quiet support behind the scenes?</p>
-      <a class="button" href="/contact/">Let’s talk <span class="dot" aria-hidden="true"></span></a>
-    </div>
-    <div class="footer-cols">
-      <div><h2 class="label">Contact</h2><p>Nicholas<br><a href="mailto:parahouse0@gmail.com">parahouse0@gmail.com</a><br><a href="tel:+6593269931">+65 9326 9931</a></p></div>
-      <div><h2 class="label">Studio</h2><p>Singapore<br><span data-clock>&nbsp;</span>, <span data-light-label>&nbsp;</span></p></div>
-      <div><h2 class="label">Social</h2><p><a href="https://www.instagram.com/">Instagram</a><br><a href="https://www.linkedin.com/">LinkedIn</a></p></div>
-      <div><h2 class="label">Pages</h2><p><a href="/">Home</a><br><a href="/portfolio/">Portfolio</a><br><a href="/about/">About</a><br><a href="/contact/">Contact</a></p></div>
+    <div class="together">
+      <h2 class="together-title"><img class="avatar" src="/assets/img/nicholas-avatar.webp" alt="" width="240" height="240" loading="lazy"><span>Let’s work<br>together</span></h2>
+      <div class="together-rule"><a class="round-button" href="/contact/">Let’s talk</a></div>
+      <ul class="contact-pills">
+        <li><a class="pill-link" href="mailto:parahouse0@gmail.com">parahouse0@gmail.com</a></li>
+        <li><a class="pill-link" href="tel:+6593269931">+65 9326 9931</a></li>
+      </ul>
     </div>
     <div class="footer-strip" aria-label="Recent projects">
-        <a href="/portfolio/tsubaki-20th-anniversary/" class="strip-item s0"><img src="/assets/img/projects/tsubaki-20th-anniversary-massing.webp" alt="TSUBAKI 20th Anniversary" width="2000" height="1250" loading="lazy"></a>
-        <a href="/portfolio/ora-5-unveiling/" class="strip-item s1"><img src="/assets/img/projects/ora-5-unveiling-massing.webp" alt="Cycle &amp; Carriage ORA 5 Unveiling" width="2000" height="1250" loading="lazy"></a>
-        <a href="/portfolio/propw-token2049/" class="strip-item s2"><img src="/assets/img/projects/propw-token2049-massing.webp" alt="PropW TOKEN2049 Booth" width="2000" height="1250" loading="lazy"></a>
-        <a href="/portfolio/tsubaki-brand-refresh/" class="strip-item s3"><img src="/assets/img/projects/tsubaki-brand-refresh-massing.webp" alt="TSUBAKI Brand Refresh Activation" width="2000" height="1250" loading="lazy"></a>
-        <a href="/portfolio/tsubaki-20th-anniversary/" class="strip-item s0"><img src="/assets/img/projects/tsubaki-20th-anniversary-built.webp" alt="TSUBAKI 20th Anniversary" width="2000" height="1250" loading="lazy"></a>
-        <a href="/portfolio/ora-5-unveiling/" class="strip-item s1"><img src="/assets/img/projects/ora-5-unveiling-built.webp" alt="Cycle &amp; Carriage ORA 5 Unveiling" width="2000" height="1250" loading="lazy"></a>
+        <a href="/portfolio/tsubaki-20th-anniversary/" class="strip-item s0" data-label="TSUBAKI"><img src="/assets/img/projects/tsubaki-20th-anniversary-massing.webp" alt="TSUBAKI 20th Anniversary" width="2000" height="1250" loading="lazy"></a>
+        <a href="/portfolio/ora-5-unveiling/" class="strip-item s1" data-label="Cycle &amp; Carriage"><img src="/assets/img/projects/ora-5-unveiling-massing.webp" alt="Cycle &amp; Carriage ORA 5 Unveiling" width="2000" height="1250" loading="lazy"></a>
+        <a href="/portfolio/propw-token2049/" class="strip-item s2" data-label="PropW"><img src="/assets/img/projects/propw-token2049-massing.webp" alt="PropW TOKEN2049 Booth" width="2000" height="1250" loading="lazy"></a>
+        <a href="/portfolio/tsubaki-brand-refresh/" class="strip-item s3" data-label="TSUBAKI"><img src="/assets/img/projects/tsubaki-brand-refresh-massing.webp" alt="TSUBAKI Brand Refresh Activation" width="2000" height="1250" loading="lazy"></a>
+        <a href="/portfolio/tsubaki-20th-anniversary/" class="strip-item s0" data-label="TSUBAKI"><img src="/assets/img/projects/tsubaki-20th-anniversary-built.webp" alt="TSUBAKI 20th Anniversary" width="2000" height="1250" loading="lazy"></a>
+        <a href="/portfolio/ora-5-unveiling/" class="strip-item s1" data-label="Cycle &amp; Carriage"><img src="/assets/img/projects/ora-5-unveiling-built.webp" alt="Cycle &amp; Carriage ORA 5 Unveiling" width="2000" height="1250" loading="lazy"></a>
     </div>
     <p class="footer-mark" aria-hidden="true">parahouse</p>
-    <div class="footer-row"><span>&copy; <span data-year>2026</span> parahouse, Singapore</span><span>Design production for roadshows and exhibitions</span></div>
+    <div class="footer-meta">
+      <div><span class="label">Version</span><span>2026 &copy; Edition</span></div>
+      <div><span class="label">Local time</span><span><span data-clock>&nbsp;</span> SGT, <span data-light-label>&nbsp;</span></span></div>
+      <div class="footer-socials"><span class="label">Socials</span><span><a href="https://www.instagram.com/">Instagram</a> <a href="https://www.linkedin.com/">LinkedIn</a></span></div>
+    </div>
   </footer>
 </body>
 </html>
