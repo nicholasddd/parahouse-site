@@ -336,7 +336,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .about-arrow { font-size: 22px; line-height: 1; color: var(--muted); }
 @media (min-width: 900px) { .about-text { padding-left: 64px; } .about-arrow { position: absolute; left: 0; top: 2px; } }
 .about-portrait { margin: 0; }
-.about-portrait img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius); background: var(--surface); }
+.about-portrait img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--radius); background: var(--surface); }
 .about-portrait figcaption { margin-top: 10px; }
 .about-help { padding-top: clamp(96px, 12vw, 180px); }
 .about-help-title { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(24px, 3vw, 46px); line-height: 1; margin-bottom: clamp(40px, 5vw, 72px); }
