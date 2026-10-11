@@ -18,7 +18,7 @@
   // Non-secret settings for the contact form. Set the API key as a secret:
   //   npx wrangler secret put RESEND_API_KEY
   "vars": {
-    "CONTACT_TO": "",
+    "CONTACT_TO": "parahouse0@gmail.com",
     "CONTACT_FROM": "Parahouse website <website@your-domain.com>"
   },
 

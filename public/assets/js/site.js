@@ -99,7 +99,7 @@ if (form) {
     status.textContent = "Brief sent. We'll reply within two working days.";
   } else if (params.get("error") === "1") {
     status.dataset.state = "error";
-    status.textContent = "The brief didn't send. Check the fields and try again, or email us directly.";
+    status.textContent = "The brief didn't send. Check the fields and try again, or email parahouse0@gmail.com.";
   }
 
   form.addEventListener("submit", async (event) => {
@@ -114,7 +114,7 @@ if (form) {
         body: JSON.stringify(Object.fromEntries(new FormData(form))),
       });
       const result = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(result.error || "The brief didn't send. Try again, or email us directly.");
+      if (!response.ok) throw new Error(result.error || "The brief didn't send. Try again, or email parahouse0@gmail.com.");
       form.reset();
       status.dataset.state = "ok";
       status.textContent = "Brief sent. We'll reply within two working days.";

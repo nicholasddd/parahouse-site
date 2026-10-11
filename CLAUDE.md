@@ -14,6 +14,8 @@ About follows Dennis Snellenberg's about page: big headline, a plain rule, intro
 
 Footer on every page (Dennis-style): "Let's work together" (no photo), a rule with a round "Let's talk" button, email and phone pills (CTA block hidden on Contact), project thumbnail strip, large wordmark, and a meta row (version, Singapore local time, socials).
 
+Contact is the heading, a short lede and the brief form only (no details column); briefs go to parahouse0@gmail.com (`CONTACT_TO`).
+
 Home (`/`), Portfolio (`/portfolio/` + one folder per project), About (`/about/`), Contact (`/contact/`), `404.html`.
 
 ## Design rules (references: Zeroframe first, then Foucault)

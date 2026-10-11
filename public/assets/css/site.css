@@ -225,8 +225,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .about-statement .section-bar { border: 0; padding-bottom: 18px; }
 
 /* ---------- Contact ---------- */
-.contact-grid { display: grid; gap: 48px; }
-@media (min-width: 900px) { .contact-grid { grid-template-columns: 1fr 1.4fr; } }
+.contact-grid { max-width: 960px; }
 .details { margin: 0; }
 .details div { border-top: 1px solid var(--line); padding: 12px 0 16px; }
 .details dt { font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
