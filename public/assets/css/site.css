@@ -24,8 +24,6 @@
   --brand-ink: #0b0b0b;
   --curtain: #4a0e12;    /* deep red: intro screen and page-change curtain */
   --bg-top: #33090c;     /* dark red at the top of the background gradient */
-  --light-tint: transparent; /* time-of-day colour laid over images */
-  --light-blend: normal;
 
   --font: "Geist", "Helvetica Neue", Arial, sans-serif;
   --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
@@ -36,13 +34,6 @@
   --measure: 60ch;
   color-scheme: dark;
 }
-
-/* Lighting follows the time of day in Singapore (studio time). The <head> script sets
-   data-light before the page paints; each phase shifts the black slightly and tints images. */
-:root[data-light="dawn"]  { --bg: #0e0c10; --surface: #17141a; --line: #262229; --light-tint: rgba(255, 150, 175, .30); --light-blend: soft-light; }
-:root[data-light="day"]   { --bg: #0b0b0b; --light-tint: transparent; --light-blend: normal; }
-:root[data-light="dusk"]  { --bg: #100c09; --surface: #1a1410; --line: #2a221b; --light-tint: rgba(255, 140, 50, .45); --light-blend: soft-light; }
-:root[data-light="night"] { --bg: #06090c; --surface: #0f1418; --line: #1c2329; --light-tint: rgba(20, 40, 110, .45); --light-blend: multiply; }
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
@@ -81,7 +72,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; transition: transform .3s ease; }
 .pill[aria-expanded="true"] .dot { transform: scale(1.6); }
 .logo { display: block; padding: 4px; color: var(--brand); }
-.logo svg { display: block; width: auto; height: clamp(40px, 4.4vw, 56px); }
+.logo svg { display: block; width: auto; height: clamp(40px, 4.4vw, 56px); filter: drop-shadow(0 1px 10px rgba(0,0,0,.55)); }
 
 /* ---------- Menu: a compact panel that grows out of the Menu pill ---------- */
 .menu-toggle { position: relative; z-index: 2; }
@@ -115,7 +106,6 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
   opacity: 0; transition: opacity 1.4s ease, transform 7s ease-out; transform: scale(1.06);
 }
 .showcase-media img.active { opacity: 1; transform: scale(1); }
-.showcase::before { content: ""; position: absolute; inset: 0; z-index: 1; background: var(--light-tint); mix-blend-mode: var(--light-blend); pointer-events: none; transition: background-color 1.2s ease; }
 .showcase::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.22), rgba(0,0,0,0) 22%); pointer-events: none; }
 
 /* Sections fade up as the visitor scrolls */
@@ -176,7 +166,6 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .tile .tile-photo { opacity: 0; transform: scale(1.06); }
 .tile:hover .tile-photo, .tile:focus-visible .tile-photo { opacity: 1; transform: scale(1); }
 .tile:hover .tile-massing, .tile:focus-visible .tile-massing { transform: scale(1.04); }
-.tile::before { content: ""; position: absolute; inset: 0; z-index: 1; background: var(--light-tint); mix-blend-mode: var(--light-blend); pointer-events: none; }
 .tile::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(0deg, rgba(0,0,0,.62), rgba(0,0,0,.18) 34%, rgba(0,0,0,0) 55%); pointer-events: none; }
 .tile-text { position: absolute; z-index: 2; left: clamp(16px, 1.8vw, 24px); right: clamp(16px, 1.8vw, 24px); bottom: clamp(16px, 1.8vw, 24px); display: grid; gap: 10px; justify-items: start; }
 .tile-type { display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: 7px; background: rgba(0,0,0,.35); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; }

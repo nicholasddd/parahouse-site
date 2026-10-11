@@ -8,17 +8,17 @@ Studio website for parahouse (always lowercase), a Singapore design production s
 - Contact form posts to `/api/contact`, which emails via the Resend API. Secret: `RESEND_API_KEY`. Vars: `CONTACT_TO`, `CONTACT_FROM`.
 
 ## Pages
-Home sections, in order: full-screen hero (logo + menu only, slow crossfade between project images, lighting tint), intro line, Selected work (one wide + two half `.feature` cards), Brands we've worked with (`.brand-wall`), What we do (`.service` accordion, numbered 001–004), footer.
+Home sections, in order: full-screen hero (logo + menu only, slow crossfade between project images), intro line, Selected work (one wide + two half `.feature` cards), Brands we've worked with (`.brand-wall`), What we do (`.service` accordion, numbered 001–004), footer.
 
 About follows Dennis Snellenberg's about page: big headline, a plain rule, intro text (with ↘) beside a large portrait of Nicholas, "We can help you with …" in numbered columns (01–04, from the same SERVICES list as home), the parahouse difference on a `--surface` band, then the brand wall.
 
-Footer on every page (Dennis-style): "Let's work together" (no photo), a rule with a round "Let's talk" button, email and phone pills (CTA block hidden on Contact), project thumbnail strip, large wordmark, and a meta row (version, local time with lighting phase, socials).
+Footer on every page (Dennis-style): "Let's work together" (no photo), a rule with a round "Let's talk" button, email and phone pills (CTA block hidden on Contact), project thumbnail strip, large wordmark, and a meta row (version, Singapore local time, socials).
 
 Home (`/`), Portfolio (`/portfolio/` + one folder per project), About (`/about/`), Contact (`/contact/`), `404.html`.
 
 ## Design rules (references: Zeroframe first, then Foucault)
 - Dark site. Tokens (colours, radius, gaps, fonts) are at the top of `public/assets/css/site.css`; use them. Ground is a fixed, slow gradient from dark red at the top of the screen (`--bg-top`) to near-black (`--bg`) below (`body::before`); cards use `--surface`, hairlines use `--line`.
-- Lighting follows Singapore time (`data-light` = dawn | day | dusk | night on `<html>`, set in the `<head>` script and updated by `site.js`). Each phase shifts the black slightly and tints images (`--light-tint`). There is no light/dark toggle.
+- One fixed look: no time-of-day lighting and no light/dark toggle (removed at Nicholas's request; night was too dim).
 - Type: Archivo at 125% width, bold, UPPERCASE for headings (`--display`: `.statement`, intro line, tile titles, service titles, menu links, footer wordmark). Geist for body text (`--font`). Geist Mono, small uppercase with letter-spacing, for labels and metadata (`--mono`: section bars, chips, buttons, pills, form labels, footer). All self-hosted in `public/assets/fonts/`.
 - Brand red `--brand` (#e5463b) is the accent: the P logo, round buttons, the current menu item, hovers.
 - Logo: the red P mark (inline SVG, a traced stand-in until the original file is supplied), top-left, no text.
@@ -45,9 +45,9 @@ The same `<head>` (including the inline theme script), the floating controls, th
 6. Fix the `.next-pill` links so every project points to the next and the last loops to the first.
 
 ## Checks before committing
-- Every page works at 390px wide with no horizontal scroll, in each lighting phase.
+- Every page works at 390px wide with no horizontal scroll.
 - All images have meaningful `alt` text and `width`/`height` attributes.
-- The menu opens, closes with Escape, the clock ticks, and each lighting phase reads well.
+- The menu opens, closes with Escape, and the clock ticks.
 - Run `npm run dev` and submit the contact form once if you touched it.
 
 ## Processing a submission
