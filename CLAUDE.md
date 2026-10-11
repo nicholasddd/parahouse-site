@@ -13,9 +13,12 @@ Home (`/`), Portfolio (`/portfolio/` + one folder per project), About (`/about/`
 ## Design rules (inspired by the Foucault Framer template)
 - Image-led and minimal. Tokens (colours, radius, gaps) are at the top of `public/assets/css/site.css`; use them. Light and dark themes are both defined there; check both when changing colours.
 - Brand green `--brand` (#427f53, lighter in dark mode). Buttons and active filters use it; the menu panel is deep green.
-- Display face: Playfair Display Black Italic (`--display`), used for `.statement` headings, the wordmark pill and the footer wordmark. Statements copy the deck's lettering: uppercase, white fill, green outline, solid green offset shadow. Keep that treatment; don't use the display face for body text.
-- Text face: Archivo (self-hosted variable), 13–24px.
-- Controls are small pills (`.pill`) floating top-left (theme toggle, wordmark) and top-right (Menu). The menu is the dark rounded panel `#menu`.
+- Headings: Bricolage Grotesque (`--display`, self-hosted, width 75–100%), sentence case, solid colour, used for `.statement`, ledes, tile titles, the home project list, menu links and the footer wordmark. Keep headings moderate in size; no outlined or giant words except the footer wordmark.
+- Body: Geist (`--font`, self-hosted), 13–16px.
+- Lighting follows Singapore time (`data-light` = dawn | day | dusk | night on `<html>`, set in the `<head>` script and updated by `site.js`). There is no light/dark toggle.
+- Logo: the green P mark (inline SVG, a traced stand-in until the original file is supplied).
+- Portfolio tiles: block-massing image (`<slug>-massing.webp`) at rest; the event photo (`<slug>-built.webp`) fades in on hover. Category chip, client and title sit bottom-left.
+- Controls are small pills (`.pill`): the P logo top-left, Menu top-right. The menu is a compact panel (`#menu`) that grows out of the Menu pill, with page links only.
 - Images sit in rounded tiles (`--radius`) with a tight 8px gap. Text on images is white with a gradient behind it for legibility.
 - About uses hairline rows with section markers (S.1, S.2…). Keep that pattern for new sections.
 - Motion only answers the visitor: menu opening, showcase image crossfade on hover, tile zoom on hover. Respect `prefers-reduced-motion`.
@@ -38,5 +41,5 @@ The same `<head>` (including the inline theme script), the floating controls, th
 ## Checks before committing
 - Every page works at 390px wide with no horizontal scroll, in light and dark.
 - All images have meaningful `alt` text and `width`/`height` attributes.
-- The menu opens, closes with Escape, and the clock ticks.
+- The menu opens, closes with Escape, the clock ticks, and each lighting phase reads well.
 - Run `npm run dev` and submit the contact form once if you touched it.
