@@ -16,7 +16,8 @@ public/                     The website (every file here is published)
   404.html                  Shown for any missing page
   assets/css/site.css       All styles (colours, font and spacing at the top)
   assets/js/site.js         Menu, theme toggle, clock, showcase, filters, contact form
-  assets/fonts/             Archivo + Playfair Display Black Italic, self-hosted (open font licences included)
+  assets/fonts/             Archivo, Geist, Geist Mono, self-hosted (open font licences included)
+  assets/img/brands/        Client logo files (see the README in that folder for names)
   assets/img/projects/      Project and studio images (placeholders for now)
 worker/index.js         Handles /api/contact and sends the email
 wrangler.jsonc          Cloudflare settings
