@@ -20,7 +20,7 @@ Home (`/`), Portfolio (`/portfolio/` + one folder per project), About (`/about/`
 - Logo: the green P mark (inline SVG, a traced stand-in until the original file is supplied), top-left, no text.
 - Controls: glassy dark pills (`.pill`). Menu top-right opens a compact panel (`#menu`) with page links only.
 - Portfolio tiles: block-massing image (`<slug>-massing.webp`) at rest; the event photo (`<slug>-built.webp`) fades in on hover. Mono category chip, mono client, uppercase title bottom-left.
-- Brand wall: real client logo files only, in `public/assets/img/brands/<slug>.svg|png|webp` (names listed in that folder's README). They render white and dim, full on hover. A brand without a file shows its name as a small mono placeholder. Never draw or trace a client's logo.
+- Brand wall: client logo files supplied by Nicholas, in `public/assets/img/brands/<slug>.svg|png|webp` (names in that folder's README), laid out as an open centred field. They render white and dim, full on hover. A brand without a file shows its name as a small mono placeholder. Only use logo files Nicholas provides; never draw or trace one.
 - Images sit in rounded tiles (`--radius`) with a tight 8px gap.
 - Motion only answers the visitor or marks one moment: hero crossfade, menu opening, tile hover, sections fading up on scroll. Respect `prefers-reduced-motion`.
 
