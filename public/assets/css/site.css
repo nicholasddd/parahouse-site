@@ -23,7 +23,8 @@
   --brand: #e5463b;      /* parahouse red: logo, buttons, current menu item, hovers */
   --brand-ink: #0b0b0b;
   --curtain: #4a0e12;    /* deep red: intro screen and page-change curtain */
-  --bg-top: #33090c;     /* dark red at the top of the background gradient */
+  --bg-top: #33090c;
+  --logo: #9b3730;       /* client logos at rest: muted red; white on hover */     /* dark red at the top of the background gradient */
 
   --font: "Geist", "Helvetica Neue", Arial, sans-serif;
   --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
@@ -266,8 +267,13 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .brand-wall { list-style: none; margin: 0; padding: clamp(24px, 4vw, 56px) 0; display: flex; flex-wrap: wrap; justify-content: center; row-gap: clamp(28px, 4vw, 56px); }
 .brand-wall li { flex: 0 0 50%; display: grid; place-items: center; min-height: 64px; padding: 0 clamp(12px, 2vw, 32px); }
 @media (min-width: 760px) { .brand-wall li { flex-basis: 25%; } }
-.brand-wall img { width: auto; height: auto; max-width: min(170px, 100%); max-height: 58px; object-fit: contain; filter: brightness(0) invert(1); opacity: .55; transition: opacity .3s ease; }
-.brand-wall li:hover img { opacity: 1; }
+.brand-logo {
+  display: block; max-width: 100%; aspect-ratio: var(--w) / var(--h);
+  width: min(170px, calc(58px * var(--w) / var(--h)));
+  background-color: var(--logo); transition: background-color .35s ease;
+  -webkit-mask: var(--src) center / contain no-repeat; mask: var(--src) center / contain no-repeat;
+}
+.brand-wall li:hover .brand-logo { background-color: #fff; }
 .brand-name { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); text-align: center; }
 
 /* Services: numbered list that opens to show what's included */
