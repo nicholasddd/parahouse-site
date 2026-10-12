@@ -25,7 +25,7 @@ Home (`/`), Work (`/portfolio/` + one folder per project; the menu calls it Work
 - Brand red `--brand` (#e5463b) is the accent: the P logo, round buttons, the current menu item, hovers.
 - Logo: the red P mark (inline SVG, a traced stand-in until the original file is supplied), top-left, no text. On hover its two parts (`.p-head`, `.p-stem`) spring apart and back.
 - Navigation: at the top of every page, Work / About / Contact stack downwards top-right in large uppercase Geist (`.topnav`, current page in red with a dot to its left). After 120px of scrolling `site.js` sets `html.is-scrolled`; the links fade out and the glassy Menu pill (`.menu-toggle`) scales in, opening a compact panel (`#menu`). On phones only the Menu pill shows.
-- Renders are the face of every project (no block massing). Each project's cover is its `cover` image (default `<slug>-render.webp`); home cards and the footer strip use it, with a slight zoom on hover. Event photos are supporting proof on project pages, labelled "On site".
+- Renders are the face of every project (no block massing). Each project's cover is its `cover` image (default `<slug>/render.webp`); home cards and the footer strip use it, with a slight zoom on hover. Event photos are supporting proof on project pages, labelled "On site".
 - Portfolio page is a shelf (`.shelf` / `.book`): cards stand edge-on like books with a vertical spine label; the card under the pointer turns to face the front and shows its chip, client, title and "View project". `site.js` picks the open card from the pointer's position across the whole shelf (its width never changes), so nothing shifts under the pointer. Keyboard focus opens a card. On touch, narrow screens, or without JS, cards simply stack facing front.
 - Brand carousel: client logo files supplied by Nicholas, in `public/assets/img/brands/<slug>.svg|png|webp` (names in that folder's README), in outlined squares drifting slowly left (pure CSS, two copies for a seamless loop, paused on hover; with reduced motion a still wrapping grid). They render as masks in muted red (`--logo`) and turn white on hover. A brand without a file shows its name as a small mono placeholder. Only use logo files Nicholas provides; never draw or trace one.
 - Images sit in rounded tiles (`--radius`) with a tight 8px gap.
@@ -46,7 +46,7 @@ The same `<head>` (including the inline theme script), the floating controls, th
 ## Adding a project
 1. Copy a folder in `public/portfolio/` and rename it with a lowercase-hyphen slug.
 2. Update: `<title>`, meta description, `og:` tags, `<h1>`, the four meta items (Client, Event, Type, Scope), summary, body, image paths and alt text.
-3. Images go in `public/assets/img/projects/` as `<slug>-render-01.webp`… and `<slug>-photo-01.webp`…, 2000 px on the long side at their own proportions, under 400 KB. Convert and resize if given larger files. Project pages show the renders first ("The render"), then photos ("The build"), as `full` or side-by-side `duo` figures. Set the project's `cover` (and `second`, for the footer strip) to its best render.
+3. Images go in their own folder, `public/assets/img/projects/<slug>/`, as `render-01.webp`… and `photo-01.webp`… (see the README there), 2000 px on the long side at their own proportions, under 400 KB. Convert and resize if given larger files. Project pages show the renders first ("The render"), then photos ("The build"), as `full` or side-by-side `duo` figures. Set the project's `cover` (and `second`, for the footer strip) to its best render.
 4. Add a `.tile` to `public/portfolio/index.html` with the right `data-type` (`exhibitions` | `roadshows`).
 5. Optionally add it to the home showcase: one `<img>` in `[data-showcase-media]` and one `<li>` in `[data-showcase-list]`, in the same position. The link's `data-meta` fills the top-right label.
 6. Fix the `.next-pill` links so every project points to the next and the last loops to the first.
@@ -61,6 +61,6 @@ The same `<head>` (including the inline theme script), the floating controls, th
 New projects arrive in `submissions/<slug>/` (outside `public/`, so never published): `project.md` (filled from `_template/project.md`), `renders/`, `photos/`.
 1. Read `project.md`. If "OK to show publicly" is No, stop and ask Nicholas.
 2. Pick the strongest render as the cover; use all good renders and photos on the project page, renders first. Show Nicholas a contact sheet of the picks before publishing if the choice isn't obvious.
-3. Resize to 2000 px on the long side (no cropping), WebP, under 400 KB, into `public/assets/img/projects/`.
+3. Resize to 2000 px on the long side (no cropping), WebP, under 400 KB, into `public/assets/img/projects/<slug>/`. Use only the images Nicholas wants shown (for ORA 5, launch day only; the pre-launch set is not used).
 4. Build the project page and tile as in "Adding a project", using his wording, tightened. Add it to the home features only if he said Yes.
 5. Delete the `submissions/<slug>/` folder in the same commit.

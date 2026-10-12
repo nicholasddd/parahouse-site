@@ -18,7 +18,7 @@ public/                     The website (every file here is published)
   assets/js/site.js         Menu, theme toggle, clock, showcase, filters, contact form
   assets/fonts/             Archivo, Geist, Geist Mono, self-hosted (open font licences included)
   assets/img/brands/        Client logo files (see the README in that folder for names)
-  assets/img/projects/      Project and studio images (placeholders for now)
+  assets/img/projects/      One folder per project (see the README inside)
 worker/index.js         Handles /api/contact and sends the email
 wrangler.jsonc          Cloudflare settings
 ```
@@ -53,8 +53,7 @@ The text is real (from the capabilities deck). The images are not yet.
 
 | Placeholder | Where |
 |---|---|
-| Project images (isometric stand-ins in each brand's colours) | `public/assets/img/projects/<project>-render.webp`, `-render-2`, `-built`, `-built-2` |
-| Team photos | `public/assets/img/projects/studio-1.webp`, `studio-2.webp` (About page) |
+| TSUBAKI Brand Refresh images (isometric stand-ins) | `public/assets/img/projects/tsubaki-brand-refresh/` |
 | Instagram / LinkedIn links | Menu, contact page and footer of every page |
 | Favicon (a green "p") | `public/assets/img/favicon.svg`; replace with the P logo mark |
 
@@ -64,7 +63,7 @@ Each project page pairs **the render** with **the build**, so for each project s
 
 1. Copy an existing folder in `public/portfolio/`, e.g. `tidewater-pavilion/`, and rename it (lowercase, hyphens: `my-new-stand/`).
 2. Edit its `index.html`: `<title>`, description, the heading, the four details (client, type, scope, year), the text, and the image paths.
-3. Add images to `public/assets/img/projects/` named `<project>-render.webp`, `-render-2.webp`, `-built.webp`, `-built-2.webp`. Export at about 2000 × 1250 px as WebP or JPG, under 400 KB each.
+3. Add a folder `public/assets/img/projects/<project>/` with `render-01.webp`… and `photo-01.webp`…, WebP, 2000 px on the long side, under 400 KB each.
 4. Add a tile for it in `public/portfolio/index.html`. `data-type` must be `exhibitions` or `roadshows` so the filters work. Update the count in the heading.
 5. To show it on the home page, add an image line and a list line in `public/index.html` (same order in both).
 6. Update the "Next" pill links so the project pages still loop.
