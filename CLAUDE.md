@@ -12,7 +12,7 @@ Home sections, in order: full-screen hero (slow crossfade between project images
 
 About follows Dennis Snellenberg's about page: big headline, a plain rule, intro text (with ↘) beside a large portrait of Nicholas, "We can help your team with …" in four columns (the same SERVICES list as home), the parahouse difference on a `--surface` band, then the brand wall.
 
-Footer on every page (Dennis-style): "Let's work together" (no photo), a rule with a round "Let's talk" button, email and phone pills (CTA block hidden on Contact), project thumbnail strip, large wordmark, and a meta row (version, Singapore local time, socials).
+Footer on every page (Dennis-style): "Let's work together" (no photo), a rule with a round "Let's talk" button that leads to the form (CTA block hidden on Contact), project thumbnail strip, large wordmark, and a meta row (version, Singapore local time, socials).
 
 Contact is the heading, a short lede and the brief form only (no details column); briefs go to parahouse0@gmail.com (`CONTACT_TO`).
 
@@ -33,6 +33,7 @@ Home (`/`), Work (`/portfolio/` + one folder per project; the menu calls it Work
 - Curtain (after Dennis Snellenberg): first visit per browser session shows the intro: a deep red screen (`--curtain`) cycles "• Hello" through greetings, then lifts with a curved bottom edge. Internal links raise the curtain with a curved top edge and "• <page name>", then navigate; the next page opens covered and lifts. The `<head>` script sets `is-intro` / `is-entering` and `data-curtain` before paint; CSS does the lifting, `site.js` only cycles words and handles leaving (navigates when the rising curtain's animation ends). The leaving and arriving labels sit at exactly the same spot so the hand-off is invisible. Pages are prefetched on hover (speculation rules in `<head>`), and a cross-document view transition holds the frame between pages so there's no flash. Link labels come from `data-label` (project links use the client name) or the page name.
 
 ## Copy
+- No email address or phone number anywhere on the site, including error messages: every enquiry goes through the brief form.
 - No decorative numbers or counts anywhere (no "(16)" beside headings, no "4+", no 001/01 indexes). Nicholas has designed for more brands than are listed, so a count undersells him.
 - Written to agencies: the reader is an account director or creative lead with a pitch coming. Say "your client", "your team", "your fabricator"; never address the brand directly. Cover creative work as a whole, 2D and 3D (concept, 3D and rendering, 2D graphics, drawings and artwork), not just 3D. Be sharp about the agency's return: pitches that win, capacity without headcount, the client relationship and margin stay theirs, fewer costly surprises on site. Key promises: we work under your name, we don't contact your client unless asked, design your fabricator and printer can produce.
 - Don't promise turnaround times, revision rounds or on-site work unless Nicholas gives them.

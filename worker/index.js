@@ -54,7 +54,7 @@ async function handleContact(request, env) {
       wantsJson,
       request,
       503,
-      "The contact form isn't connected yet. Email us directly for now."
+      "The form isn't switched on yet. Please try again later."
     );
   }
 
@@ -85,7 +85,7 @@ async function handleContact(request, env) {
 
   if (!send.ok) {
     console.error("Resend error", send.status, await send.text());
-    return reply(wantsJson, request, 502, "The brief didn't send. Try again, or email us directly.");
+    return reply(wantsJson, request, 502, "The brief didn't send. Please try again in a moment.");
   }
 
   return reply(wantsJson, request, 200);
