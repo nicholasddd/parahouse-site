@@ -622,3 +622,16 @@ a.about-portrait span { display: block; margin-top: 10px; }
 .pillar-text { margin: 0; max-width: 46ch; min-height: 5.2em; font-size: clamp(17px, 1.45vw, 21px); line-height: 1.55; color: rgba(236,236,233,.75); animation: pillar-in .5s ease; }
 @keyframes pillar-in { from { opacity: 0; transform: translateY(6px); } }
 @media (prefers-reduced-motion: reduce) { .pillars::before, .pq-glow, .pillar-text { transition: none; animation: none; } }
+
+/* ---------- Services: offers and FAQ ---------- */
+.offer-group { padding-top: clamp(56px, 7vw, 100px); }
+.offers { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: var(--gap); grid-template-columns: 1fr; }
+@media (min-width: 900px) { .offers { grid-template-columns: repeat(3, 1fr); } .offers.two { grid-template-columns: repeat(2, 1fr); } }
+.offer { display: grid; align-content: start; gap: 14px; padding: clamp(22px, 2.4vw, 34px); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.offer-title { margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 12px; font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(22px, 2.2vw, 32px); line-height: 1; }
+.offer-tag { padding: 4px 9px 5px; border-radius: 99px; background: var(--brand); color: #fff; font-family: var(--mono); font-weight: 400; font-stretch: 100%; font-size: 10.5px; letter-spacing: .06em; }
+.offer-lede { margin: 0; color: var(--muted); }
+.offer-list { list-style: none; margin: 6px 0 0; padding: 0; display: grid; border-top: 1px solid var(--line); }
+.offer-list li { position: relative; padding: 11px 0 11px 26px; border-bottom: 1px solid var(--line); }
+.offer-list li::before { content: "+"; position: absolute; left: 2px; top: 9px; font-size: 18px; line-height: 1; color: var(--brand); }
+.offer-note { margin: 0; font-family: var(--mono); font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }

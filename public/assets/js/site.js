@@ -264,7 +264,7 @@ if (root.classList.contains("is-intro")) {
   if (root.classList.contains(cls)) setTimeout(() => root.classList.remove(cls), cls === "is-intro" ? 3200 : 1400);
 });
 
-const PAGE_NAMES = { "/": "Home", "/portfolio/": "Work", "/about/": "About", "/contact/": "Contact" };
+const PAGE_NAMES = { "/": "Home", "/portfolio/": "Work", "/services/": "Services", "/about/": "About", "/contact/": "Contact" };
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 document.addEventListener("click", (event) => {
   if (reduceMotion || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
