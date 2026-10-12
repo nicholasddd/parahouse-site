@@ -576,7 +576,7 @@ a.about-portrait span { display: block; margin-top: 10px; }
 /* A small dot that trails the cursor (site.js); pointer devices only */
 .cursor-dot {
   position: fixed; left: 0; top: 0; z-index: 70; width: 10px; height: 10px; margin: -5px 0 0 -5px;
-  border-radius: 50%; background: #fff; mix-blend-mode: difference; pointer-events: none;
+  border-radius: 50%; background: #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.18), 0 1px 6px rgba(0,0,0,.35); pointer-events: none;
   opacity: 0; transition: opacity .3s ease, width .3s ease, height .3s ease, margin .3s ease;
 }
 .cursor-dot.is-visible { opacity: 1; }

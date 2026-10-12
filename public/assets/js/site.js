@@ -233,7 +233,8 @@ if (matchMedia("(hover: hover)").matches) {
   const ease = reduceMotionNow() ? 1 : 0.14; // lags behind the pointer; no lag with reduced motion
   const step = () => {
     dx += (tx - dx) * ease; dy += (ty - dy) * ease;
-    dot.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
+    // Sits just above and to the right of the pointer, never on it (the cursor pill sits below).
+    dot.style.transform = `translate3d(${dx + 16}px, ${dy - 14}px, 0)`;
     running = Math.abs(tx - dx) + Math.abs(ty - dy) > 0.2 ? requestAnimationFrame(step) : 0;
   };
   document.addEventListener("mousemove", (event) => {
