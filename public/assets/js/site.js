@@ -177,7 +177,7 @@ if (root.classList.contains("is-intro")) {
   if (root.classList.contains(cls)) setTimeout(() => root.classList.remove(cls), cls === "is-intro" ? 3200 : 1400);
 });
 
-const PAGE_NAMES = { "/": "Home", "/portfolio/": "Portfolio", "/about/": "About", "/contact/": "Contact" };
+const PAGE_NAMES = { "/": "Home", "/portfolio/": "Work", "/about/": "About", "/contact/": "Contact" };
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 document.addEventListener("click", (event) => {
   if (reduceMotion || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -197,9 +197,45 @@ document.addEventListener("click", (event) => {
   text.textContent = "\u2022\u2002" + label;
   curtain.append(text);
   document.body.append(curtain);
-  setTimeout(() => { location.href = url.href; }, 650);
+  // Navigate the moment the curtain has fully risen (the page is usually prefetched by then).
+  let gone = false;
+  const go = () => { if (!gone) { gone = true; location.href = url.href; } };
+  curtain.addEventListener("animationend", (e) => { if (e.target === curtain) go(); });
+  setTimeout(go, 750);
 });
 // Back/forward from the browser cache: clear any curtain left from leaving.
 window.addEventListener("pageshow", (event) => {
   if (event.persisted) document.querySelectorAll(".curtain-leave").forEach((el) => el.remove());
 });
+
+// ---------- Work page heading: the word glitches into the next one every few seconds ----------
+const glitch = document.querySelector("[data-glitch]");
+if (glitch && !reduceMotion) {
+  const words = glitch.dataset.glitch.split("|");
+  const glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&/<>-_";
+  let index = 0;
+  const morph = (to) => {
+    const from = glitch.textContent;
+    const length = Math.max(from.length, to.length);
+    const start = performance.now();
+    const duration = 650;
+    const frame = (now) => {
+      const t = Math.min(1, (now - start) / duration);
+      let out = "";
+      for (let i = 0; i < length; i++) {
+        const settle = (i / length) * 0.7 + 0.3; // letters lock in from left to right
+        if (t >= settle) out += to[i] || "";
+        else if (t >= settle - 0.35) out += to[i] || from[i] ? glyphs[(Math.random() * glyphs.length) | 0] : "";
+        else out += from[i] || "";
+      }
+      glitch.textContent = out;
+      if (t < 1) requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  };
+  setInterval(() => {
+    if (document.hidden) return;
+    index = (index + 1) % words.length;
+    morph(words[index]);
+  }, 3600);
+}

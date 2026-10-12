@@ -15,16 +15,17 @@
   <link rel="preload" href="/assets/fonts/archivo-wide.woff" as="font" type="font/woff" crossorigin>
   <link rel="preload" href="/assets/fonts/geist-mono.woff" as="font" type="font/woff" crossorigin>
   <link rel="stylesheet" href="/assets/css/site.css">
+  <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/*"},"eagerness":"moderate"}]}</script>
   <script src="/assets/js/site.js" defer></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
   <div class="chrome chrome-left">
-    <a class="logo" href="/" aria-label="parahouse home"><svg viewBox="90 85 295 530" fill="currentColor" aria-hidden="true"><path d="M100 158 215 92 372 188 375 368 258 432 258 252Z"/><path d="M118 325 232 268 237 605 120 538Z"/></svg></a>
+    <a class="logo" href="/" aria-label="parahouse home"><svg viewBox="90 85 295 530" fill="currentColor" aria-hidden="true"><path class="p-head" d="M100 158 215 92 372 188 375 368 258 432 258 252Z"/><path class="p-stem" d="M118 325 232 268 237 605 120 538Z"/></svg></a>
   </div>
   <nav class="topnav" aria-label="Main">
     <ul>
-      <li><a href="/portfolio/">Portfolio</a></li>
+      <li><a href="/portfolio/">Work</a></li>
       <li><a href="/about/">About</a></li>
       <li><a href="/contact/">Contact</a></li>
     </ul>
@@ -34,7 +35,7 @@
     <nav class="menu" id="menu" aria-label="Menu">
       <ul>
           <li><a href="/" aria-current="page">Home</a></li>
-          <li><a href="/portfolio/">Portfolio</a></li>
+          <li><a href="/portfolio/">Work</a></li>
           <li><a href="/about/">About</a></li>
           <li><a href="/contact/">Contact</a></li>
       </ul>
@@ -42,17 +43,23 @@
   </div>
 
   <main id="main">
-    <section class="showcase" data-showcase aria-label="Selected projects">
+    <section class="showcase" data-showcase aria-labelledby="hero-title">
       <div class="showcase-media" data-showcase-media>
         <img src="/assets/img/projects/tsubaki-20th-anniversary-built.webp" alt="" class="active" width="2000" height="1250" fetchpriority="high">
         <img src="/assets/img/projects/ora-5-unveiling-render.webp" alt="" width="2000" height="1250" loading="lazy">
         <img src="/assets/img/projects/propw-token2049-render-01.webp" alt="" width="2000" height="1125" loading="lazy">
         <img src="/assets/img/projects/tsubaki-brand-refresh-render.webp" alt="" width="2000" height="1250" loading="lazy">
       </div>
+      <h1 class="hero-title" id="hero-title">The creative team behind your next pitch.</h1>
+      <div class="hero-meta">
+        <span><span data-clock>&nbsp;</span> SGT</span>
+        <span>Design studio for agencies</span>
+        <span>Based in Singapore</span>
+      </div>
     </section>
 
     <section class="intro reveal">
-      <h1 class="intro-line">The creative team behind your next pitch.</h1>
+      <h2 class="intro-line">Your silent backend. We don’t compete, we enable.</h2>
       <p class="intro-sub">parahouse is a Singapore design studio that works for agencies, not brands. Concepts, 2D and 3D design, renders and production-ready files for roadshows, exhibitions and brand events, all under your name and to your deadline.</p>
     </section>
 
@@ -98,24 +105,44 @@
 
     <section class="home-block" aria-labelledby="brands-title">
       <div class="block-head"><h2 id="brands-title">Brands we’ve designed for</h2><span class="muted">(16)</span></div>
-      <ul class="brand-wall">
-          <li><span class="brand-logo" role="img" aria-label="Don Julio" style="--w:301;--h:163;--src:url(/assets/img/brands/don-julio.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Zacapa" style="--w:307;--h:100;--src:url(/assets/img/brands/zacapa.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Audemars Piguet" style="--w:474;--h:113;--src:url(/assets/img/brands/audemars-piguet.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="LVMH Beauty" style="--w:237;--h:163;--src:url(/assets/img/brands/lvmh-beauty.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="TSUBAKI" style="--w:301;--h:65;--src:url(/assets/img/brands/tsubaki.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="ELIXIR" style="--w:232;--h:70;--src:url(/assets/img/brands/elixir.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="CoinW" style="--w:331;--h:70;--src:url(/assets/img/brands/coinw.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Cetaphil" style="--w:254;--h:70;--src:url(/assets/img/brands/cetaphil.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="1664" style="--w:188;--h:98;--src:url(/assets/img/brands/1664.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Nicorette" style="--w:370;--h:90;--src:url(/assets/img/brands/nicorette.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="SENKA" style="--w:411;--h:90;--src:url(/assets/img/brands/senka.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Cygnet" style="--w:251;--h:100;--src:url(/assets/img/brands/cygnet.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Carlsberg" style="--w:293;--h:116;--src:url(/assets/img/brands/carlsberg.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Unilever" style="--w:157;--h:160;--src:url(/assets/img/brands/unilever.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Listerine" style="--w:318;--h:70;--src:url(/assets/img/brands/listerine.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Eucerin" style="--w:252;--h:109;--src:url(/assets/img/brands/eucerin.png)"></span></li>
+      <div class="brand-marquee">
+      <ul class="brand-track">
+        <li><span class="brand-logo" role="img" aria-label="Don Julio" style="--w:301;--h:163;--src:url(/assets/img/brands/don-julio.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="Zacapa" style="--w:307;--h:100;--src:url(/assets/img/brands/zacapa.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="Audemars Piguet" style="--w:474;--h:113;--src:url(/assets/img/brands/audemars-piguet.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="LVMH Beauty" style="--w:237;--h:163;--src:url(/assets/img/brands/lvmh-beauty.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="TSUBAKI" style="--w:301;--h:65;--src:url(/assets/img/brands/tsubaki.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="ELIXIR" style="--w:232;--h:70;--src:url(/assets/img/brands/elixir.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="CoinW" style="--w:331;--h:70;--src:url(/assets/img/brands/coinw.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="Cetaphil" style="--w:254;--h:70;--src:url(/assets/img/brands/cetaphil.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="1664" style="--w:188;--h:98;--src:url(/assets/img/brands/1664.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="Nicorette" style="--w:370;--h:90;--src:url(/assets/img/brands/nicorette.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="SENKA" style="--w:411;--h:90;--src:url(/assets/img/brands/senka.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="Cygnet" style="--w:251;--h:100;--src:url(/assets/img/brands/cygnet.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="Carlsberg" style="--w:293;--h:116;--src:url(/assets/img/brands/carlsberg.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="Unilever" style="--w:157;--h:160;--src:url(/assets/img/brands/unilever.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="Listerine" style="--w:318;--h:70;--src:url(/assets/img/brands/listerine.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="Eucerin" style="--w:252;--h:109;--src:url(/assets/img/brands/eucerin.png)"></span></li>
       </ul>
+      <ul class="brand-track" aria-hidden="true">
+        <li><span class="brand-logo" role="img" aria-label="Don Julio" style="--w:301;--h:163;--src:url(/assets/img/brands/don-julio.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="Zacapa" style="--w:307;--h:100;--src:url(/assets/img/brands/zacapa.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="Audemars Piguet" style="--w:474;--h:113;--src:url(/assets/img/brands/audemars-piguet.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="LVMH Beauty" style="--w:237;--h:163;--src:url(/assets/img/brands/lvmh-beauty.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="TSUBAKI" style="--w:301;--h:65;--src:url(/assets/img/brands/tsubaki.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="ELIXIR" style="--w:232;--h:70;--src:url(/assets/img/brands/elixir.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="CoinW" style="--w:331;--h:70;--src:url(/assets/img/brands/coinw.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="Cetaphil" style="--w:254;--h:70;--src:url(/assets/img/brands/cetaphil.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="1664" style="--w:188;--h:98;--src:url(/assets/img/brands/1664.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="Nicorette" style="--w:370;--h:90;--src:url(/assets/img/brands/nicorette.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="SENKA" style="--w:411;--h:90;--src:url(/assets/img/brands/senka.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="Cygnet" style="--w:251;--h:100;--src:url(/assets/img/brands/cygnet.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="Carlsberg" style="--w:293;--h:116;--src:url(/assets/img/brands/carlsberg.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="Unilever" style="--w:157;--h:160;--src:url(/assets/img/brands/unilever.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="Listerine" style="--w:318;--h:70;--src:url(/assets/img/brands/listerine.png)"></span></li>
+        <li><span class="brand-logo" role="img" aria-label="Eucerin" style="--w:252;--h:109;--src:url(/assets/img/brands/eucerin.png)"></span></li>
+      </ul>
+      </div>
     </section>
 
     <section class="home-block" aria-labelledby="services-title">
