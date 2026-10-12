@@ -75,17 +75,41 @@ if (showcase && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
   }
 }
 
-// ---------- Portfolio filters ----------
-const filterBar = document.querySelector("[data-filters]");
-if (filterBar) {
-  const tiles = document.querySelectorAll("[data-type]");
-  filterBar.addEventListener("click", (event) => {
-    const button = event.target.closest("button[data-filter]");
-    if (!button) return;
-    const value = button.dataset.filter;
-    filterBar.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
-    tiles.forEach((tile) => (tile.hidden = value !== "all" && tile.dataset.type !== value));
-    document.dispatchEvent(new Event("shelf:update"));
+// ---------- Work page: search, type and work filters ----------
+const workFilters = document.querySelector("[data-work-filters]");
+if (workFilters) {
+  const cards = [...document.querySelectorAll(".work-card")];
+  const empty = document.querySelector("[data-work-empty]");
+  const search = workFilters.querySelector("[data-filter-search]");
+  const state = { type: "all", service: "all", q: "" };
+  const apply = () => {
+    const words = state.q.toLowerCase().split(/\s+/).filter(Boolean);
+    let shown = 0;
+    cards.forEach((card) => {
+      const ok = (state.type === "all" || card.dataset.type === state.type)
+        && (state.service === "all" || card.dataset.services.split(" ").includes(state.service))
+        && words.every((w) => card.dataset.search.includes(w));
+      card.hidden = !ok;
+      if (ok) shown += 1;
+    });
+    empty.hidden = shown > 0;
+  };
+  const press = (attr, value) => {
+    workFilters.querySelectorAll(`[${attr}]`).forEach((b) => b.setAttribute("aria-pressed", String(b.getAttribute(attr) === value)));
+  };
+  workFilters.addEventListener("click", (event) => {
+    const t = event.target.closest("[data-filter-type]");
+    const sv = event.target.closest("[data-filter-service]");
+    if (t) { state.type = t.dataset.filterType; press("data-filter-type", state.type); apply(); }
+    if (sv) { state.service = sv.dataset.filterService; press("data-filter-service", state.service); apply(); }
+  });
+  search.addEventListener("input", () => { state.q = search.value; apply(); });
+  document.querySelector("[data-filter-reset]")?.addEventListener("click", () => {
+    Object.assign(state, { type: "all", service: "all", q: "" });
+    search.value = "";
+    press("data-filter-type", "all");
+    press("data-filter-service", "all");
+    apply();
   });
 }
 
