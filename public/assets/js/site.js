@@ -188,6 +188,28 @@ if (cursorTargets.length && matchMedia("(hover: hover)").matches) {
   });
 }
 
+// ---------- A small dot that trails the cursor ----------
+if (matchMedia("(hover: hover)").matches) {
+  const dot = document.createElement("div");
+  dot.className = "cursor-dot";
+  dot.setAttribute("aria-hidden", "true");
+  document.body.append(dot);
+  let tx = 0, ty = 0, dx = 0, dy = 0, running = 0;
+  const ease = reduceMotionNow() ? 1 : 0.14; // lags behind the pointer; no lag with reduced motion
+  const step = () => {
+    dx += (tx - dx) * ease; dy += (ty - dy) * ease;
+    dot.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
+    running = Math.abs(tx - dx) + Math.abs(ty - dy) > 0.2 ? requestAnimationFrame(step) : 0;
+  };
+  document.addEventListener("mousemove", (event) => {
+    if (!dot.classList.contains("is-visible")) { dx = event.clientX; dy = event.clientY; }
+    tx = event.clientX; ty = event.clientY;
+    dot.classList.add("is-visible");
+    if (!running) running = requestAnimationFrame(step);
+  }, { passive: true });
+  document.documentElement.addEventListener("mouseleave", () => dot.classList.remove("is-visible"));
+}
+
 // ---------- Intro greeting and page-change curtain ----------
 // First visit in a session: the <head> script shows "• Hello" on the curtain; here we cycle it
 // through greetings before the CSS lifts it. Internal links: a curtain rises with the page
