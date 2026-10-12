@@ -537,3 +537,20 @@ a.about-portrait span { display: block; margin-top: 10px; }
 .cursor-bubble svg { width: 11px; stroke: var(--brand); stroke-width: 2.2; }
 @media (hover: none) { .cursor-bubble { display: none; } }
 @media (prefers-reduced-motion: reduce) { .pcard-link, .bubble span, .chevron i, .pcard-outline { transition: none; } }
+
+/* ---------- Project pages: image mosaic ----------
+   12 columns. Every image is cropped to the exact aspect of its slot (curate.py), so each row
+   lines up: full (21:9), w8 (16:10) beside n4 (4:5), h6 pairs, t4 trios of square details,
+   and inset (2:1, indented). Phones: one column, with h6 pairs and t4 trios kept side by side. */
+.media.mosaic { grid-template-columns: repeat(12, 1fr); }
+.media.mosaic figure { grid-column: span 12; overflow: hidden; border-radius: var(--radius); }
+.media.mosaic img { display: block; width: 100%; height: auto; border-radius: 0; transition: transform 1.2s cubic-bezier(.2,.7,.2,1); }
+.media.mosaic figure:hover img { transform: scale(1.03); }
+.media.mosaic .h6 { grid-column: span 6; }
+.media.mosaic .t4 { grid-column: span 4; }
+@media (min-width: 760px) {
+  .media.mosaic .w8 { grid-column: span 8; }
+  .media.mosaic .n4 { grid-column: span 4; }
+  .media.mosaic .inset { grid-column: 2 / span 10; margin: clamp(24px, 4vw, 64px) 0; }
+}
+@media (prefers-reduced-motion: reduce) { .media.mosaic img { transition: none; } }
