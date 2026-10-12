@@ -635,3 +635,13 @@ a.about-portrait span { display: block; margin-top: 10px; }
 .offer-list li { position: relative; padding: 11px 0 11px 26px; border-bottom: 1px solid var(--line); }
 .offer-list li::before { content: "+"; position: absolute; left: 2px; top: 9px; font-size: 18px; line-height: 1; color: var(--brand); }
 .offer-note { margin: 0; font-family: var(--mono); font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+
+/* FAQ: a plus on the right turns into a cross as the answer slides open (site.js animates the height) */
+.faq-item summary { grid-template-columns: 1fr auto; align-items: center; }
+.faq-item summary::after {
+  content: ""; width: 18px; height: 18px; flex: none;
+  background: linear-gradient(currentColor, currentColor) center / 100% 1.5px no-repeat, linear-gradient(currentColor, currentColor) center / 1.5px 100% no-repeat;
+  transition: transform .45s cubic-bezier(.65,0,.2,1), color .3s ease;
+}
+.faq-item.is-open summary::after, .no-js .faq-item[open] summary::after { transform: rotate(135deg); color: var(--brand); }
+.faq-item:not(.is-open) .service-title { transition: color .3s ease; }

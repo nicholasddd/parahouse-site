@@ -223,6 +223,31 @@ if (pillars) {
   }
 }
 
+// ---------- FAQ: answers slide open and closed instead of snapping ----------
+// The <details> stays the source of truth (works without JS); script only animates its height.
+document.querySelectorAll("details.faq-item").forEach((item) => {
+  const summary = item.querySelector("summary");
+  const body = item.querySelector(".service-body");
+  let anim = null;
+  const run = (from, to, open) => {
+    anim?.cancel();
+    item.style.overflow = "hidden";
+    anim = item.animate({ height: [from + "px", to + "px"] }, { duration: reduceMotionNow() ? 0 : 450, easing: "cubic-bezier(.65,0,.2,1)" });
+    if (open) body.animate({ opacity: [0, 1], transform: ["translateY(-6px)", "none"] }, { duration: reduceMotionNow() ? 0 : 400, delay: 80, easing: "ease-out", fill: "backwards" });
+    anim.onfinish = () => { anim = null; item.style.height = item.style.overflow = ""; if (!open) item.open = false; };
+  };
+  summary.addEventListener("click", (event) => {
+    event.preventDefault();
+    const start = item.offsetHeight; // starts from wherever it is, so a quick second click reverses smoothly
+    if (item.classList.toggle("is-open")) {
+      item.open = true;
+      run(start, item.scrollHeight, true);
+    } else {
+      run(start, summary.offsetHeight, false);
+    }
+  });
+});
+
 // ---------- A small dot that trails the cursor ----------
 if (matchMedia("(hover: hover)").matches) {
   const dot = document.createElement("div");
