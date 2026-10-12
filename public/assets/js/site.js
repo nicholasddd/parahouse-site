@@ -221,6 +221,9 @@ document.addEventListener("click", (event) => {
   try { sessionStorage.setItem("ph-curtain", label); } catch {}
   const curtain = document.createElement("div");
   curtain.className = "curtain-leave";
+  // Heading to a project page: the curtain takes that project's colour, matching the page it reveals.
+  const tintTo = (window.PH_CURTAINS || {})[url.pathname];
+  if (tintTo) curtain.style.background = tintTo;
   curtain.setAttribute("aria-hidden", "true");
   const text = document.createElement("span");
   text.textContent = "\u2022\u2002" + label;
