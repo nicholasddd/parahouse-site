@@ -246,7 +246,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
   .js .book.is-open:hover .book-plane { filter: none; }
   .js .book-spine {
     position: absolute; left: 0; top: 0; width: var(--spine); height: var(--h); z-index: 1;
-    display: flex; justify-content: space-between; align-items: center; padding: 16px 0;
+    display: flex; justify-content: flex-end; align-items: center; padding: 16px 0;
     writing-mode: vertical-rl; transform: rotate(180deg); pointer-events: none;
     font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #fff;
     text-shadow: 0 1px 8px rgba(0,0,0,.8); transition: opacity .4s ease;
@@ -386,17 +386,15 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .services-list { border-bottom: 1px solid var(--line); }
 .service { border-top: 1px solid var(--line); }
 .service:first-child { border-top: 0; }
-.service summary { list-style: none; display: grid; grid-template-columns: 4.5em 1fr auto; align-items: baseline; gap: 16px; padding: 22px 0; cursor: pointer; }
+.service summary { list-style: none; display: grid; grid-template-columns: 1fr; align-items: baseline; gap: 16px; padding: 22px 0; cursor: pointer; }
 .service summary::-webkit-details-marker { display: none; }
-.service-no, .service-count { font-family: var(--mono); font-size: 11px; letter-spacing: .07em; color: var(--muted); }
 .service-title { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(20px, 2.6vw, 40px); line-height: 1; }
 .service summary:hover .service-title { color: var(--brand); }
-.service-body { display: grid; gap: 18px; padding: 0 0 26px 4.5em; }
-@media (min-width: 900px) { .service-body { grid-template-columns: 1fr 1fr; padding-left: calc(4.5em + 16px); } }
+.service-body { display: grid; gap: 18px; padding: 0 0 26px; }
+@media (min-width: 900px) { .service-body { grid-template-columns: 1fr 1fr; } }
 .service-body p { margin: 0; max-width: 46ch; color: var(--muted); font-size: 16px; }
 .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; align-content: start; }
 .chips li { padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
-@media (max-width: 640px) { .service summary { grid-template-columns: 3.5em 1fr auto; } .service-body { padding-left: 0; } }
 
 /* ---------- Brands wall (About) ---------- */
 .brands { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); }
@@ -446,7 +444,6 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 @media (min-width: 760px) { .help-cols { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 1100px) { .help-cols { grid-template-columns: repeat(4, 1fr); } }
 .help-cols li { display: grid; gap: 14px; align-content: start; padding-top: 20px; border-top: 1px solid var(--line); }
-.help-no { font-family: var(--mono); font-size: 11px; letter-spacing: .07em; color: var(--muted); }
 .help-cols h3 { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(20px, 1.8vw, 28px); line-height: 1; }
 .help-cols p { margin: 0; color: var(--muted); max-width: 40ch; }
 .about-band { margin-top: clamp(96px, 12vw, 180px); padding: clamp(40px, 6vw, 88px) clamp(20px, 4vw, 64px); background: var(--surface); border-radius: var(--radius); display: grid; gap: 32px; }

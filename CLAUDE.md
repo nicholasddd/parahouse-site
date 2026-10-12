@@ -8,9 +8,9 @@ Studio website for parahouse (always lowercase), a Singapore design studio that 
 - Contact form posts to `/api/contact`, which emails via the Resend API. Secret: `RESEND_API_KEY`. Vars: `CONTACT_TO`, `CONTACT_FROM`.
 
 ## Pages
-Home sections, in order: full-screen hero (slow crossfade between project images, the key message "The creative team behind your next pitch." large bottom-left, and a mono row along the bottom: studio time, "Design studio for agencies", "Based in Singapore"), intro line (the positioning line), Selected work (one wide + two half `.feature` cards), What your agency gets (`.difference.value`, the four value points in `VALUE`), Brands we've designed for (`.brand-marquee`), How we help your team (`.service` accordion, numbered 001–004), footer.
+Home sections, in order: full-screen hero (slow crossfade between project images, the key message "The creative team behind your next pitch." large bottom-left, and a mono row along the bottom: studio time, "Design studio for agencies", "Based in Singapore"), intro line (the positioning line), Selected work (one wide + two half `.feature` cards), What your agency gets (`.difference.value`, the four value points in `VALUE`), Brands we've designed for (`.brand-marquee`), How we help your team (`.service` accordion), footer.
 
-About follows Dennis Snellenberg's about page: big headline, a plain rule, intro text (with ↘) beside a large portrait of Nicholas, "We can help you with …" in numbered columns (01–04, from the same SERVICES list as home), the parahouse difference on a `--surface` band, then the brand wall.
+About follows Dennis Snellenberg's about page: big headline, a plain rule, intro text (with ↘) beside a large portrait of Nicholas, "We can help your team with …" in four columns (the same SERVICES list as home), the parahouse difference on a `--surface` band, then the brand wall.
 
 Footer on every page (Dennis-style): "Let's work together" (no photo), a rule with a round "Let's talk" button, email and phone pills (CTA block hidden on Contact), project thumbnail strip, large wordmark, and a meta row (version, Singapore local time, socials).
 
@@ -33,6 +33,7 @@ Home (`/`), Work (`/portfolio/` + one folder per project; the menu calls it Work
 - Curtain (after Dennis Snellenberg): first visit per browser session shows the intro: a deep red screen (`--curtain`) cycles "• Hello" through greetings, then lifts with a curved bottom edge. Internal links raise the curtain with a curved top edge and "• <page name>", then navigate; the next page opens covered and lifts. The `<head>` script sets `is-intro` / `is-entering` and `data-curtain` before paint; CSS does the lifting, `site.js` only cycles words and handles leaving (navigates when the rising curtain's animation ends). The leaving and arriving labels sit at exactly the same spot so the hand-off is invisible. Pages are prefetched on hover (speculation rules in `<head>`), and a cross-document view transition holds the frame between pages so there's no flash. Link labels come from `data-label` (project links use the client name) or the page name.
 
 ## Copy
+- No decorative numbers or counts anywhere (no "(16)" beside headings, no "4+", no 001/01 indexes). Nicholas has designed for more brands than are listed, so a count undersells him.
 - Written to agencies: the reader is an account director or creative lead with a pitch coming. Say "your client", "your team", "your fabricator"; never address the brand directly. Cover creative work as a whole, 2D and 3D (concept, 3D and rendering, 2D graphics, drawings and artwork), not just 3D. Be sharp about the agency's return: pitches that win, capacity without headcount, the client relationship and margin stay theirs, fewer costly surprises on site. Key promises: we work under your name, we don't contact your client unless asked, design your fabricator and printer can produce.
 - Don't promise turnaround times, revision rounds or on-site work unless Nicholas gives them.
 - Plain, specific, no hype words. Write in sentence case; CSS handles the uppercase for headings and labels.
@@ -45,7 +46,7 @@ The same `<head>` (including the inline theme script), the floating controls, th
 1. Copy a folder in `public/portfolio/` and rename it with a lowercase-hyphen slug.
 2. Update: `<title>`, meta description, `og:` tags, `<h1>`, the four meta items (Client, Event, Type, Scope), summary, body, image paths and alt text.
 3. Images go in `public/assets/img/projects/` as `<slug>-render-01.webp`… and `<slug>-photo-01.webp`…, 2000 px on the long side at their own proportions, under 400 KB. Convert and resize if given larger files. Project pages show the renders first ("The render"), then photos ("The build"), as `full` or side-by-side `duo` figures. Set the project's `cover` (and `second`, for the footer strip) to its best render.
-4. Add a `.tile` to `public/portfolio/index.html` with the right `data-type` (`exhibitions` | `roadshows`) and update the `(NN)` count.
+4. Add a `.tile` to `public/portfolio/index.html` with the right `data-type` (`exhibitions` | `roadshows`).
 5. Optionally add it to the home showcase: one `<img>` in `[data-showcase-media]` and one `<li>` in `[data-showcase-list]`, in the same position. The link's `data-meta` fills the top-right label.
 6. Fix the `.next-pill` links so every project points to the next and the last loops to the first.
 
