@@ -16,7 +16,7 @@ Footer on every page (Dennis-style): "Let's work together" (no photo), a rule wi
 
 Contact is the heading, a short lede and the brief form only (no details column); briefs go to parahouse0@gmail.com (`CONTACT_TO`).
 
-Home (`/`), Work (`/portfolio/` + one folder per project; the menu calls it Work, the URL stays /portfolio/), About (`/about/`), Contact (`/contact/`), `404.html`. The Work page is a clean grid (`.work-grid` / `.work-card`: cover, uppercase title, mono client · year), three across on desktop, with a search box (brand, event, venue, scope) and two filter rows: Type (All / Exhibitions / Roadshows) and Work (3D and rendering / 2D and graphics / Technical drawings, read from each project's scope by `SERVICE_TAGS`). Its heading cycles "Collaborations", "Co-creations", "Contributions" with a short scramble every few seconds (`data-glitch`); with reduced motion it stays on the first word.
+Home (`/`), Work (`/portfolio/` + one folder per project; the menu calls it Work, the URL stays /portfolio/), About (`/about/`), Contact (`/contact/`), `404.html`. The Work page is a clean grid (`.work-grid` / `.work-card`: cover, uppercase title, mono client · year), three across on desktop, with a search box (brand, event, venue, scope) and two filter rows: Type (All / Exhibitions / Roadshows / Brand events) and Work (3D and rendering / 2D and graphics / Technical drawings, read from each project's scope by `SERVICE_TAGS`). Its heading cycles "Collaborations", "Co-creations", "Contributions" with a short scramble every few seconds (`data-glitch`); with reduced motion it stays on the first word.
 
 ## Design rules (references: Zeroframe first, then Foucault)
 - Dark site. Tokens (colours, radius, gaps, fonts) are at the top of `public/assets/css/site.css`; use them. Ground is a fixed, slow gradient from dark red at the top of the screen (`--bg-top`) to near-black (`--bg`) below (`body::before`); cards use `--surface`, hairlines use `--line`. Project pages swap the red for the project's own colour: each project in `PROJECTS` has a `hue` (TSUBAKI red 356, PropW purple 268, ORA 5 teal 176), turned into a colour at the same depth as the red and set as `--bg-top` on that page's `<html>` (and its `theme-color`). Logo, buttons and the current menu item stay brand red.
@@ -47,7 +47,7 @@ The same `<head>` (including the inline theme script), the floating controls, th
 1. Copy a folder in `public/portfolio/` and rename it with a lowercase-hyphen slug.
 2. Update: `<title>`, meta description, `og:` tags, `<h1>`, the four meta items (Client, Event, Type, Scope), summary, body, image paths and alt text, and pick the project's `hue` from its main colour (judge by eye from the renders; an automatic average gets fooled by carpets and studio walls).
 3. Images go in their own folder, `public/assets/img/projects/<slug>/`, as `render-01.webp`… and `photo-01.webp`… (see the README there), 2000 px on the long side at their own proportions, under 400 KB. Convert and resize if given larger files. Project pages show the renders first ("The render"), then photos ("The build"), as `full` or side-by-side `duo` figures. Set the project's `cover` (and `second`, for the footer strip) to its best render.
-4. Add it to `PROJECTS` with the right `type` (`exhibitions` | `roadshows`) and a clear scope; the Work grid card, its filters and the home shelf come from that.
+4. Add it to `PROJECTS` with the right `type` (`exhibitions` | `roadshows` | `events`) and a clear scope; the Work grid card, its filters and the home shelf come from that.
 5. Optionally add it to the home showcase: one `<img>` in `[data-showcase-media]` and one `<li>` in `[data-showcase-list]`, in the same position. The link's `data-meta` fills the top-right label.
 6. Fix the `.next-pill` links so every project points to the next and the last loops to the first.
 
@@ -56,6 +56,9 @@ The same `<head>` (including the inline theme script), the floating controls, th
 - All images have meaningful `alt` text and `width`/`height` attributes.
 - The menu opens, closes with Escape, and the clock ticks.
 - Run `npm run dev` and submit the contact form once if you touched it.
+
+## Projects from Instagram
+CoinW 2025 Afterparty and Audemars Piguet SEA Staff Party 2025 came from @parahouse.co posts (photos only, no renders; collage posts were split into their panels). Their copy is a first draft from the captions; Nicholas will review each project's details.
 
 ## Processing a submission
 New projects arrive in `submissions/<slug>/` (outside `public/`, so never published): `project.md` (filled from `_template/project.md`), `renders/`, `photos/`.

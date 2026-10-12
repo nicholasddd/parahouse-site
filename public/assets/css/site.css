@@ -495,7 +495,7 @@ a.about-portrait span { display: block; margin-top: 10px; }
 @media (min-width: 1121px) { .pcards { grid-auto-flow: row; grid-template-columns: repeat(4, 1fr); overflow: visible; } }
 .pcard-cell { scroll-snap-align: start; padding: clamp(28px, 2.6vw, 40px) var(--pc-gap); border-right: 1px solid var(--line); }
 .pcard-cell:first-child { border-left: 1px solid var(--line); }
-@media (min-width: 1121px) { .pcard-cell:nth-child(4n) { border-right: 0; } .pcard-cell:first-child { border-left: 0; } }
+@media (min-width: 1121px) { .pcard-cell:nth-child(4n) { border-right: 0; } .pcard-cell:first-child { border-left: 0; } .pcard-cell:nth-child(n+5) { border-top: 1px solid var(--line); } }
 .pcard { position: relative; }
 .pcard-link {
   position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: space-between;
