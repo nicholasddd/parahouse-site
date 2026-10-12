@@ -240,12 +240,18 @@ document.querySelectorAll("details.faq-item").forEach((item) => {
     event.preventDefault();
     const start = item.offsetHeight; // starts from wherever it is, so a quick second click reverses smoothly
     if (item.classList.toggle("is-open")) {
+      // Only one answer open at a time: the previous one slides shut as this one opens.
+      item.parentElement.querySelectorAll("details.faq-item.is-open").forEach((other) => other !== item && other._close());
       item.open = true;
       run(start, item.scrollHeight, true);
     } else {
       run(start, summary.offsetHeight, false);
     }
   });
+  item._close = () => {
+    item.classList.remove("is-open");
+    run(item.offsetHeight, summary.offsetHeight, false);
+  };
 });
 
 // ---------- A small dot that trails the cursor ----------
