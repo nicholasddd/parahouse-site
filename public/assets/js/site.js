@@ -113,74 +113,64 @@ if (workFilters) {
   });
 }
 
-// ---------- Portfolio shelf: the card under the pointer turns to face the front ----------
-// The open card comes from the pointer's position across the whole shelf. The shelf's total
-// width never changes (one open card plus spines), so the chosen card is always the one
-// under the pointer and nothing shifts away mid-sweep.
+// ---------- Home shelf: cards turn to face the front; the row rotates endlessly at the edges ----------
+// In the middle of the shelf, the open card comes from the pointer's position across the whole
+// row. The row's width never changes (one open card plus spines), so the chosen card is always
+// the one under the pointer. Near the left or right edge the row slides that way; cards that
+// leave one end are moved to the other, so it loops forever, and the card at the centre opens.
 const shelf = document.querySelector("[data-shelf]");
-if (shelf) {
-  const visible = () => [...shelf.querySelectorAll(".book")].filter((b) => !b.hidden);
+const shelfView = shelf?.parentElement;
+const canShelf = matchMedia("(hover: hover) and (min-width: 900px)");
+if (shelf && shelfView) {
+  const books = () => [...shelf.children];
   const open = (book) => {
     if (!book || book.classList.contains("is-open")) return;
-    shelf.querySelectorAll(".book.is-open").forEach((b) => b.classList.remove("is-open"));
+    shelf.querySelector(".book.is-open")?.classList.remove("is-open");
     book.classList.add("is-open");
   };
-  const update = () => {
-    const books = visible();
-    shelf.style.setProperty("--n", Math.max(books.length, 1));
-    if (!books.some((b) => b.classList.contains("is-open"))) open(books[0]);
+  const openAt = (x) => {
+    const all = books();
+    const left = all[0].getBoundingClientRect().left;
+    const right = all[all.length - 1].getBoundingClientRect().right;
+    const i = Math.floor(((x - left) / Math.max(right - left, 1)) * all.length);
+    open(all[Math.min(all.length - 1, Math.max(0, i))]);
   };
-  shelf.addEventListener("pointermove", (event) => {
-    if (event.pointerType !== "mouse") return;
-    const books = visible();
-    const box = shelf.getBoundingClientRect();
-    const first = books[0]?.getBoundingClientRect().left ?? box.left;
-    const last = books[books.length - 1]?.getBoundingClientRect().right ?? box.right;
-    const x = (event.clientX - first) / Math.max(last - first, 1);
-    open(books[Math.min(books.length - 1, Math.max(0, Math.floor(x * books.length)))]);
-  });
-  shelf.addEventListener("focusin", (event) => open(event.target.closest(".book")));
-  document.addEventListener("shelf:update", update);
-  update();
-}
-
-// ---------- Contact form: send with fetch so the visitor stays on the page ----------
-const form = document.querySelector("[data-contact-form]");
-if (form) {
-  const status = form.querySelector("[data-status]");
-  const submit = form.querySelector("button[type=submit]");
-  const params = new URLSearchParams(location.search);
-  if (params.get("sent") === "1") {
-    status.dataset.state = "ok";
-    status.textContent = "Brief sent. We'll reply within two working days.";
-  } else if (params.get("error") === "1") {
-    status.dataset.state = "error";
-    status.textContent = "The brief didn't send. Check the fields and try again in a moment.";
-  }
-
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    status.dataset.state = "";
-    status.textContent = "Sending…";
-    submit.disabled = true;
-    try {
-      const response = await fetch(form.action, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(Object.fromEntries(new FormData(form))),
-      });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(result.error || "The brief didn't send. Please try again in a moment.");
-      form.reset();
-      status.dataset.state = "ok";
-      status.textContent = "Brief sent. We'll reply within two working days.";
-    } catch (error) {
-      status.dataset.state = "error";
-      status.textContent = error.message;
-    } finally {
-      submit.disabled = false;
+  let offset = 0, speed = 0, pointerX = null, frame = 0;
+  const edgeZone = () => Math.min(170, shelfView.clientWidth * 0.12);
+  const step = () => {
+    offset += speed;
+    // Loop: a card that has slid fully out of one end is moved to the other.
+    for (let guard = 0; guard < 24; guard++) {
+      const first = shelf.firstElementChild;
+      const w = first.getBoundingClientRect().width;
+      if (offset < w) break;
+      shelf.append(first);
+      offset -= w;
     }
+    for (let guard = 0; guard < 24 && offset < 0; guard++) {
+      const last = shelf.lastElementChild;
+      shelf.prepend(last);
+      offset += last.getBoundingClientRect().width;
+    }
+    shelf.style.transform = `translate3d(${-offset}px, 0, 0)`;
+    const box = shelfView.getBoundingClientRect();
+    openAt(box.left + box.width / 2);
+    frame = speed ? requestAnimationFrame(step) : 0;
+  };
+  shelfView.addEventListener("pointermove", (event) => {
+    if (event.pointerType !== "mouse" || !canShelf.matches) return;
+    pointerX = event.clientX;
+    const box = shelfView.getBoundingClientRect();
+    const zone = edgeZone();
+    const fromLeft = pointerX - box.left, fromRight = box.right - pointerX;
+    // Speed grows the deeper the pointer sits in the edge zone (up to ~10px per frame).
+    speed = fromRight < zone ? 10 * (1 - fromRight / zone) : fromLeft < zone ? -10 * (1 - fromLeft / zone) : 0;
+    if (speed) { if (!frame) frame = requestAnimationFrame(step); }
+    else openAt(pointerX);
   });
+  shelfView.addEventListener("pointerleave", () => { speed = 0; pointerX = null; });
+  shelf.addEventListener("focusin", (event) => open(event.target.closest(".book")));
+  if (!books().some((b) => b.classList.contains("is-open"))) open(books()[0]);
 }
 
 // ---------- Intro greeting and page-change curtain ----------

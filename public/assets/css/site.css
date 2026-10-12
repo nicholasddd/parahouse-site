@@ -206,12 +206,14 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 @media (hover: none) { .tile-hint { display: none; } }
 .tile[hidden] { display: none; }
 
-/* ---------- Portfolio shelf ----------
-   Projects stand side by side like books, each render turned edge-on. Moving the pointer along
-   the shelf turns one to face the front. The open card is chosen from the pointer's position
-   across the whole shelf (site.js), so the shelf never shifts out from under the pointer.
-   Without hover (phones, touch) or without JS, the cards simply stack, facing front. */
-.shelf { display: grid; gap: 28px; margin-top: 8px; }
+/* ---------- Home shelf ----------
+   Twelve cards (projects repeat to fill them) stand side by side like books, each render turned
+   edge-on. Moving the pointer along the shelf turns one to face the front; holding it near either
+   edge rotates the row like a carousel, endlessly (site.js moves cards from one end to the other).
+   Without hover (phones, touch) or without JS, each project shows once, stacked and facing front. */
+.shelf-viewport { margin-top: 8px; }
+.shelf { display: grid; gap: 28px; }
+.book[data-copy] { display: none; }
 .book { position: relative; display: block; color: var(--fg); }
 .book[hidden] { display: none; }
 .book-plane { display: block; border-radius: var(--radius); overflow: hidden; background: #000; aspect-ratio: 16 / 10; }
@@ -223,15 +225,18 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .book-hint { display: none; }
 
 @media (hover: hover) and (min-width: 900px) {
-  .js .shelf {
+  .js .shelf-viewport {
     --h: clamp(320px, 56vh, 560px);
-    --w: calc(100vw - 2 * var(--edge) - 20px); /* shelf width; viewport units so it means the same inside every card */
-    --open: min(calc(var(--h) * 1.5), calc(var(--w) - (var(--n, 4) - 1) * 40px));
-    --spine: min(84px, calc((var(--w) - var(--open)) / max(var(--n, 4) - 1, 1)));
-    display: flex; gap: 0; align-items: flex-start; height: calc(var(--h) + 96px);
-    margin-top: 40px; border-bottom: 1px solid var(--line);
+    --open: min(calc(var(--h) * 1.45), 56vw);
+    --spine: 96px;
+    margin: 40px calc(-1 * var(--edge)) 0; overflow: hidden; border-bottom: 1px solid var(--line);
     perspective: 2400px; perspective-origin: 100% 45%;
   }
+  .js .shelf {
+    display: flex; gap: 0; align-items: flex-start; width: max-content; height: calc(var(--h) + 96px);
+    padding-left: var(--edge); transform-style: preserve-3d; will-change: transform;
+  }
+  .js .book[data-copy] { display: block; }
   .js .book { flex: 0 0 var(--spine); height: 100%; transform-style: preserve-3d; transition: flex-basis .8s cubic-bezier(.65,0,.2,1); }
   .js .book.is-open { flex-basis: var(--open); }
   .js .book-plane {
