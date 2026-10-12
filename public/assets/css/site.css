@@ -581,3 +581,44 @@ a.about-portrait span { display: block; margin-top: 10px; }
 }
 .cursor-dot.is-visible { opacity: 1; }
 @media (hover: none) { .cursor-dot { display: none; } }
+
+/* ---------- About: the parahouse difference (after the pillar section on fabric.codebydennis.com) ----------
+   Four quarters of a mark whose cut corners follow the slant of the P. The active quarter fills
+   with a slowly turning brand-red gradient and a glow sits behind it; tabs and text change with it.
+   Faint grid lines in quarters behind the section. */
+.pillars {
+  position: relative; margin-top: clamp(80px, 10vw, 150px); padding: clamp(56px, 7vw, 110px) var(--edge);
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); overflow: hidden;
+  background:
+    linear-gradient(90deg, transparent calc(25% - .5px), var(--line) 25%, transparent calc(25% + .5px), transparent calc(50% - .5px), var(--line) 50%, transparent calc(50% + .5px), transparent calc(75% - .5px), var(--line) 75%, transparent calc(75% + .5px)),
+    linear-gradient(180deg, transparent calc(50% - .5px), var(--line) 50%, transparent calc(50% + .5px));
+}
+.pillars::before {
+  content: ""; position: absolute; z-index: 0; width: 70vmax; height: 70vmax; left: var(--gx, 30%); top: var(--gy, 75%);
+  transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--brand) 38%, transparent), transparent);
+  transition: left 1.1s cubic-bezier(.65,0,.2,1), top 1.1s cubic-bezier(.65,0,.2,1);
+}
+.pillars-inner { position: relative; z-index: 1; display: grid; gap: clamp(40px, 5vw, 80px); align-items: center; }
+@media (min-width: 900px) { .pillars-inner { grid-template-columns: 1fr 1fr; } }
+.pillars-visual svg { display: block; width: min(100%, 520px); margin: 0 auto; overflow: visible; }
+.pq { cursor: pointer; }
+.pq-base { fill: #1a1a1a; stroke: rgba(255,255,255,.06); stroke-width: 1; transition: fill .4s ease; }
+.pq:hover .pq-base { fill: #262626; }
+.pq-glow { opacity: 0; transition: opacity .7s ease; }
+.pq.is-active .pq-glow { opacity: 1; }
+.pillars-copy { display: grid; gap: 28px; align-content: center; }
+.pillars-title { margin: 0; font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(30px, 4vw, 62px); line-height: .98; letter-spacing: -0.01em; max-width: 13ch; }
+.pillar-tabs { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px clamp(18px, 2.4vw, 36px); }
+.pillar-tabs button {
+  position: relative; padding: 6px 0 10px; border: 0; background: none; cursor: pointer;
+  font-family: var(--font); font-weight: 500; font-size: clamp(14px, 1.1vw, 16px); letter-spacing: .02em; text-transform: uppercase;
+  color: var(--muted); transition: color .3s ease;
+}
+.pillar-tabs button::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--brand); transform: scaleX(0); transition: transform .4s cubic-bezier(.65,0,.2,1); }
+.pillar-tabs button:hover { color: var(--fg); }
+.pillar-tabs button[aria-selected="true"] { color: var(--fg); }
+.pillar-tabs button[aria-selected="true"]::after { transform: scaleX(1); }
+.pillar-text { margin: 0; max-width: 46ch; min-height: 5.2em; font-size: clamp(17px, 1.45vw, 21px); line-height: 1.55; color: rgba(236,236,233,.75); animation: pillar-in .5s ease; }
+@keyframes pillar-in { from { opacity: 0; transform: translateY(6px); } }
+@media (prefers-reduced-motion: reduce) { .pillars::before, .pq-glow, .pillar-text { transition: none; animation: none; } }

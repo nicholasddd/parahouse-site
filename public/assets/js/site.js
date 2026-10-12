@@ -188,6 +188,41 @@ if (cursorTargets.length && matchMedia("(hover: hover)").matches) {
   });
 }
 
+// ---------- About: the parahouse difference (tabs and quarters stay in step) ----------
+const pillars = document.querySelector("[data-pillars]");
+if (pillars) {
+  const tabs = [...pillars.querySelectorAll("[data-pillar]")];
+  const quads = [...pillars.querySelectorAll("[data-quad]")];
+  const panels = [...pillars.querySelectorAll('[role="tabpanel"]')];
+  // Where the glow sits for each quarter: top-left, top-right, bottom-right, bottom-left of the mark.
+  const wide = () => matchMedia("(min-width: 900px)").matches;
+  const glow = [[18, 25], [38, 25], [38, 75], [18, 75]];
+  let current = 0, timer = 0;
+  const show = (i) => {
+    current = i;
+    tabs.forEach((t, k) => t.setAttribute("aria-selected", String(k === i)));
+    quads.forEach((q, k) => q.classList.toggle("is-active", k === i));
+    panels.forEach((p, k) => (p.hidden = k !== i));
+    const [gx, gy] = glow[i];
+    pillars.style.setProperty("--gx", (wide() ? gx : gx + 22) + "%");
+    pillars.style.setProperty("--gy", (wide() ? gy : gy * 0.5) + "%");
+  };
+  const stop = () => { clearInterval(timer); timer = 0; };
+  tabs.forEach((t, i) => t.addEventListener("click", () => { stop(); show(i); }));
+  quads.forEach((q, i) => q.addEventListener("click", () => { stop(); show(i); }));
+  pillars.querySelector('[role="tablist"]').addEventListener("keydown", (event) => {
+    const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+    if (!step) return;
+    stop(); show((current + step + tabs.length) % tabs.length); tabs[current].focus();
+  });
+  show(0);
+  if (reduceMotionNow()) {
+    pillars.querySelectorAll("animateTransform").forEach((a) => a.remove());
+  } else {
+    timer = setInterval(() => { if (!document.hidden) show((current + 1) % tabs.length); }, 5000); // cycles until the visitor picks one
+  }
+}
+
 // ---------- A small dot that trails the cursor ----------
 if (matchMedia("(hover: hover)").matches) {
   const dot = document.createElement("div");

@@ -59,17 +59,57 @@
           <span class="label">Cycle &amp; Carriage, ORA 5 Unveiling</span>
         </a>
       </div>
+    </div>
 
-      <section class="about-help" aria-labelledby="help">
-        <h2 class="about-help-title" id="help">What we do</h2>
-        <ul class="help-cols">
-          <li><h3>Concept and creative</h3><ul class="chips"><li>Spatial concepts</li><li>Visitor journeys</li><li>Moodboards</li><li>Concept options</li></ul></li>
-          <li><h3>3D design and rendering</h3><ul class="chips"><li>3D models</li><li>Key-view renders</li><li>Option studies</li><li>Walkthroughs</li></ul></li>
-          <li><h3>2D design</h3><ul class="chips"><li>Key visuals</li><li>Event graphics</li><li>Signage and wayfinding</li><li>Pitch deck visuals</li></ul></li>
-          <li><h3>Drawings and artwork</h3><ul class="chips"><li>Plans and elevations</li><li>Construction details</li><li>Print-ready artwork</li><li>Venue submissions</li></ul></li>
-        </ul>
-      </section>
+    <section class="pillars" data-pillars aria-labelledby="difference">
+      <div class="pillars-inner">
+        <div class="pillars-visual" aria-hidden="true">
+          <svg viewBox="0 0 400 400">
+            <defs>
+              <linearGradient id="pq-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#fff3ef"/>
+                <stop offset=".45" style="stop-color: var(--brand)"/>
+                <stop offset=".7" stop-color="#ffd6cd"/>
+                <stop offset="1" style="stop-color: var(--brand)"/>
+                <animateTransform attributeName="gradientTransform" type="rotate" from="0 .5 .5" to="360 .5 .5" dur="14s" repeatCount="indefinite"/>
+              </linearGradient>
+            </defs>
+            <g class="pq" data-quad="0" data-cursor-text="Your name" transform="rotate(0 200 200)">
+              <path class="pq-base" d="M190 10.26A190 190 0 0 0 91 44.4L125.4 93.5L93.5 125.4L44.4 91A190 190 0 0 0 10.26 190L120 190L190 120Z"/>
+              <path class="pq-glow" d="M190 10.26A190 190 0 0 0 91 44.4L125.4 93.5L93.5 125.4L44.4 91A190 190 0 0 0 10.26 190L120 190L190 120Z" fill="url(#pq-grad)"/>
+            </g>
+            <g class="pq" data-quad="1" data-cursor-text="The pitch" transform="rotate(90 200 200)">
+              <path class="pq-base" d="M190 10.26A190 190 0 0 0 91 44.4L125.4 93.5L93.5 125.4L44.4 91A190 190 0 0 0 10.26 190L120 190L190 120Z"/>
+              <path class="pq-glow" d="M190 10.26A190 190 0 0 0 91 44.4L125.4 93.5L93.5 125.4L44.4 91A190 190 0 0 0 10.26 190L120 190L190 120Z" fill="url(#pq-grad)"/>
+            </g>
+            <g class="pq" data-quad="2" data-cursor-text="Capacity" transform="rotate(180 200 200)">
+              <path class="pq-base" d="M190 10.26A190 190 0 0 0 91 44.4L125.4 93.5L93.5 125.4L44.4 91A190 190 0 0 0 10.26 190L120 190L190 120Z"/>
+              <path class="pq-glow" d="M190 10.26A190 190 0 0 0 91 44.4L125.4 93.5L93.5 125.4L44.4 91A190 190 0 0 0 10.26 190L120 190L190 120Z" fill="url(#pq-grad)"/>
+            </g>
+            <g class="pq" data-quad="3" data-cursor-text="The build" transform="rotate(270 200 200)">
+              <path class="pq-base" d="M190 10.26A190 190 0 0 0 91 44.4L125.4 93.5L93.5 125.4L44.4 91A190 190 0 0 0 10.26 190L120 190L190 120Z"/>
+              <path class="pq-glow" d="M190 10.26A190 190 0 0 0 91 44.4L125.4 93.5L93.5 125.4L44.4 91A190 190 0 0 0 10.26 190L120 190L190 120Z" fill="url(#pq-grad)"/>
+            </g>
+          </svg>
+        </div>
+        <div class="pillars-copy">
+          <h2 class="label" id="difference">The parahouse difference</h2>
+          <p class="pillars-title">Your name. Your client. Our craft.</p>
+          <ul class="pillar-tabs" role="tablist" aria-label="The parahouse difference">
+            <li role="presentation"><button type="button" role="tab" id="pt-0" aria-controls="pp-0" aria-selected="true" data-pillar="0">Your name</button></li>
+            <li role="presentation"><button type="button" role="tab" id="pt-1" aria-controls="pp-1" aria-selected="false" data-pillar="1">The pitch</button></li>
+            <li role="presentation"><button type="button" role="tab" id="pt-2" aria-controls="pp-2" aria-selected="false" data-pillar="2">Capacity</button></li>
+            <li role="presentation"><button type="button" role="tab" id="pt-3" aria-controls="pp-3" aria-selected="false" data-pillar="3">The build</button></li>
+          </ul>
+          <p class="pillar-text" role="tabpanel" id="pp-0" aria-labelledby="pt-0">We work in your templates and under your agency’s name. We never contact or pitch to your client, so the relationship and the margin stay yours.</p>
+          <p class="pillar-text" role="tabpanel" id="pp-1" aria-labelledby="pt-1" hidden>Your client sees the event before it exists: a clear idea, considered 2D and 3D design, and visuals they can say yes to.</p>
+          <p class="pillar-text" role="tabpanel" id="pp-2" aria-labelledby="pt-2" hidden>A senior design team for one pitch or a busy season, without hiring, fixed salaries or idle time between projects.</p>
+          <p class="pillar-text" role="tabpanel" id="pp-3" aria-labelledby="pt-3" hidden>Everything is designed to real dimensions and handed over as files your fabricator and printer can work from, so what gets approved gets built.</p>
+        </div>
+      </div>
+    </section>
 
+    <div class="page about">
       <section class="about-help" aria-labelledby="how">
         <h2 class="about-help-title" id="how">How we work</h2>
         <ol class="help-cols">
@@ -78,57 +118,6 @@
           <li><h3>Design and render</h3><p>2D and 3D design and key-view renders, in your templates.</p></li>
           <li><h3>Hand over</h3><p>Drawings and artwork your fabricator and printer can build from.</p></li>
         </ol>
-      </section>
-
-      <section class="about-band" aria-labelledby="difference">
-        <h2 class="label" id="difference">The parahouse difference</h2>
-        <ul class="difference">
-          <li><h3>Under your name</h3><p>We never contact or pitch to your client.</p></li>
-          <li><h3>Built to real dimensions</h3><p>What your client approves, your fabricator can build.</p></li>
-          <li><h3>Part of your team</h3><p>If something won’t work, we say so early.</p></li>
-        </ul>
-      </section>
-
-      <section class="home-block flush" aria-labelledby="brands">
-        <div class="block-head"><h2 id="brands">Brands we’ve designed for</h2></div>
-        <div class="brand-marquee">
-        <ul class="brand-track">
-          <li><span class="brand-logo" role="img" aria-label="Don Julio" style="--w:301;--h:163;--src:url(/assets/img/brands/don-julio.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Zacapa" style="--w:307;--h:100;--src:url(/assets/img/brands/zacapa.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Audemars Piguet" style="--w:474;--h:113;--src:url(/assets/img/brands/audemars-piguet.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="LVMH Beauty" style="--w:237;--h:163;--src:url(/assets/img/brands/lvmh-beauty.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="TSUBAKI" style="--w:301;--h:65;--src:url(/assets/img/brands/tsubaki.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="ELIXIR" style="--w:232;--h:70;--src:url(/assets/img/brands/elixir.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="CoinW" style="--w:331;--h:70;--src:url(/assets/img/brands/coinw.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Cetaphil" style="--w:254;--h:70;--src:url(/assets/img/brands/cetaphil.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="1664" style="--w:188;--h:98;--src:url(/assets/img/brands/1664.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Nicorette" style="--w:370;--h:90;--src:url(/assets/img/brands/nicorette.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="SENKA" style="--w:411;--h:90;--src:url(/assets/img/brands/senka.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Cygnet" style="--w:251;--h:100;--src:url(/assets/img/brands/cygnet.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Carlsberg" style="--w:293;--h:116;--src:url(/assets/img/brands/carlsberg.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Unilever" style="--w:157;--h:160;--src:url(/assets/img/brands/unilever.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Listerine" style="--w:318;--h:70;--src:url(/assets/img/brands/listerine.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Eucerin" style="--w:252;--h:109;--src:url(/assets/img/brands/eucerin.png)"></span></li>
-        </ul>
-        <ul class="brand-track" aria-hidden="true">
-          <li><span class="brand-logo" role="img" aria-label="Don Julio" style="--w:301;--h:163;--src:url(/assets/img/brands/don-julio.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Zacapa" style="--w:307;--h:100;--src:url(/assets/img/brands/zacapa.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Audemars Piguet" style="--w:474;--h:113;--src:url(/assets/img/brands/audemars-piguet.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="LVMH Beauty" style="--w:237;--h:163;--src:url(/assets/img/brands/lvmh-beauty.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="TSUBAKI" style="--w:301;--h:65;--src:url(/assets/img/brands/tsubaki.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="ELIXIR" style="--w:232;--h:70;--src:url(/assets/img/brands/elixir.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="CoinW" style="--w:331;--h:70;--src:url(/assets/img/brands/coinw.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Cetaphil" style="--w:254;--h:70;--src:url(/assets/img/brands/cetaphil.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="1664" style="--w:188;--h:98;--src:url(/assets/img/brands/1664.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Nicorette" style="--w:370;--h:90;--src:url(/assets/img/brands/nicorette.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="SENKA" style="--w:411;--h:90;--src:url(/assets/img/brands/senka.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Cygnet" style="--w:251;--h:100;--src:url(/assets/img/brands/cygnet.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Carlsberg" style="--w:293;--h:116;--src:url(/assets/img/brands/carlsberg.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Unilever" style="--w:157;--h:160;--src:url(/assets/img/brands/unilever.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Listerine" style="--w:318;--h:70;--src:url(/assets/img/brands/listerine.png)"></span></li>
-          <li><span class="brand-logo" role="img" aria-label="Eucerin" style="--w:252;--h:109;--src:url(/assets/img/brands/eucerin.png)"></span></li>
-        </ul>
-        </div>
       </section>
     </div>
   </main>
