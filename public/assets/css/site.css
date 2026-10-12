@@ -456,3 +456,8 @@ html.is-entering::after { animation-delay: .05s; }
 
 /* ---------- 404 ---------- */
 .notfound { min-height: 60vh; display: grid; align-content: center; gap: 24px; }
+
+/* Home: what your agency gets (reuses the About difference list, four across) */
+.difference.value { padding-top: 28px; }
+@media (min-width: 900px) { .difference.value { grid-template-columns: repeat(4, 1fr); } }
+.difference.value h3 { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(17px, 1.5vw, 22px); line-height: 1.05; }

@@ -1,6 +1,6 @@
 # parahouse site: notes for Claude Code
 
-Studio website for parahouse (always lowercase), a Singapore 3D studio that works for agencies (not brands) on roadshows, exhibitions and brand events: 3D models, renders and technical drawings, delivered under the agency's name. parahouse is digital only; fabrication is the agency's fabricator. Positioning: "Your silent backend. We don't compete, we enable." Tagline (deck): "We build fast. You look good." Not used on the site, since parahouse doesn't build. Source of truth for copy is the 2026 capabilities deck.
+Studio website for parahouse (always lowercase), a Singapore design studio that works for agencies (not brands) on roadshows, exhibitions and brand events: concepts, 2D and 3D design, renders, technical drawings and print-ready artwork, delivered under the agency's name. parahouse is digital only; fabrication is the agency's fabricator. Positioning: "Your silent backend. We don't compete, we enable." Tagline (deck): "We build fast. You look good." Not used on the site, since parahouse doesn't build. Source of truth for copy is the 2026 capabilities deck.
 
 ## Stack
 - Plain static HTML/CSS/JS in `public/`. No framework, no build step. Keep it that way unless asked.
@@ -8,7 +8,7 @@ Studio website for parahouse (always lowercase), a Singapore 3D studio that work
 - Contact form posts to `/api/contact`, which emails via the Resend API. Secret: `RESEND_API_KEY`. Vars: `CONTACT_TO`, `CONTACT_FROM`.
 
 ## Pages
-Home sections, in order: full-screen hero (logo + menu only, slow crossfade between project images), intro line, Selected work (one wide + two half `.feature` cards), Brands we've worked with (`.brand-wall`), How we help your team (`.service` accordion, numbered 001–004), footer.
+Home sections, in order: full-screen hero (logo + menu only, slow crossfade between project images), intro line, Selected work (one wide + two half `.feature` cards), What your agency gets (`.difference.value`, the four value points in `VALUE`), Brands we've designed for (`.brand-wall`), How we help your team (`.service` accordion, numbered 001–004), footer.
 
 About follows Dennis Snellenberg's about page: big headline, a plain rule, intro text (with ↘) beside a large portrait of Nicholas, "We can help you with …" in numbered columns (01–04, from the same SERVICES list as home), the parahouse difference on a `--surface` band, then the brand wall.
 
@@ -33,7 +33,7 @@ Home (`/`), Portfolio (`/portfolio/` + one folder per project), About (`/about/`
 - Curtain (after Dennis Snellenberg): first visit per browser session shows the intro: a deep red screen (`--curtain`) cycles "• Hello" through greetings, then lifts with a curved bottom edge. Internal links raise the curtain with a curved top edge and "• <page name>", then navigate; the next page opens covered and lifts. The `<head>` script sets `is-intro` / `is-entering` and `data-curtain` before paint; CSS does the lifting, `site.js` only cycles words and handles leaving. Link labels come from `data-label` (project links use the client name) or the page name.
 
 ## Copy
-- Written to agencies: the reader is an account director or creative lead with a pitch coming. Say "your client", "your team", "your fabricator"; never address the brand directly. Key promises: we work under your name, we don't contact your client unless asked, renders your fabricator can build.
+- Written to agencies: the reader is an account director or creative lead with a pitch coming. Say "your client", "your team", "your fabricator"; never address the brand directly. Cover creative work as a whole, 2D and 3D (concept, 3D and rendering, 2D graphics, drawings and artwork), not just 3D. Be sharp about the agency's return: pitches that win, capacity without headcount, the client relationship and margin stay theirs, fewer costly surprises on site. Key promises: we work under your name, we don't contact your client unless asked, design your fabricator and printer can produce.
 - Don't promise turnaround times, revision rounds or on-site work unless Nicholas gives them.
 - Plain, specific, no hype words. Write in sentence case; CSS handles the uppercase for headings and labels.
 - Calls to action: "Let’s talk" (footer) and "Send brief" (form). Contact person: Nicholas.
