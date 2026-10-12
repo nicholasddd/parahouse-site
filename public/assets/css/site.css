@@ -206,70 +206,6 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 @media (hover: none) { .tile-hint { display: none; } }
 .tile[hidden] { display: none; }
 
-/* ---------- Home shelf ----------
-   Twelve cards (projects repeat to fill them) stand side by side like books, each render turned
-   edge-on. Moving the pointer along the shelf turns one to face the front; holding it near either
-   edge rotates the row like a carousel, endlessly (site.js moves cards from one end to the other).
-   Without hover (phones, touch) or without JS, each project shows once, stacked and facing front. */
-.shelf-viewport { margin-top: 8px; }
-.shelf { display: grid; gap: 28px; }
-.book[data-copy] { display: none; }
-.book { position: relative; display: block; color: var(--fg); }
-.book[hidden] { display: none; }
-.book-plane { display: block; border-radius: var(--radius); overflow: hidden; background: #000; aspect-ratio: 16 / 10; }
-.book-plane img { width: 100%; height: 100%; object-fit: cover; }
-.book-spine { display: none; }
-.book-info { display: grid; gap: 8px; justify-items: start; padding-top: 12px; }
-.book-info .tile-type { background: transparent; border: 1px solid var(--line); backdrop-filter: none; -webkit-backdrop-filter: none; }
-.book-title { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(18px, 1.7vw, 26px); line-height: 1; }
-.book-hint { display: none; }
-
-@media (hover: hover) and (min-width: 900px) {
-  .js .shelf-viewport {
-    --h: clamp(320px, 56vh, 560px);
-    --open: min(calc(var(--h) * 1.45), 56vw);
-    --spine: 96px;
-    margin: 40px calc(-1 * var(--edge)) 0; overflow: hidden; border-bottom: 1px solid var(--line);
-    perspective: 2400px; perspective-origin: 100% 45%;
-  }
-  .js .shelf {
-    display: flex; gap: 0; align-items: flex-start; width: max-content; height: calc(var(--h) + 96px);
-    padding-left: var(--edge); transform-style: preserve-3d; will-change: transform;
-  }
-  .js .book[data-copy] { display: block; }
-  .js .book { flex: 0 0 var(--spine); height: 100%; transform-style: preserve-3d; transition: flex-basis .8s cubic-bezier(.65,0,.2,1); }
-  .js .book.is-open { flex-basis: var(--open); }
-  .js .book-plane {
-    position: absolute; left: 0; top: 0; width: var(--open); height: var(--h); aspect-ratio: auto;
-    transform-origin: 0 50%; transform: rotateY(72deg);
-    box-shadow: -18px 0 40px rgba(0,0,0,.5);
-    transition: transform .8s cubic-bezier(.65,0,.2,1), filter .8s ease;
-    filter: brightness(.5) saturate(.8);
-  }
-  .js .book.is-open .book-plane { transform: rotateY(0deg); filter: none; }
-  .js .book:hover .book-plane { filter: brightness(.75); }
-  .js .book.is-open:hover .book-plane { filter: none; }
-  .js .book-spine {
-    position: absolute; left: 0; top: 0; width: var(--spine); height: var(--h); z-index: 1;
-    display: flex; justify-content: flex-end; align-items: center; padding: 16px 0;
-    writing-mode: vertical-rl; transform: rotate(180deg); pointer-events: none;
-    font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #fff;
-    text-shadow: 0 1px 8px rgba(0,0,0,.8); transition: opacity .4s ease;
-  }
-  .js .book.is-open .book-spine { opacity: 0; }
-  .js .book-info {
-    position: absolute; left: 0; top: calc(var(--h) + 16px); width: var(--open);
-    grid-template-columns: auto 1fr auto; align-items: end; column-gap: 16px; padding: 0;
-    opacity: 0; transform: translateY(6px); transition: opacity .3s ease, transform .3s ease; pointer-events: none;
-  }
-  .js .book.is-open .book-info { opacity: 1; transform: none; transition-delay: .35s; }
-  .js .book:not(.is-open) .book-info { width: var(--spine); overflow: hidden; } /* hidden captions must not widen the page */
-  .js .book-info .tile-type { grid-row: 1; }
-  .js .book-title { grid-row: 1; }
-  .js .book-hint { display: block; grid-row: 1; justify-self: end; font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--brand); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .js .book, .js .book-plane, .js .book-info, .js .book-spine { transition: none !important; }
 }
 
 /* ---------- Project page ---------- */
@@ -375,8 +311,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
   -webkit-mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
 .home-block.flush .brand-marquee { margin: 0; }
 .brand-track { list-style: none; margin: 0; padding: 0 var(--gap) 0 0; display: flex; gap: var(--gap); flex-shrink: 0; animation: brand-drift 70s linear infinite; }
-.brand-track li { flex: 0 0 auto; width: clamp(150px, 17vw, 250px); aspect-ratio: 1; display: grid; place-items: center; padding: clamp(22px, 2.8vw, 44px); border: 1px solid var(--line); border-radius: 4px; transition: border-color .35s ease; }
-.brand-track li:hover { border-color: #444; }
+.brand-track li { flex: 0 0 auto; width: clamp(140px, 14vw, 210px); height: clamp(90px, 9vw, 130px); display: grid; place-items: center; padding: 0 clamp(14px, 1.8vw, 28px); }
 .brand-track .brand-logo { width: min(100%, calc(64px * var(--w) / var(--h))); }
 .brand-marquee:hover .brand-track { animation-play-state: paused; }
 @keyframes brand-drift { to { transform: translateX(-100%); } }
@@ -542,3 +477,63 @@ a.about-portrait span { display: block; margin-top: 10px; }
 .faq .service-title { font-size: clamp(18px, 1.9vw, 28px); line-height: 1.1; }
 .faq .service-body { grid-template-columns: 1fr; }
 .faq .service-body p { max-width: 60ch; }
+
+/* ---------- Home: portfolio cards (after fabric.codebydennis.com) ----------
+   Four dark cards in a row, split by hairlines. On hover the card lifts up and to the right and
+   leaves an outline where it was; the label slides up and is replaced by its copy; the arrow slides
+   out and back in; the name and title scramble; a small pill follows the cursor with the project name.
+   Narrower screens: a sideways-scrolling row that snaps card by card. */
+.pcards {
+  --pc-gap: 20px; --pc-ease: .4s cubic-bezier(.75, 0, .25, 1);
+  list-style: none; margin: 24px calc(-1 * var(--edge)) 0; padding: 0;
+  display: grid; grid-auto-flow: column; grid-auto-columns: 82%; overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+}
+.pcards::-webkit-scrollbar { display: none; }
+@media (min-width: 601px) { .pcards { grid-auto-columns: 46%; } }
+@media (min-width: 881px) { .pcards { grid-auto-columns: 32%; } }
+@media (min-width: 1121px) { .pcards { grid-auto-flow: row; grid-template-columns: repeat(4, 1fr); overflow: visible; } }
+.pcard-cell { scroll-snap-align: start; padding: clamp(28px, 2.6vw, 40px) var(--pc-gap); border-right: 1px solid var(--line); }
+.pcard-cell:first-child { border-left: 1px solid var(--line); }
+@media (min-width: 1121px) { .pcard-cell:nth-child(4n) { border-right: 0; } .pcard-cell:first-child { border-left: 0; } }
+.pcard { position: relative; }
+.pcard-link {
+  position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: space-between;
+  min-height: clamp(300px, 26vw, 400px); background: #000; color: var(--fg); border-radius: 6px;
+  transition: transform var(--pc-ease);
+}
+.pcard-outline { position: absolute; inset: 0; border: 1px solid rgba(159, 161, 163, .35); border-radius: 6px; opacity: 0; transition: opacity var(--pc-ease); pointer-events: none; }
+.pcard-top { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; padding: 24px 22px; }
+.pcard-bubbles { height: 22px; }
+.bubble { position: relative; display: inline-flex; overflow: hidden; padding: 4px 9px 5px; border-radius: 99px; background: var(--fg); color: #000; }
+.bubble span { display: block; white-space: nowrap; font-family: var(--mono); font-size: 10.5px; line-height: 1; letter-spacing: .06em; text-transform: uppercase; transition: transform var(--pc-ease); }
+.bubble span.copy { position: absolute; left: 9px; top: 4px; transform: translateY(200%); }
+.pcard-logo { display: flex; align-items: center; height: clamp(64px, 5.6vw, 84px); }
+.pcard-logo-img { display: block; height: 62%; aspect-ratio: var(--w) / var(--h); max-width: 100%; background: #fff; -webkit-mask: var(--src) left center / contain no-repeat; mask: var(--src) left center / contain no-repeat; }
+.pcard-wordmark { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(20px, 1.7vw, 26px); line-height: 1; }
+.pcard-info { display: grid; gap: 2px; font-size: 15px; }
+.pcard-sub { color: rgba(236, 236, 233, .5); }
+.pcard-bottom { position: relative; display: flex; align-items: center; justify-content: space-between; padding: 16px 22px; border-top: 1px solid var(--line); font-size: 15px; }
+.chevron { position: relative; display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: rgba(159, 161, 163, .225); overflow: hidden; }
+.chevron i { display: flex; width: 14px; transition: transform var(--pc-ease); }
+.chevron i.copy { position: absolute; transform: translateX(-150%); }
+.chevron svg { width: 100%; stroke: var(--fg); stroke-width: 1.8; }
+@media (hover: hover) {
+  .pcard-link:hover { transform: translate(7px, -7px); }
+  .pcard-link:hover + .pcard-outline { opacity: 1; }
+  .pcard-link:hover .bubble span { transform: translateY(-200%); }
+  .pcard-link:hover .bubble span.copy { transform: translateY(0); }
+  .pcard-link:hover .chevron i { transform: translateX(200%); }
+  .pcard-link:hover .chevron i.copy { transform: translateX(0); }
+}
+
+/* The pill that follows the cursor over a project card */
+.cursor-bubble {
+  position: fixed; left: 0; top: 0; z-index: 60; pointer-events: none; display: flex; align-items: center; gap: 6px;
+  padding: 5px 12px 6px 11px; border-radius: 6px; background: #000; border: 1px solid rgba(159, 161, 163, .35);
+  color: var(--fg); font-size: 13px; white-space: nowrap; opacity: 0; transition: opacity .3s ease-in-out .1s;
+}
+.cursor-bubble.is-active { opacity: 1; transition-delay: 0s; }
+.cursor-bubble svg { width: 11px; stroke: var(--brand); stroke-width: 2.2; }
+@media (hover: none) { .cursor-bubble { display: none; } }
+@media (prefers-reduced-motion: reduce) { .pcard-link, .bubble span, .chevron i, .pcard-outline { transition: none; } }

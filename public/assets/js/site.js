@@ -113,64 +113,79 @@ if (workFilters) {
   });
 }
 
-// ---------- Home shelf: cards turn to face the front; the row rotates endlessly at the edges ----------
-// In the middle of the shelf, the open card comes from the pointer's position across the whole
-// row. The row's width never changes (one open card plus spines), so the chosen card is always
-// the one under the pointer. Near the left or right edge the row slides that way; cards that
-// leave one end are moved to the other, so it loops forever, and the card at the centre opens.
-const shelf = document.querySelector("[data-shelf]");
-const shelfView = shelf?.parentElement;
-const canShelf = matchMedia("(hover: hover) and (min-width: 900px)");
-if (shelf && shelfView) {
-  const books = () => [...shelf.children];
-  const open = (book) => {
-    if (!book || book.classList.contains("is-open")) return;
-    shelf.querySelector(".book.is-open")?.classList.remove("is-open");
-    book.classList.add("is-open");
-  };
-  const openAt = (x) => {
-    const all = books();
-    const left = all[0].getBoundingClientRect().left;
-    const right = all[all.length - 1].getBoundingClientRect().right;
-    const i = Math.floor(((x - left) / Math.max(right - left, 1)) * all.length);
-    open(all[Math.min(all.length - 1, Math.max(0, i))]);
-  };
-  let offset = 0, speed = 0, pointerX = null, frame = 0;
-  const edgeZone = () => Math.min(170, shelfView.clientWidth * 0.12);
-  const step = () => {
-    offset += speed;
-    // Loop: a card that has slid fully out of one end is moved to the other.
-    for (let guard = 0; guard < 24; guard++) {
-      const first = shelf.firstElementChild;
-      const w = first.getBoundingClientRect().width;
-      if (offset < w) break;
-      shelf.append(first);
-      offset -= w;
+// ---------- Text scramble (after GSAP's ScrambleText, as on fabric.codebydennis.com) ----------
+// Letters turn into random characters and settle back into the text from left to right.
+const SCRAMBLE_CHARS = "XYZxyzabc0$€£";
+const scramble = (el, text, duration = 600) => {
+  if (reduceMotionNow()) { el.textContent = text; return; }
+  cancelAnimationFrame(el._scramble || 0);
+  const start = performance.now();
+  const frame = (now) => {
+    const t = Math.min(1, (now - start) / duration);
+    const settled = Math.floor(t * text.length);
+    let out = text.slice(0, settled);
+    for (let i = settled; i < text.length; i++) {
+      out += text[i] === " " ? " " : SCRAMBLE_CHARS[(Math.random() * SCRAMBLE_CHARS.length) | 0];
     }
-    for (let guard = 0; guard < 24 && offset < 0; guard++) {
-      const last = shelf.lastElementChild;
-      shelf.prepend(last);
-      offset += last.getBoundingClientRect().width;
-    }
-    shelf.style.transform = `translate3d(${-offset}px, 0, 0)`;
-    const box = shelfView.getBoundingClientRect();
-    openAt(box.left + box.width / 2);
-    frame = speed ? requestAnimationFrame(step) : 0;
+    el.textContent = out;
+    if (t < 1) el._scramble = requestAnimationFrame(frame);
   };
-  shelfView.addEventListener("pointermove", (event) => {
-    if (event.pointerType !== "mouse" || !canShelf.matches) return;
-    pointerX = event.clientX;
-    const box = shelfView.getBoundingClientRect();
-    const zone = edgeZone();
-    const fromLeft = pointerX - box.left, fromRight = box.right - pointerX;
-    // Speed grows the deeper the pointer sits in the edge zone (up to ~10px per frame).
-    speed = fromRight < zone ? 10 * (1 - fromRight / zone) : fromLeft < zone ? -10 * (1 - fromLeft / zone) : 0;
-    if (speed) { if (!frame) frame = requestAnimationFrame(step); }
-    else openAt(pointerX);
+  el._scramble = requestAnimationFrame(frame);
+};
+function reduceMotionNow() { return matchMedia("(prefers-reduced-motion: reduce)").matches; }
+
+// Project cards: name and title scramble on the way in and again on the way out.
+document.querySelectorAll("[data-hover-scramble]").forEach((card) => {
+  const targets = [...card.querySelectorAll("[data-scramble]")];
+  targets.forEach((el) => (el.dataset.text = el.textContent));
+  const run = () => targets.forEach((el) => scramble(el, el.dataset.text));
+  card.addEventListener("mouseenter", run);
+  card.addEventListener("mouseleave", run);
+});
+
+// Section headings scramble in once as they scroll into view.
+const scrollScramble = document.querySelectorAll("[data-scroll-scramble]");
+if (scrollScramble.length && "IntersectionObserver" in window) {
+  const seen = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      seen.unobserve(entry.target);
+      scramble(entry.target, entry.target.textContent, 900);
+    });
+  }, { rootMargin: "0px 0px -15% 0px" });
+  scrollScramble.forEach((el) => seen.observe(el));
+}
+
+// A small pill follows the cursor over project cards, showing the project's name.
+const cursorTargets = document.querySelectorAll("[data-cursor-text]");
+if (cursorTargets.length && matchMedia("(hover: hover)").matches) {
+  const bubble = document.createElement("div");
+  bubble.className = "cursor-bubble";
+  bubble.setAttribute("aria-hidden", "true");
+  bubble.innerHTML = '<span></span><svg viewBox="0 0 24 24" fill="none"><polyline points="9 5 16 12 9 19"/></svg>';
+  document.body.append(bubble);
+  const label = bubble.querySelector("span");
+  let x = 0, y = 0, bx = 0, by = 0, moving = 0, flip = false;
+  const follow = () => {
+    bx += (x - bx) * 0.2; by += (y - by) * 0.2; // eases behind the cursor
+    // Cards on the right half show the pill to the left of the cursor, so it never runs off screen.
+    bubble.style.transform = flip ? `translate3d(calc(${bx - 8}px - 100%), ${by + 20}px, 0)` : `translate3d(${bx + 14}px, ${by + 20}px, 0)`;
+    moving = Math.abs(x - bx) + Math.abs(y - by) > 0.3 ? requestAnimationFrame(follow) : 0;
+  };
+  document.addEventListener("mousemove", (event) => {
+    x = event.clientX; y = event.clientY;
+    if (!moving) moving = requestAnimationFrame(follow);
+  }, { passive: true });
+  cursorTargets.forEach((el) => {
+    el.addEventListener("mouseenter", (event) => {
+      const r = el.getBoundingClientRect();
+      flip = r.left + r.width / 2 > innerWidth / 2;
+      if (!bubble.classList.contains("is-active")) { bx = event.clientX; by = event.clientY; }
+      bubble.classList.add("is-active");
+      scramble(label, el.dataset.cursorText);
+    });
+    el.addEventListener("mouseleave", () => bubble.classList.remove("is-active"));
   });
-  shelfView.addEventListener("pointerleave", () => { speed = 0; pointerX = null; });
-  shelf.addEventListener("focusin", (event) => open(event.target.closest(".book")));
-  if (!books().some((b) => b.classList.contains("is-open"))) open(books()[0]);
 }
 
 // ---------- Intro greeting and page-change curtain ----------
