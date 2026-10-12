@@ -10,7 +10,7 @@ Studio website for parahouse (always lowercase), a Singapore design studio that 
 ## Pages
 Home sections, in order: full-screen hero (slow crossfade between project images, the key message "The creative team behind your next pitch." large bottom-left, and a mono row along the bottom: studio time, "Design studio for agencies", "Based in Singapore"), intro line (the positioning line), Selected work (the shelf of flipping cards, see below), What your agency gets (`.difference.value`, the four value points in `VALUE`), Brands we've designed for (`.brand-marquee`), How we help your team (`.service` accordion), footer.
 
-About follows Dennis Snellenberg's about page: big headline, a plain rule, intro text (with ↘) beside a large portrait of Nicholas, "We can help your team with …" in four columns (the same SERVICES list as home), the parahouse difference on a `--surface` band, then the brand wall.
+About is about the studio and its services, never the founder (no portrait, no founder story; Nicholas asked for this). Order: big headline, a plain rule, intro text (with ↘) beside a project render that links to that project, "We can help your team with …" (the four SERVICES, each with its deliverables as chips), "How we work with your team" (`STEPS`: Brief, Concept, Design and render, Hand over), "Ways to bring us in" (`WAYS`: a single pitch, pitch to production, overflow support), the parahouse difference on a `--surface` band, "Who we work with", "Questions agencies ask" (`FAQ`, an accordion), then the brand carousel.
 
 Footer on every page (Dennis-style): "Let's work together" (no photo), a rule with a round "Let's talk" button that leads to the form (CTA block hidden on Contact), project thumbnail strip, large wordmark, and a meta row (version, Singapore local time, socials).
 
@@ -38,7 +38,7 @@ Home (`/`), Work (`/portfolio/` + one folder per project; the menu calls it Work
 - Written to agencies: the reader is an account director or creative lead with a pitch coming. Say "your client", "your team", "your fabricator"; never address the brand directly. Cover creative work as a whole, 2D and 3D (concept, 3D and rendering, 2D graphics, drawings and artwork), not just 3D. Be sharp about the agency's return: pitches that win, capacity without headcount, the client relationship and margin stay theirs, fewer costly surprises on site. Key promises: we work under your name, we don't contact your client unless asked, design your fabricator and printer can produce.
 - Don't promise turnaround times, revision rounds or on-site work unless Nicholas gives them.
 - Plain, specific, no hype words. Write in sentence case; CSS handles the uppercase for headings and labels.
-- Calls to action: "Let’s talk" (footer) and "Send brief" (form). Contact person: Nicholas.
+- Calls to action: "Let’s talk" (footer) and "Send brief" (form). Contact person: Nicholas (not named on the site).
 
 ## Every page shares
 The same `<head>` (including the inline theme script), the floating controls, the `#menu` panel and the footer (not on Home). If you change one, change all of them (`public/**/*.html`, including `404.html`).
