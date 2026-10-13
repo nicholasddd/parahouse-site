@@ -5,6 +5,7 @@ Studio website for parahouse (always lowercase), a Singapore design studio that 
 ## Stack
 - Plain static HTML/CSS/JS in `public/`. No framework, no build step. Keep it that way unless asked.
 - Hosted on Cloudflare Workers with static assets (`wrangler.jsonc`). `worker/index.js` only handles `/api/*`; everything else is a static file.
+- Domain: parahouse.co, registered at Porkbun (renews yearly, auto-renew on), nameservers on Cloudflare. `wrangler.jsonc` `routes` attach parahouse.co and www.parahouse.co to the Worker as custom domains on every deploy.
 - Contact form posts to `/api/contact`, which emails via the Resend API. Secret: `RESEND_API_KEY`. Vars: `CONTACT_TO`, `CONTACT_FROM`.
 
 ## Pages
