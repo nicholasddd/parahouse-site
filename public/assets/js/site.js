@@ -139,6 +139,7 @@ function reduceMotionNow() { return matchMedia("(prefers-reduced-motion: reduce)
 if (matchMedia("(hover: hover)").matches) document.querySelectorAll("[data-hover-scramble]").forEach((card) => {
   const targets = [...card.querySelectorAll("[data-scramble]")];
   targets.forEach((el) => (el.dataset.text = el.textContent));
+  if (!card.hasAttribute("aria-label")) card.setAttribute("aria-label", targets.map((el) => el.dataset.text || el.textContent).join(", "));
   const run = () => targets.forEach((el) => scramble(el, el.dataset.text));
   card.addEventListener("mouseenter", run);
   card.addEventListener("mouseleave", run);
@@ -154,7 +155,7 @@ if (scrollScramble.length && "IntersectionObserver" in window) {
       scramble(entry.target, entry.target.textContent, 900);
     });
   }, { rootMargin: "0px 0px -15% 0px" });
-  scrollScramble.forEach((el) => seen.observe(el));
+  scrollScramble.forEach((el) => { el.setAttribute("aria-label", el.textContent); seen.observe(el); });
 }
 
 // A small pill follows the cursor over project cards, showing the project's name.
@@ -231,8 +232,8 @@ document.querySelectorAll("details.faq-item").forEach((item) => {
   const run = (from, to, open) => {
     anim?.cancel();
     item.style.overflow = "hidden";
-    anim = item.animate({ height: [from + "px", to + "px"] }, { duration: reduceMotionNow() ? 0 : 450, easing: "cubic-bezier(.65,0,.2,1)" });
-    if (open) body.animate({ opacity: [0, 1], transform: ["translateY(-6px)", "none"] }, { duration: reduceMotionNow() ? 0 : 400, delay: 80, easing: "ease-out", fill: "backwards" });
+    anim = item.animate({ height: [from + "px", to + "px"] }, { duration: reduceMotionNow() ? 0 : 300, easing: "cubic-bezier(.23,1,.32,1)" });
+    if (open) body.animate({ opacity: [0, 1], transform: ["translateY(-6px)", "none"] }, { duration: reduceMotionNow() ? 0 : 250, delay: 50, easing: "cubic-bezier(.23,1,.32,1)", fill: "backwards" });
     anim.onfinish = () => { anim = null; item.style.height = item.style.overflow = ""; if (!open) item.open = false; };
   };
   summary.addEventListener("click", (event) => {
@@ -287,11 +288,11 @@ if (root.classList.contains("is-intro")) {
     i += 1;
     if (i >= words.length) return;
     root.dataset.curtain = words[i];
-    setTimeout(step, 125);
-  }, 520);
+    setTimeout(step, 80);
+  }, 300);
 }
 ["is-intro", "is-entering"].forEach((cls) => {
-  if (root.classList.contains(cls)) setTimeout(() => root.classList.remove(cls), cls === "is-intro" ? 3200 : 1400);
+  if (root.classList.contains(cls)) setTimeout(() => root.classList.remove(cls), cls === "is-intro" ? 2100 : 800);
 });
 
 const PAGE_NAMES = { "/": "Home", "/portfolio/": "Work", "/services/": "Services", "/about/": "About", "/contact/": "Contact" };
@@ -321,7 +322,7 @@ document.addEventListener("click", (event) => {
   let gone = false;
   const go = () => { if (!gone) { gone = true; location.href = url.href; } };
   curtain.addEventListener("animationend", (e) => { if (e.target === curtain) go(); });
-  setTimeout(go, 750);
+  setTimeout(go, 450);
 });
 // Back/forward from the browser cache: clear any curtain left from leaving.
 window.addEventListener("pageshow", (event) => {
