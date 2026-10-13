@@ -312,7 +312,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 }
 .brand-wall li:hover .brand-logo, .brand-track li:hover .brand-logo { background-color: #fff; }
 
-/* Brand carousel: outlined squares drifting left, paused while the pointer is over them.
+/* Brand carousel: outlined squares drifting left, without pausing on hover.
    With reduced motion it becomes a still, wrapping grid. */
 .brand-marquee { display: flex; overflow: hidden; padding: clamp(28px, 4vw, 56px) 0; margin: 0 calc(-1 * var(--edge));
   -webkit-mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
@@ -320,7 +320,6 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .brand-track { list-style: none; margin: 0; padding: 0 var(--gap) 0 0; display: flex; gap: var(--gap); flex-shrink: 0; animation: brand-drift 70s linear infinite; }
 .brand-track li { flex: 0 0 auto; width: clamp(190px, 19vw, 300px); height: clamp(90px, 9vw, 130px); display: grid; place-items: center; padding: 0 clamp(30px, 3.6vw, 60px); }
 .brand-track .brand-logo { width: min(100%, calc(64px * var(--w) / var(--h))); }
-.brand-marquee:hover .brand-track { animation-play-state: paused; }
 @keyframes brand-drift { to { transform: translateX(-100%); } }
 @media (prefers-reduced-motion: reduce) {
   .brand-marquee { -webkit-mask: none; mask: none; margin: 0; }
