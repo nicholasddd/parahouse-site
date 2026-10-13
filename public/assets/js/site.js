@@ -359,3 +359,7 @@ if (glitch && !reduceMotion) {
     morph(words[index]);
   }, 3600);
 }
+
+// ---------- Contact: the Pitch Kit's "Send brief" arrives with ?type=pitch ----------
+const eventType = document.getElementById("event_type");
+if (eventType && new URLSearchParams(location.search).get("type") === "pitch") eventType.value = "Pitch support";
