@@ -8,9 +8,10 @@ projects/
   tsubaki-20th-anniversary/       TSUBAKI, 20th anniversary with Suzy Bae, July 2026
   ora-5-unveiling/                Cycle & Carriage, ORA 5 at the Singapore Motorshow, January 2026
   propw-token2049/                PropW, TOKEN2049 booth, October 2025
-  coinw-token2049-afterparty/     CoinW, TOKEN2049 afterparty, October 2025
+  coinw-token2049-afterparty-2025/ CoinW, TOKEN2049 afterparty at CÉ LA VI, October 2025
   audemars-piguet-staff-party/    Audemars Piguet, 150 Years staff party, October 2025
   tsubaki-brand-refresh/          TSUBAKI, brand relaunch roadshow, April 2025
+  coinw-token2049-afterparty-2024/ CoinW, TOKEN2049 afterparty at Tipsy Unicorn, Sentosa, October 2024
   don-julio-ultima-glorifier/     Don Julio, Ultima bottle glorifier, July 2024
   1664-brut-private-trade-event/  1664, Brut private trade event at Kinki, June 2024
 ```

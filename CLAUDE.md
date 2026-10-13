@@ -62,7 +62,7 @@ The same `<head>` (including the inline theme script), the floating controls, th
 - Run `npm run dev` and submit the contact form once if you touched it.
 
 ## Projects from Instagram
-CoinW 2025 Afterparty and Audemars Piguet 150 Years Staff Party came from @parahouse.co posts (photos only, no renders; collage posts were split into their panels). Their copy is a first draft from the captions; Nicholas will review each project's details.
+CoinW 2025 Afterparty, CoinW 2024 Afterparty (Tipsy Unicorn, post DAvHJdnTI3Q) and Audemars Piguet 150 Years Staff Party came from @parahouse.co posts (photos only, no renders; collage posts were split into their panels). Their copy is a first draft from the captions; Nicholas will review each project's details.
 
 ## Processing a submission
 New projects arrive in `submissions/<slug>/` (outside `public/`, so never published): `project.md` (filled from `_template/project.md`), `renders/`, `photos/`.
