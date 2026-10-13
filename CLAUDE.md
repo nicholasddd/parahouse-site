@@ -40,7 +40,7 @@ Home (`/`), Work (`/portfolio/` + one folder per project; the menu calls it Work
 - No email address or phone number anywhere on the site, including error messages: every enquiry goes through the brief form.
 - No decorative numbers or counts anywhere (no "(16)" beside headings, no "4+", no 001/01 indexes). Nicholas has designed for more brands than are listed, so a count undersells him.
 - Written to agencies: the reader is an account director or creative lead with a pitch coming. Say "your client", "your team", "your fabricator"; never address the brand directly. Cover creative work as a whole, 2D and 3D (concept, 3D and rendering, 2D graphics, drawings and artwork), not just 3D. Be sharp about the agency's return: pitches that win, capacity without headcount, the client relationship and margin stay theirs, fewer costly surprises on site. Key promises: we work under your name, we don't contact your client unless asked, design your fabricator and printer can produce.
-- Don't promise turnaround times, revision rounds or on-site work unless Nicholas gives them.
+- Promises Nicholas has given: first renders within 48 hours of the brief (stated on the Pitch Kit) and a reply to every brief within one working day (Contact lede). Don't promise other turnaround times, revision rounds or on-site work unless he gives them.
 - Plain, specific, no hype words. Write in sentence case; CSS handles the uppercase for headings and labels.
 - Calls to action: "Let’s talk" (footer) and "Send brief" (form). Contact person: Nicholas (not named on the site).
 
