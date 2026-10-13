@@ -364,3 +364,39 @@ if (glitch && !reduceMotion) {
 // ---------- Contact: the Pitch Kit's "Send brief" arrives with ?type=pitch ----------
 const eventType = document.getElementById("event_type");
 if (eventType && new URLSearchParams(location.search).get("type") === "pitch") eventType.value = "Pitch support";
+
+// ---------- Selected work floats into place as it scrolls in (after lusion.co's featured work) ----------
+// Each card starts a little low and small and settles as it reaches its spot. Its position follows
+// the scroll, eased so the card trails slightly behind and catches up, which makes it float.
+// Columns arrive one after another. Measures the untransformed cell, so the motion never feeds back.
+const floatCards = [...document.querySelectorAll(".pcard")];
+if (floatCards.length && !reduceMotionNow()) {
+  const cards = floatCards.map((card) => ({ card, cell: card.closest(".pcard-cell") || card.parentElement, y: 0, s: 1, ready: false }));
+  let frame = 0;
+  const targetFor = ({ cell }) => {
+    const vh = innerHeight, box = cell.getBoundingClientRect();
+    const column = Math.max(0, Math.round((box.left - (cell.parentElement.getBoundingClientRect().left)) / box.width));
+    const visibleColumn = Math.max(0, Math.min(3, Math.floor(Math.max(0, box.left) / box.width)));
+    const delay = (cell.parentElement.scrollWidth > cell.parentElement.clientWidth ? visibleColumn : column % 4) * 0.08;
+    const p = Math.min(1, Math.max(0, (vh - box.top) / (vh * 0.6) - delay));
+    const e = 1 - Math.pow(1 - p, 3);
+    return { y: (1 - e) * 110, s: 0.88 + 0.12 * e };
+  };
+  const tick = () => {
+    let moving = false;
+    cards.forEach((c) => {
+      const t = targetFor(c);
+      if (!c.ready) { c.y = t.y; c.s = t.s; c.ready = true; }
+      c.y += (t.y - c.y) * 0.1;
+      c.s += (t.s - c.s) * 0.1;
+      if (Math.abs(t.y - c.y) > 0.1 || Math.abs(t.s - c.s) > 0.0005) moving = true;
+      c.card.style.transform = c.y < 0.1 && c.s > 0.9995 ? "" : `translate3d(0, ${c.y.toFixed(2)}px, 0) scale(${c.s.toFixed(4)})`;
+    });
+    frame = moving ? requestAnimationFrame(tick) : 0;
+  };
+  const wake = () => { if (!frame) frame = requestAnimationFrame(tick); };
+  addEventListener("scroll", wake, { passive: true });
+  addEventListener("resize", wake);
+  document.querySelector("[data-pcards]")?.addEventListener("scroll", wake, { passive: true });
+  wake();
+}
