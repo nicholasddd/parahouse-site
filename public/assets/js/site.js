@@ -134,8 +134,9 @@ const scramble = (el, text, duration = 600) => {
 };
 function reduceMotionNow() { return matchMedia("(prefers-reduced-motion: reduce)").matches; }
 
-// Project cards: name and title scramble on the way in and again on the way out.
-document.querySelectorAll("[data-hover-scramble]").forEach((card) => {
+// Project cards: name and title scramble on the way in and again on the way out (mouse only;
+// on touch screens a tap would just flicker the text before the page changes).
+if (matchMedia("(hover: hover)").matches) document.querySelectorAll("[data-hover-scramble]").forEach((card) => {
   const targets = [...card.querySelectorAll("[data-scramble]")];
   targets.forEach((el) => (el.dataset.text = el.textContent));
   const run = () => targets.forEach((el) => scramble(el, el.dataset.text));

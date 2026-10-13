@@ -572,6 +572,12 @@ a.about-portrait span { display: block; margin-top: 10px; }
   .pcard-link:hover .pcard-media img { transform: scale(1); }
   .pcard-link:hover .pcard-sub { color: rgba(255,255,255,.8); }
 }
+/* Touch screens have no hover: the project image is simply there, with no motion. */
+@media (hover: none) {
+  .pcard-media { opacity: 1; transition: none; }
+  .pcard-media img { transform: none; transition: none; }
+  .pcard-sub { color: rgba(255,255,255,.8); }
+}
 
 /* A small dot that trails the cursor (site.js); pointer devices only */
 .cursor-dot {
