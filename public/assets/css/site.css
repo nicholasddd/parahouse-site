@@ -601,9 +601,10 @@ a.about-portrait span { display: block; margin-top: 10px; }
 }
 .pillars-inner { position: relative; z-index: 1; display: grid; gap: clamp(40px, 5vw, 80px); align-items: center; }
 @media (min-width: 900px) { .pillars-inner { grid-template-columns: 1fr 1fr; } }
-.pillars-visual svg { display: block; width: min(100%, 520px); margin: 0 auto; overflow: visible; }
-.pq { cursor: pointer; }
-.pq-base { fill: #1a1a1a; stroke: rgba(255,255,255,.06); stroke-width: 1; transition: fill .4s ease; }
+.pillars-visual svg { display: block; height: clamp(320px, 58vh, 560px); width: auto; max-width: 100%; margin: 0 auto; overflow: visible; }
+.pq { cursor: pointer; transition: transform .7s cubic-bezier(.65,0,.2,1); }
+.pq.is-active { transform: translate(var(--dx), var(--dy)); }
+.pq-base { fill: #1a1a1a; stroke: rgba(255,255,255,.07); stroke-width: 1; stroke-linejoin: round; transition: fill .4s ease; }
 .pq:hover .pq-base { fill: #262626; }
 .pq-glow { opacity: 0; transition: opacity .7s ease; }
 .pq.is-active .pq-glow { opacity: 1; }
@@ -621,7 +622,7 @@ a.about-portrait span { display: block; margin-top: 10px; }
 .pillar-tabs button[aria-selected="true"]::after { transform: scaleX(1); }
 .pillar-text { margin: 0; max-width: 46ch; min-height: 5.2em; font-size: clamp(17px, 1.45vw, 21px); line-height: 1.55; color: rgba(236,236,233,.75); animation: pillar-in .5s ease; }
 @keyframes pillar-in { from { opacity: 0; transform: translateY(6px); } }
-@media (prefers-reduced-motion: reduce) { .pillars::before, .pq-glow, .pillar-text { transition: none; animation: none; } }
+@media (prefers-reduced-motion: reduce) { .pillars::before, .pq, .pq-glow, .pillar-text { transition: none; animation: none; } }
 
 /* ---------- Services: offers and FAQ ---------- */
 .offer-group { padding-top: clamp(56px, 7vw, 100px); }
