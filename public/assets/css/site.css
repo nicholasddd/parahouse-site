@@ -646,3 +646,6 @@ a.about-portrait span { display: block; margin-top: 10px; }
 }
 .faq-item.is-open summary::after, .no-js .faq-item[open] summary::after { transform: rotate(135deg); color: var(--brand); }
 .faq-item:not(.is-open) .service-title { transition: color .3s ease; }
+/* Mouse clicks don't leave a focus box on FAQ questions; keyboard focus still shows one */
+.faq-item summary:focus { outline: none; }
+.faq-item summary:focus-visible { outline: 1px solid var(--fg); outline-offset: 4px; border-radius: 6px; }
