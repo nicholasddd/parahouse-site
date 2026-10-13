@@ -1,6 +1,6 @@
 # parahouse website
 
-The studio site for Parahouse. Plain HTML and CSS served by Cloudflare Workers, plus a small Worker that emails contact-form briefs to you. Content and brand (green, lowercase italic wordmark, outlined italic serif headings) come from the 2026 capabilities deck. The layout takes its cue from the Foucault Framer template: full-bleed project images, floating pill controls, a dark drop-down menu, big condensed headings and rounded image tiles. It has a light/dark toggle that follows the visitor's system setting by default.
+The studio site for parahouse, a Singapore design studio that works for agencies. Plain HTML and CSS served by Cloudflare Workers, plus a small Worker that emails contact-form briefs. Dark, with brand red as the accent; each project page takes on its project's own colour. `CLAUDE.md` holds the full design and copy rules.
 
 - No build step. What's in `public/` is exactly what goes live.
 - Static pages and images are served free by Cloudflare. The Worker code only runs for `/api/contact`.
@@ -9,18 +9,19 @@ The studio site for Parahouse. Plain HTML and CSS served by Cloudflare Workers, 
 
 ```
 public/                     The website (every file here is published)
-  index.html                Home: full-screen project showcase
-  portfolio/index.html      Portfolio grid with filters
-  portfolio/<project>/      One folder per project page
-  about/  contact/
+  index.html                Home: hero, selected work, brands
+  portfolio/index.html      Work: grid with search and filters
+  portfolio/<slug>/         One folder per project page
+  services/  about/  contact/
   404.html                  Shown for any missing page
-  assets/css/site.css       All styles (colours, font and spacing at the top)
-  assets/js/site.js         Menu, theme toggle, clock, showcase, filters, contact form
+  assets/css/site.css       All styles (colours, fonts and spacing at the top)
+  assets/js/site.js         Menu, clock, curtain, cards, filters, FAQ, contact form
   assets/fonts/             Archivo, Geist, Geist Mono, self-hosted (open font licences included)
   assets/img/brands/        Client logo files (see the README in that folder for names)
-  assets/img/projects/      One folder per project (see the README inside)
-worker/index.js         Handles /api/contact and sends the email
-wrangler.jsonc          Cloudflare settings
+  assets/img/projects/      One folder per project, same slug as its page (see the README inside)
+submissions/                New projects waiting to be added (never published)
+worker/index.js             Handles /api/contact and sends the email
+wrangler.jsonc              Cloudflare settings
 ```
 
 ## Put it online (first time)
@@ -47,28 +48,17 @@ The form works out of the box but replies "isn't connected yet" until you add an
 
 Replies to an enquiry go straight to the person who sent it.
 
-## Replace the placeholders
+## Still to supply
 
-The text is real (from the capabilities deck). The images are not yet.
-
-| Placeholder | Where |
+| What | Where |
 |---|---|
-| TSUBAKI Brand Refresh images (isometric stand-ins) | `public/assets/img/projects/tsubaki-brand-refresh/` |
-| Instagram / LinkedIn links | Menu, contact page and footer of every page |
-| Favicon (a green "p") | `public/assets/img/favicon.svg`; replace with the P logo mark |
-
-Each project page pairs **the render** with **the build**, so for each project supply 2 renders and 2 event photos. Keep the same file names and the pages pick them up.
+| The original P logo file (the current mark is a traced stand-in) | `public/assets/img/p-mark.svg` and the logo in every page |
+| Instagram / LinkedIn links | Menu and footer of every page |
+| Logo files for PropW and Cycle & Carriage | `public/assets/img/brands/` |
 
 ## Add a project
 
-1. Copy an existing folder in `public/portfolio/`, e.g. `tidewater-pavilion/`, and rename it (lowercase, hyphens: `my-new-stand/`).
-2. Edit its `index.html`: `<title>`, description, the heading, the four details (client, type, scope, year), the text, and the image paths.
-3. Add a folder `public/assets/img/projects/<project>/` with `render-01.webp`… and `photo-01.webp`…, WebP, 2000 px on the long side, under 400 KB each.
-4. Add a tile for it in `public/portfolio/index.html`. `data-type` must be `exhibitions` or `roadshows` so the filters work. Update the count in the heading.
-5. To show it on the home page, add an image line and a list line in `public/index.html` (same order in both).
-6. Update the "Next" pill links so the project pages still loop.
-
-Or ask Claude Code: "Add a new project called X using the images in this folder." `CLAUDE.md` tells it how.
+Send Claude Code the images and the details (client, event, date, scope), or drop them in `submissions/<slug>/` using the template there. `CLAUDE.md` says how a project is built: a page in `public/portfolio/<slug>/`, its images in `public/assets/img/projects/<slug>/`, and its card on the Work page and home page.
 
 ## Work on it locally
 
