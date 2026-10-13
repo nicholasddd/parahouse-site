@@ -20,8 +20,8 @@
   --panel: #161616;
   --panel-fg: #ecece9;
   --panel-muted: #7d7d79;
-  --brand: #e5463b;      /* parahouse red: logo, buttons, current menu item, hovers */
-  --brand-ink: #0b0b0b;
+  --brand: #bc3128;      /* parahouse red: logo, buttons, current menu item, hovers */
+  --brand-ink: #fff;     /* text on brand red; project pages set their own */
   --curtain: #4a0e12;    /* deep red: intro screen and page-change curtain */
   --bg-top: #33090c;
   --logo: #9b3730;       /* client logos at rest: muted red; white on hover */     /* dark red at the top of the background gradient */
