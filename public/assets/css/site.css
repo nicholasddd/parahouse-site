@@ -726,11 +726,17 @@ a.about-portrait span { display: block; margin-top: 10px; }
 .talk-arrow { background: var(--grad); color: #fff; }
 @media (hover: hover) and (pointer: fine) { .talk-button:hover { background: var(--grad); color: #fff; } .talk-button:hover .talk-arrow { background: #fff; color: var(--ember); } }
 
-/* ---------- About: "We are ___", a vertical ticker of design titles (site.js steps it) ---------- */
-.we-are { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: .32em; margin: clamp(72px, 9vw, 140px) 0 0;
+/* ---------- About: "We are ___", a small vertical carousel of design titles (site.js steps it) ----------
+   The window is two lines tall: the current title sits in the middle, half of the previous one shows above and
+   half of the next below, dimmed and fading out at the edges. */
+.we-are { display: flex; flex-wrap: wrap; align-items: center; column-gap: .32em; margin: clamp(72px, 9vw, 140px) 0 0;
   font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase;
   font-size: clamp(26px, 3.9vw, 64px); line-height: 1; letter-spacing: -0.01em; }
-.we-are-ticker { position: relative; display: inline-block; height: 1.1em; overflow: hidden; vertical-align: bottom; color: var(--brand-text); }
-.we-are-track { display: flex; flex-direction: column; transition: transform .7s cubic-bezier(.77, 0, .175, 1); }
-.we-are-track > span { display: block; height: 1.1em; line-height: 1.1; white-space: nowrap; }
-@media (prefers-reduced-motion: reduce) { .we-are-track { transition: none; } }
+.we-are-ticker { position: relative; display: inline-block; height: 2.2em; overflow: hidden; color: var(--brand-text);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 32%, #000 68%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 32%, #000 68%, transparent 100%); }
+.we-are-track { display: flex; flex-direction: column; transform: translateY(-0.55em); transition: transform .5s cubic-bezier(.77, 0, .175, 1); }
+.we-are-track > span { display: block; height: 1.1em; line-height: 1.1; white-space: nowrap; opacity: .35; transition: opacity .5s ease; }
+.we-are-track > span.is-current { opacity: 1; }
+.we-are-track.is-jumping, .we-are-track.is-jumping > span { transition: none; }
+@media (prefers-reduced-motion: reduce) { .we-are-track, .we-are-track > span { transition: none; } }

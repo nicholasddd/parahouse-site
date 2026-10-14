@@ -543,27 +543,31 @@ const STRIP_PROJECTS = [ // newest first, as on the Work page
   }
 }
 
-// ---------- About: "We are ___" ticker ----------
-// Titles swipe up one at a time and pause on each. A copy of the first title sits at the end so the loop
-// is seamless: after sliding onto it, the track jumps back to the start without animating.
+// ---------- About: "We are ___" carousel ----------
+// A small vertical carousel: the current title sits in the middle of a two-line window with half of the
+// previous and next titles peeking out, and every 1.4s the next one swipes up into the middle.
+// Copies at both ends (last title first, first title last) make the loop seamless: after sliding onto the
+// copy, the track jumps back to the real title without animating.
 // Screen readers get the whole list once from the paragraph's aria-label. Reduced motion: it stays still.
 const ticker = document.querySelector("[data-ticker]");
-if (ticker && !reduceMotionNow()) {
+if (ticker) {
   const track = ticker.querySelector(".we-are-track");
-  track.append(track.firstElementChild.cloneNode(true));
-  const count = track.children.length;
-  let i = 0;
-  setInterval(() => {
-    if (document.hidden) return;
-    i += 1;
-    track.style.transition = "";
-    track.style.transform = `translateY(-${(i * 100) / count}%)`;
-    if (i === count - 1) {
-      setTimeout(() => {
-        track.style.transition = "none";
-        track.style.transform = "translateY(0)";
-        i = 0;
-      }, 750);
-    }
-  }, 2200);
+  track.prepend(track.lastElementChild.cloneNode(true));
+  track.append(track.children[1].cloneNode(true));
+  const items = [...track.children];
+  let i = 1;
+  const place = (animate) => {
+    track.classList.toggle("is-jumping", !animate); // no slide and no fade while jumping
+    track.style.transform = `translateY(calc(0.55em - ${i * 1.1}em))`;
+    items.forEach((el, k) => el.classList.toggle("is-current", k === i));
+  };
+  place(false);
+  if (!reduceMotionNow()) {
+    setInterval(() => {
+      if (document.hidden) return;
+      i += 1;
+      place(true);
+      if (i === items.length - 1) setTimeout(() => { i = 1; place(false); }, 520);
+    }, 1400);
+  }
 }
