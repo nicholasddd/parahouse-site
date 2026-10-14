@@ -459,44 +459,56 @@ const eventType = document.getElementById("event_type");
 if (eventType && new URLSearchParams(location.search).get("type") === "pitch") eventType.value = "Pitch support";
 
 // ---------- Project cards float into place as they scroll in (after lusion.co's featured work) ----------
-// Home's featured cards and the Work grid. Each card starts a little low and small and settles as it
+// Home's featured cards, the Work grid and every project page image. Each card starts a little low and small and settles as it
 // reaches its spot. Its position follows the scroll, eased so the card trails slightly behind and
 // catches up, which makes it float. Columns arrive one after another. The card's resting box is worked
 // back out of its current transform (origin top centre), so the motion never feeds back on itself.
-const floatCards = [...document.querySelectorAll(".pcard, .work-card")];
-if (floatCards.length && !reduceMotionNow()) {
-  const cards = floatCards.map((card) => ({ card, y: 0, s: 1, ready: false }));
-  let frame = 0;
+// Cards already on screen at load start low too, so the first row floats in as well. Each fades in as it rises.
+const floatCards = [...document.querySelectorAll(".pcard, .work-card, .media.mosaic figure")];
+if (!floatCards.length || reduceMotionNow()) document.documentElement.classList.add("float-ready");
+else {
+  const cards = floatCards.map((card) => ({ card, y: 0, s: 1, o: 1, ready: false }));
   const targetFor = (c) => {
     const box = c.card.getBoundingClientRect();
-    if (!box.height) return { y: 0, s: 1 }; // filtered out of view
+    if (!box.height) return { y: 0, s: 1, o: 1 }; // filtered out of view
     const vh = innerHeight;
     const top = box.top - c.y;
     const width = box.width / c.s;
     const left = box.left - (width * (1 - c.s)) / 2;
-    const grid = c.card.closest(".pcards, .work-grid") || c.card.parentElement;
+    const grid = c.card.closest(".pcards, .work-grid, .media") || c.card.parentElement;
     const column = Math.max(0, Math.min(3, Math.round((left - grid.getBoundingClientRect().left) / width)));
     const p = Math.min(1, Math.max(0, (vh - top) / (vh * 0.6) - column * 0.08));
     const e = 1 - Math.pow(1 - p, 3);
-    return { y: (1 - e) * 110, s: 0.88 + 0.12 * e };
+    return { y: (1 - e) * 110, s: 0.88 + 0.12 * e, o: Math.min(1, e * 1.4) };
   };
+  let frame = 0, timer = 0, last = 0;
   const tick = () => {
+    cancelAnimationFrame(frame); clearTimeout(timer); frame = timer = 0;
+    const now = performance.now();
+    const k = 1 - Math.pow(0.92, Math.min(100, last ? now - last : 16.7) / 16.7); // the same easing at any frame rate
+    last = now;
     let moving = false;
     cards.forEach((c) => {
       const t = targetFor(c);
-      if (!c.ready) { c.y = t.y; c.s = t.s; c.ready = true; }
-      c.y += (t.y - c.y) * 0.1;
-      c.s += (t.s - c.s) * 0.1;
-      if (Math.abs(t.y - c.y) > 0.1 || Math.abs(t.s - c.s) > 0.0005) moving = true;
-      c.card.style.transform = c.y < 0.1 && c.s > 0.9995 ? "" : `translate3d(0, ${c.y.toFixed(2)}px, 0) scale(${c.s.toFixed(4)})`;
+      if (!c.ready) { c.y = 110; c.s = 0.88; c.o = 0; c.ready = true; } // everything starts low and faded
+      c.y += (t.y - c.y) * k;
+      c.s += (t.s - c.s) * k;
+      c.o += (t.o - c.o) * k;
+      if (Math.abs(t.y - c.y) > 0.1 || Math.abs(t.s - c.s) > 0.0005 || Math.abs(t.o - c.o) > 0.005) moving = true;
+      const rest = c.y < 0.1 && c.s > 0.9995;
+      c.card.style.transform = rest ? "" : `translate3d(0, ${c.y.toFixed(2)}px, 0) scale(${c.s.toFixed(4)})`;
+      c.card.style.opacity = c.o > 0.995 ? "" : c.o.toFixed(3);
     });
-    frame = moving ? requestAnimationFrame(tick) : 0;
+    document.documentElement.classList.add("float-ready");
+    if (moving) schedule(); else last = 0;
   };
-  const wake = () => { if (!frame) frame = requestAnimationFrame(tick); };
+  // Animation frame first; a timer backs it up when the browser throttles frames, so nothing stays hidden
+  const schedule = () => { if (!frame) frame = requestAnimationFrame(tick); if (!timer) timer = setTimeout(tick, 120); };
+  const wake = () => { if (!frame && !timer) schedule(); };
   addEventListener("scroll", wake, { passive: true });
   addEventListener("resize", wake);
   addEventListener("ph:layout", wake);
-  wake();
+  tick(); // place everything now, before the first paint
 }
 
 // ---------- Footer strip: the work most related to the last project viewed ----------

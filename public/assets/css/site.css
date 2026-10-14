@@ -684,7 +684,9 @@ a.about-portrait span { display: block; margin-top: 10px; }
 .button:active, .offer-cta:active, .pill:active, .filters button:active { transform: scale(.97); }
 
 /* Project cards (home and Work) float into place as they scroll in (site.js sets the transform; after lusion.co) */
-.pcard, .work-card { transform-origin: 50% 0; }
+.pcard, .work-card, .media.mosaic figure { transform-origin: 50% 0; }
+/* Hidden until the float-in script places them, so nothing flashes in place first */
+@media (prefers-reduced-motion: no-preference) { .js:not(.float-ready) :is(.pcard, .work-card, .media.mosaic figure) { opacity: 0; } }
 
 /* ---------- Dark green palette: small extras ---------- */
 .cursor-dot { background: #fff; box-shadow: none; mix-blend-mode: difference; } /* white on dark, dark on light images */
