@@ -770,3 +770,10 @@ a.about-portrait span { display: block; margin-top: 10px; }
 /* Footer socials: the Instagram logo as a line icon */
 .social-icon { display: inline-grid; place-items: center; width: 30px; height: 30px; margin: -4px 0 0 -4px; color: var(--fg); transition: color .25s ease; }
 .social-icon svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.6; }
+
+/* Project pages: a strong conceptual punchline on the left; what we did, how and the result on the right */
+.project-intro .punchline { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase;
+  font-size: clamp(26px, 3.2vw, 48px); line-height: 1; letter-spacing: -0.01em; max-width: 14ch; text-wrap: balance; }
+.project-story .label { display: block; margin: 0 0 6px; color: var(--brand-text); }
+.project-story p { margin: 0 0 22px; }
+.project-story p:last-child { margin-bottom: 0; }
