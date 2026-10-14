@@ -404,8 +404,8 @@ document.addEventListener("click", (event) => {
   const curtain = document.createElement("div");
   curtain.className = "curtain-leave";
   // The curtain always takes the colour of the page it reveals: a project's own colour, or the
-  // near-black (the default --curtain) for every other page, even when leaving a coloured project page.
-  curtain.style.background = (window.PH_CURTAINS || {})[url.pathname] || "#111111";
+  // the deep teal-green gradient (the default --curtain) for every other page, even when leaving a coloured project page.
+  curtain.style.background = (window.PH_CURTAINS || {})[url.pathname] || "linear-gradient(180deg, #16302f 0%, #2a5631 100%)";
   curtain.setAttribute("aria-hidden", "true");
   const text = document.createElement("span");
   text.textContent = "\u2022\u2002" + label;
