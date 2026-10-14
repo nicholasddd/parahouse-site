@@ -571,3 +571,33 @@ if (ticker) {
     }, 1400);
   }
 }
+
+// ---------- Services: offer names glitch when their card comes into focus ----------
+// The same letter-by-letter glitch as the Work heading (random glyphs that lock in from left to right),
+// playing once each time the mouse enters a card. Mouse only; screen readers keep the real name.
+if (matchMedia("(hover: hover) and (pointer: fine)").matches && !reduceMotionNow()) {
+  const glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&/<>-_";
+  document.querySelectorAll(".offer").forEach((card) => {
+    const name = card.querySelector(".offer-name");
+    if (!name) return;
+    const text = name.textContent;
+    name.closest(".offer-title").setAttribute("aria-label", name.closest(".offer-title").textContent.trim());
+    let raf = 0;
+    card.addEventListener("mouseenter", () => {
+      cancelAnimationFrame(raf);
+      if (!name.style.minWidth) name.style.minWidth = name.getBoundingClientRect().width + "px"; // no jiggle while letters change
+      const start = performance.now(), duration = 520;
+      const frame = (now) => {
+        const t = Math.min(1, (now - start) / duration);
+        let out = "";
+        for (let i = 0; i < text.length; i++) {
+          const settle = (i / text.length) * 0.7 + 0.3;
+          out += text[i] === " " || t >= settle ? text[i] : glyphs[(Math.random() * glyphs.length) | 0];
+        }
+        name.textContent = out;
+        if (t < 1) raf = requestAnimationFrame(frame);
+      };
+      raf = requestAnimationFrame(frame);
+    });
+  });
+}

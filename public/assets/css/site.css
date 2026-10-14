@@ -740,3 +740,20 @@ a.about-portrait span { display: block; margin-top: 10px; }
 .we-are-track > span.is-current { opacity: 1; }
 .we-are-track.is-jumping, .we-are-track.is-jumping > span { transition: none; }
 @media (prefers-reduced-motion: reduce) { .we-are-track, .we-are-track > span { transition: none; } }
+
+/* ---------- Services: an offer card in focus lifts, warms up and its name glitches (site.js) ---------- */
+.offer { position: relative; isolation: isolate; }
+.offer::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; opacity: 0;
+  background: linear-gradient(180deg, rgba(255, 122, 26, .16) 0%, rgba(255, 122, 26, .04) 45%, rgba(255, 122, 26, 0) 100%); transition: opacity .35s ease; }
+.offer-name { display: inline-block; }
+@media (hover: hover) and (pointer: fine) {
+  .offer { transition: transform .35s var(--ease-out), border-color .3s ease, box-shadow .35s ease; }
+  .offer:hover, .offer:focus-within { transform: translateY(-6px); border-color: rgba(255, 122, 26, .55); box-shadow: 0 22px 50px -24px rgba(255, 122, 26, .5); }
+  .offer:hover::before, .offer:focus-within::before { opacity: 1; }
+  .offer:hover .offer-name, .offer:focus-within .offer-name { color: var(--brand-text); }
+  .offer-name { transition: color .3s ease; }
+}
+@media (prefers-reduced-motion: reduce) { .offer:hover, .offer:focus-within { transform: none; } }
+
+/* Services FAQ: the open question stays tangerine, not just on hover */
+.faq-item.is-open .service-title, .no-js .faq-item[open] .service-title { color: var(--brand-text); }
