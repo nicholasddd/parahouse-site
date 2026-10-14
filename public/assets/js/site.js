@@ -601,3 +601,32 @@ if (matchMedia("(hover: hover) and (pointer: fine)").matches && !reduceMotionNow
     });
   });
 }
+
+// ---------- Back to work: return to the project you were on ----------
+// Came from the Work page: step back in history, so its scroll and filter come back exactly.
+// Otherwise (direct link, or from another page) open Work at this project's card.
+document.querySelector("[data-back]")?.addEventListener("click", (event) => {
+  let from = null;
+  try { from = new URL(document.referrer); } catch {}
+  if (from && from.origin === location.origin && from.pathname === "/portfolio/" && history.length > 1) {
+    event.preventDefault();
+    history.back();
+  }
+});
+{
+  const card = location.pathname === "/portfolio/" && location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  if (card && card.classList.contains("work-card")) {
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    const centre = () => {
+      const was = card.style.transform; card.style.transform = ""; // measure its resting box, not the float
+      const box = card.getBoundingClientRect();
+      card.style.transform = was;
+      scrollTo({ top: scrollY + box.top - Math.max(0, (innerHeight - box.height) / 2), behavior: "instant" });
+    };
+    centre();
+    addEventListener("load", centre, { once: true });
+    card.classList.add("is-returned");
+    requestAnimationFrame(() => card.classList.add("is-fading"));
+    history.replaceState(null, "", location.pathname); // keep the address clean
+  }
+}

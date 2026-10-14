@@ -219,10 +219,14 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 @media (hover: none) { .tile-hint { display: none; } }
 .tile[hidden] { display: none; }
 
-}
-
 /* ---------- Project page ---------- */
-.back { display: inline-flex; margin-bottom: 28px; }
+/* Back to work: stays under the logo while the project scrolls */
+.back { display: inline-flex; margin-bottom: 28px; position: sticky; z-index: 30; top: calc(var(--edge) + clamp(40px, 4.4vw, 56px) + 18px); }
+.back-arrow { display: inline-block; transition: transform .25s var(--ease-out); }
+.back:hover .back-arrow { transform: translateX(-3px); }
+/* The card you came back to glows briefly */
+.work-card.is-returned { outline: 1px solid var(--brand); outline-offset: 6px; transition: outline-color 1.2s ease 1.4s; }
+.work-card.is-returned.is-fading { outline-color: transparent; }
 .meta-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 var(--gap); margin: 0; }
 @media (min-width: 900px) { .meta-grid { grid-template-columns: repeat(4, 1fr); } }
 .meta-grid div { border-top: 1px solid var(--line); padding: 12px 0 18px; }
