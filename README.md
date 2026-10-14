@@ -49,7 +49,6 @@ Mail sent to hello@parahouse.co is forwarded to the same Gmail by Email Routing.
 | What | Where |
 |---|---|
 | The original P logo file (the current mark is a traced stand-in) | `public/assets/img/p-mark.svg` and the logo in every page |
-| Instagram / LinkedIn links | Menu and footer of every page |
 | Logo files for PropW and Cycle & Carriage | `public/assets/img/brands/` |
 
 ## Add a project

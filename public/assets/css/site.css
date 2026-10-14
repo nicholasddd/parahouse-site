@@ -766,3 +766,7 @@ a.about-portrait span { display: block; margin-top: 10px; }
 .offer-list-head { margin: 6px 0 -8px; font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
 .offer-example { margin: 0; font-size: 14px; line-height: 1.5; color: var(--muted); }
 .offer-example span { display: block; margin-bottom: 4px; font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--fg); }
+
+/* Footer socials: the Instagram logo as a line icon */
+.social-icon { display: inline-grid; place-items: center; width: 30px; height: 30px; margin: -4px 0 0 -4px; color: var(--fg); transition: color .25s ease; }
+.social-icon svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.6; }
