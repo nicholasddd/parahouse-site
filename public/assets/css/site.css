@@ -25,9 +25,9 @@
   --panel-muted: #7f8b83;
   --teal: #1e3b3e;        /* focal: deep teal */
   --green: #3f7a3a;       /* focal: green */
-  --brand: #e9efe6;       /* no accent colour: logo, buttons, dots and current page are off-white; the key gradient carries all the colour. Project pages set their own */
-  --brand-ink: #070b09;   /* dark text on the off-white */
-  --brand-text: #e9efe6;
+  --brand: #a8c29a;       /* accent: soft sage green. Logo, buttons, dots, current page; project pages set their own */
+  --brand-ink: #0b1a12;   /* dark text on the sage */
+  --brand-text: #b4cca6;  /* sage as text on the dark ground */
   --grad: linear-gradient(180deg, #1e3b3e 0%, #3f7a3a 52%, #b9d95c 100%); /* the key gradient */
   --curtain: linear-gradient(180deg, #16302f 0%, #2a5631 100%); /* intro screen and page-change curtain */
   --bg-top: #12261f;      /* teal-green at the top of the background */
@@ -722,6 +722,6 @@ a.about-portrait span { display: block; margin-top: 10px; }
 /* turned slats darken as they face away */
 .slat::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; background: #000; opacity: calc(var(--turn, 0) * .35); }
 
-/* Gradient only: the Let's talk arrow circle carries the key gradient */
+/* The Let's talk arrow circle carries the key gradient */
 .talk-arrow { background: var(--grad); color: #fff; }
 @media (hover: hover) and (pointer: fine) { .talk-button:hover { background: var(--grad); color: #fff; } .talk-button:hover .talk-arrow { background: #fff; color: var(--teal); } }
