@@ -12,21 +12,21 @@
 :root {
   --ease-out: cubic-bezier(.23, 1, .32, 1);   /* strong ease-out for UI */
   --ease-drawer: cubic-bezier(.32, .72, 0, 1); /* panels growing out of a control */
-  --bg: #0b0b0b;
-  --surface: #141414;
-  --fg: #ecece9;
-  --muted: #7d7d79;
-  --line: #242423;
-  --pill: rgba(30, 30, 30, .72);
-  --pill-fg: #ecece9;
+  --bg: #ffffff;
+  --surface: #f3f2ef;
+  --fg: #141414;
+  --muted: #66665f;
+  --line: #e4e2dd;
+  --pill: rgba(255, 255, 255, .82);
+  --pill-fg: #141414;
   --panel: #161616;
   --panel-fg: #ecece9;
-  --panel-muted: #7d7d79;
-  --brand: #e02c1d;      /* parahouse red: logo, buttons, current menu item, hovers */
+  --panel-muted: #8f8f8a;
+  --brand: #d2271a;      /* parahouse red: logo, buttons, current menu item, hovers */
   --brand-ink: #fff;     /* text on brand red; project pages set their own */
   --curtain: #4a0e12;    /* deep red: intro screen and page-change curtain */
-  --bg-top: #33090c;
-  --logo: #9b3730;       /* client logos at rest: muted red; white on hover */     /* dark red at the top of the background gradient */
+  --bg-top: #fbe6e3;
+  --logo: #b04a41;       /* client logos at rest: muted red; white on hover */     /* dark red at the top of the background gradient */
 
   --font: "Geist", "Helvetica Neue", Arial, sans-serif;
   --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
@@ -35,7 +35,7 @@
   --gap: 8px;
   --edge: clamp(12px, 1.4vw, 20px);
   --measure: 60ch;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -679,3 +679,39 @@ a.about-portrait span { display: block; margin-top: 10px; }
 
 /* Project cards (home and Work) float into place as they scroll in (site.js sets the transform; after lusion.co) */
 .pcard, .work-card { transform-origin: 50% 0; }
+
+/* ---------- Light theme: hard-coded colours that assumed a dark page ---------- */
+.pill { box-shadow: 0 0 0 1px rgba(0,0,0,.08), 0 4px 18px rgba(0,0,0,.06); }
+.pill:hover { background: rgba(240, 239, 235, .95); }
+.next-pill .muted { color: var(--muted); }
+/* Top links: dark on the page, white over Home's full-screen images until the page scrolls */
+.topnav a { text-shadow: none; }
+body:has(.showcase) .topnav a:not([aria-current="page"]) { color: #fff; text-shadow: 0 1px 10px rgba(0,0,0,.5); }
+.form-status[data-state="error"] { color: #b3241a; }
+.brand-wall li:hover .brand-logo, .brand-track li:hover .brand-logo { background-color: var(--fg); }
+/* Home project cards: light at rest; dark image and white text on hover (and on touch, where the image always shows) */
+.pcard-link { background: var(--surface); }
+.bubble { color: var(--bg); }
+.pcard-logo-img { background: var(--fg); }
+.pcard-sub { color: var(--muted); }
+.chevron { background: rgba(20, 20, 20, .08); }
+.pcard-outline { border-color: rgba(20, 20, 20, .25); }
+@media (hover: hover) {
+  .pcard-link:hover { color: #fff; }
+  .pcard-link:hover .pcard-logo-img { background: #fff; }
+  .pcard-link:hover .chevron { background: rgba(255,255,255,.2); }
+  .pcard-link:hover .bubble { background: #fff; color: #141414; }
+}
+@media (hover: none) {
+  .pcard-link { color: #fff; }
+  .pcard-logo-img { background: #fff; }
+  .chevron { background: rgba(255,255,255,.2); }
+  .bubble { background: #fff; color: #141414; }
+  .pcard-sub { color: rgba(255,255,255,.8); }
+}
+.cursor-bubble { background: #141414; color: #fff; border-color: transparent; }
+.cursor-dot { background: #141414; box-shadow: 0 0 0 1px rgba(255,255,255,.6), 0 1px 6px rgba(0,0,0,.25); }
+/* About: the P pieces at rest are light blocks; the active one keeps its red gradient */
+.pq-base { fill: #ebe9e4; stroke: rgba(0,0,0,.08); }
+.pq:hover .pq-base { fill: #dfddd7; }
+.pillar-text { color: rgba(20, 20, 20, .78); }
