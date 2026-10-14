@@ -405,7 +405,7 @@ document.addEventListener("click", (event) => {
   curtain.className = "curtain-leave";
   // The curtain always takes the colour of the page it reveals: a project's own colour, or the
   // the deep ember gradient (the default --curtain) for every other page, even when leaving a coloured project page.
-  curtain.style.background = (window.PH_CURTAINS || {})[url.pathname] || "linear-gradient(180deg, #1a0904 0%, #6b230a 100%)";
+  curtain.style.background = (window.PH_CURTAINS || {})[url.pathname] || "linear-gradient(180deg, #170a05 0%, #5a240c 100%)";
   curtain.setAttribute("aria-hidden", "true");
   const text = document.createElement("span");
   text.textContent = "\u2022\u2002" + label;
