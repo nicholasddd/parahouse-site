@@ -12,21 +12,22 @@
 :root {
   --ease-out: cubic-bezier(.23, 1, .32, 1);   /* strong ease-out for UI */
   --ease-drawer: cubic-bezier(.32, .72, 0, 1); /* panels growing out of a control */
-  --bg: #0b0b0b;
-  --surface: #141414;
-  --fg: #ecece9;
-  --muted: #7d7d79;
-  --line: #242423;
-  --pill: rgba(30, 30, 30, .72);
-  --pill-fg: #ecece9;
-  --panel: #161616;
-  --panel-fg: #ecece9;
-  --panel-muted: #7d7d79;
-  --brand: #e02c1d;      /* parahouse red: logo, buttons, current menu item, hovers */
-  --brand-ink: #fff;     /* text on brand red; project pages set their own */
-  --curtain: #4a0e12;    /* deep red: intro screen and page-change curtain */
-  --bg-top: #33090c;
-  --logo: #9b3730;       /* client logos at rest: muted red; white on hover */     /* dark red at the top of the background gradient */
+  --bg: #f1f1ef;          /* light grey ground */
+  --surface: #ffffff;     /* white cards, fields, pills */
+  --fg: #111111;
+  --muted: #5c5c57;
+  --line: #dadad6;
+  --pill: rgba(255, 255, 255, .88);
+  --pill-fg: #111111;
+  --panel: #111111;
+  --panel-fg: #f1f1ef;
+  --panel-muted: #8f8f8a;
+  --brand: #ff6b17;       /* parahouse orange: logo, buttons, fills, glows; project pages set their own */
+  --brand-ink: #111111;   /* text ON the brand colour: black, as in the reference */
+  --brand-text: #c2410c;  /* the brand colour where it IS text on the light ground (current page, hovers, labels) */
+  --curtain: #111111;     /* intro screen and page-change curtain */
+  --bg-top: #ffdcc2;      /* soft orange glow at the top of the page */
+  --logo: #8d8d88;        /* client logos at rest: grey; dark on hover */       /* client logos at rest: muted red; white on hover */     /* dark red at the top of the background gradient */
 
   --font: "Geist", "Helvetica Neue", Arial, sans-serif;
   --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
@@ -35,7 +36,7 @@
   --gap: 8px;
   --edge: clamp(12px, 1.4vw, 20px);
   --measure: 60ch;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -91,11 +92,11 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .topnav { position: absolute; z-index: 39; top: calc(var(--edge) + 2px); right: calc(var(--edge) + clamp(0px, 4vw, 64px)); transition: opacity .25s var(--ease-out), transform .25s var(--ease-out); }
 .topnav ul { list-style: none; margin: 0; padding: 0; display: grid; justify-items: start; }
 .topnav a { position: relative; display: block; padding: 1px 0; font-family: var(--font); font-weight: 500; font-size: clamp(17px, 1.55vw, 23px); line-height: 1.12; letter-spacing: .01em; text-transform: uppercase; color: var(--fg); text-shadow: 0 1px 10px rgba(0,0,0,.5); transition: color .25s ease; }
-.topnav a:hover { color: var(--brand); }
+.topnav a:hover { color: var(--brand-text); }
 .topnav a::after { content: ""; position: absolute; left: -14px; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: currentColor; opacity: 0; transform: scale(.5); transition: transform .2s var(--ease-out), opacity .2s var(--ease-out); }
 .topnav a[aria-current="page"]::after { opacity: 1; transform: none; }
 @media (hover: hover) and (pointer: fine) { .topnav a:hover::after { opacity: 1; transform: none; } }
-.topnav a[aria-current="page"] { color: var(--brand); }
+.topnav a[aria-current="page"] { color: var(--brand-text); }
 .js .menu-toggle { transform: scale(.9); opacity: 0; visibility: hidden; transition: transform .25s var(--ease-out), opacity .2s var(--ease-out), visibility 0s linear .25s, background-color .2s ease; }
 .js.is-scrolled .menu-toggle, .js .menu-toggle[aria-expanded="true"] { transform: none; opacity: 1; visibility: visible; transition: transform .25s var(--ease-out), opacity .2s var(--ease-out), background-color .2s ease; }
 .js.is-scrolled .topnav { opacity: 0; transform: translateY(-6px); pointer-events: none; }
@@ -124,7 +125,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .menu ul { list-style: none; margin: 0; padding: 0; }
 .menu a { display: block; padding: 8px 12px; border-radius: 10px; font-family: var(--display); font-stretch: 125%; font-weight: 700; font-size: 20px; line-height: 1.1; text-transform: uppercase; }
 .menu a:hover { background: rgba(255,255,255,.08); }
-.menu a[aria-current="page"] { color: var(--brand); }
+.menu a[aria-current="page"] { color: var(--brand-text); }
 /* Mono labels: small uppercase metadata, as in Zeroframe */
 .label, .mono { font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
 .label { margin-bottom: 8px; }
@@ -190,7 +191,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
   font-family: var(--mono); font-size: 12px; letter-spacing: .07em; text-transform: uppercase; cursor: pointer;
   transition: background-color .25s ease;
 }
-.button:hover { background: var(--brand); }
+.button:hover { background: var(--brand); color: var(--brand-ink); }
 .button .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
 /* ---------- Portfolio grid ---------- */
@@ -335,7 +336,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .service summary { list-style: none; display: grid; grid-template-columns: 1fr; align-items: baseline; gap: 16px; padding: 22px 0; cursor: pointer; }
 .service summary::-webkit-details-marker { display: none; }
 .service-title { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(20px, 2.6vw, 40px); line-height: 1; }
-.service summary:hover .service-title { color: var(--brand); }
+.service summary:hover .service-title { color: var(--brand-text); }
 .service-body { display: grid; gap: 18px; padding: 0 0 26px; }
 @media (min-width: 900px) { .service-body { grid-template-columns: 1fr 1fr; } }
 .service-body p { margin: 0; max-width: 46ch; color: var(--muted); font-size: 16px; }
@@ -370,7 +371,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .footer-meta .label { margin: 0; }
 .footer-socials { margin-left: auto; }
 .footer-socials a { margin-right: 14px; }
-.footer-socials a:hover, .footer-meta a:hover { color: var(--brand); }
+.footer-socials a:hover, .footer-meta a:hover { color: var(--brand-text); }
 @media (max-width: 640px) { .together-rule { margin-top: 96px; } .round-button { right: 0; width: 108px; } .footer-socials { margin-left: 0; } }
 
 /* ---------- About (structure after Dennis Snellenberg's about page) ---------- */
@@ -470,7 +471,7 @@ html.is-entering::after { animation-duration: .3s; }
 .work-card:focus-visible .work-media img { transform: scale(1.04); }
 @media (hover: hover) and (pointer: fine) { .work-card:hover .work-media img { transform: scale(1.04); } }
 .work-title { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(18px, 1.6vw, 24px); line-height: 1.05; transition: color .25s ease; }
-.work-card:hover .work-title { color: var(--brand); }
+.work-card:hover .work-title { color: var(--brand-text); }
 .work-meta { font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
 .work-empty { color: var(--muted); padding: 40px 0; }
 .work-empty button { background: none; border: 0; padding: 0; font: inherit; color: var(--fg); text-decoration: underline; cursor: pointer; }
@@ -641,11 +642,11 @@ a.about-portrait span { display: block; margin-top: 10px; }
 @media (min-width: 900px) { .offers { grid-template-columns: repeat(3, 1fr); } .offers.two { grid-template-columns: repeat(2, 1fr); } }
 .offer { display: grid; align-content: start; gap: 14px; padding: clamp(22px, 2.4vw, 34px); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
 .offer-title { margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 12px; font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(22px, 2.2vw, 32px); line-height: 1; }
-.offer-tag { padding: 4px 9px 5px; border-radius: 99px; background: var(--brand); color: #fff; font-family: var(--mono); font-weight: 400; font-stretch: 100%; font-size: 10.5px; letter-spacing: .06em; }
+.offer-tag { padding: 4px 9px 5px; border-radius: 99px; background: var(--brand); color: var(--brand-ink); font-family: var(--mono); font-weight: 400; font-stretch: 100%; font-size: 10.5px; letter-spacing: .06em; }
 .offer-lede { margin: 0; color: var(--muted); }
 .offer-list { list-style: none; margin: 6px 0 0; padding: 0; display: grid; border-top: 1px solid var(--line); }
 .offer-list li { position: relative; padding: 11px 0 11px 26px; border-bottom: 1px solid var(--line); }
-.offer-list li::before { content: "+"; position: absolute; left: 2px; top: 9px; font-size: 18px; line-height: 1; color: var(--brand); }
+.offer-list li::before { content: "+"; position: absolute; left: 2px; top: 9px; font-size: 18px; line-height: 1; color: var(--brand-text); }
 .offer-note { margin: 0; font-family: var(--mono); font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
 
 /* FAQ: a plus on the right turns into a cross as the answer slides open (site.js animates the height) */
@@ -655,22 +656,22 @@ a.about-portrait span { display: block; margin-top: 10px; }
   background: linear-gradient(currentColor, currentColor) center / 100% 1.5px no-repeat, linear-gradient(currentColor, currentColor) center / 1.5px 100% no-repeat;
   transition: transform .45s cubic-bezier(.65,0,.2,1), color .3s ease;
 }
-.faq-item.is-open summary::after, .no-js .faq-item[open] summary::after { transform: rotate(135deg); color: var(--brand); }
+.faq-item.is-open summary::after, .no-js .faq-item[open] summary::after { transform: rotate(135deg); color: var(--brand-text); }
 .faq-item:not(.is-open) .service-title { transition: color .3s ease; }
 /* Mouse clicks don't leave a focus box on FAQ questions; keyboard focus still shows one */
 .faq-item summary:focus { outline: none; }
 .faq-item summary:focus-visible { outline: 1px solid var(--fg); outline-offset: 4px; border-radius: 6px; }
 
 /* Offer cards end with a direct ask */
-.offer-cta { justify-self: start; margin-top: 6px; padding: 10px 16px 11px; border-radius: 99px; background: var(--brand); color: #fff; font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; transition: background-color .25s ease, color .25s ease; }
+.offer-cta { justify-self: start; margin-top: 6px; padding: 10px 16px 11px; border-radius: 99px; background: var(--brand); color: var(--brand-ink); font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; transition: background-color .25s ease, color .25s ease; }
 .offer-cta:hover { background: var(--fg); color: var(--bg); }
 
 /* Project result: the outcome, pulled out of the story */
 .result { display: grid; gap: 6px; margin: clamp(24px, 3vw, 40px) 0 0; padding: 14px 0 0; border-top: 1px solid var(--brand); }
-.result dt { font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--brand); }
+.result dt { font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--brand-text); }
 .result dd { margin: 0; max-width: 40ch; font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(18px, 1.8vw, 26px); line-height: 1.15; }
 .intro-link { display: block; width: fit-content; margin-top: 14px; color: var(--fg); text-decoration: underline; text-decoration-color: var(--brand); text-underline-offset: .35em; }
-.intro-link:hover { color: var(--brand); }
+.intro-link:hover { color: var(--brand-text); }
 
 /* Press feedback: pressable things give a little under the finger */
 .button, .offer-cta, .pill, .filters button { transition-property: background-color, color, border-color, transform; transition-duration: .25s, .25s, .25s, .16s; transition-timing-function: ease, ease, ease, var(--ease-out); }
@@ -679,3 +680,42 @@ a.about-portrait span { display: block; margin-top: 10px; }
 
 /* Project cards (home and Work) float into place as they scroll in (site.js sets the transform; after lusion.co) */
 .pcard, .work-card { transform-origin: 50% 0; }
+
+/* ---------- Light theme: hard-coded colours that assumed a dark page ---------- */
+.pill { box-shadow: 0 0 0 1px rgba(0,0,0,.08), 0 4px 18px rgba(0,0,0,.06); }
+.pill:hover { background: rgba(240, 239, 235, .95); }
+.next-pill .muted { color: var(--muted); }
+/* Top links: dark on the page, white over Home's full-screen images until the page scrolls */
+.topnav a { text-shadow: none; }
+body:has(.showcase) .topnav a:not([aria-current="page"]) { color: #fff; text-shadow: 0 1px 10px rgba(0,0,0,.5); }
+.form-status[data-state="error"] { color: #b3241a; }
+.brand-wall li:hover .brand-logo, .brand-track li:hover .brand-logo { background-color: var(--fg); }
+/* Home project cards: light at rest; dark image and white text on hover (and on touch, where the image always shows) */
+.pcard-link { background: var(--surface); }
+.bubble { color: var(--bg); }
+.pcard-logo-img { background: var(--fg); }
+.pcard-sub { color: var(--muted); }
+.chevron { background: rgba(20, 20, 20, .08); }
+.pcard-outline { border-color: rgba(20, 20, 20, .25); }
+@media (hover: hover) {
+  .pcard-link:hover { color: #fff; }
+  .pcard-link:hover .pcard-logo-img { background: #fff; }
+  .pcard-link:hover .chevron { background: rgba(255,255,255,.2); }
+  .pcard-link:hover .bubble { background: #fff; color: #141414; }
+}
+@media (hover: none) {
+  .pcard-link { color: #fff; }
+  .pcard-logo-img { background: #fff; }
+  .chevron { background: rgba(255,255,255,.2); }
+  .bubble { background: #fff; color: #141414; }
+  .pcard-sub { color: rgba(255,255,255,.8); }
+}
+.cursor-bubble { background: #141414; color: #fff; border-color: transparent; }
+.cursor-dot { background: #141414; box-shadow: 0 0 0 1px rgba(255,255,255,.6), 0 1px 6px rgba(0,0,0,.25); }
+/* About: the P pieces at rest are light blocks; the active one keeps its red gradient */
+.pq-base { fill: #ffffff; stroke: rgba(0,0,0,.08); }
+.pq:hover .pq-base { fill: #e8e8e5; }
+.pillar-text { color: rgba(20, 20, 20, .78); }
+
+/* Reference palette: the dark menu keeps the bright accent for its current item */
+.menu a[aria-current="page"] { color: var(--brand); }
