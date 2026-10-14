@@ -698,7 +698,7 @@ a.about-portrait span { display: block; margin-top: 10px; }
   .offer-cta:hover, .button:hover { background: var(--grad); color: #fff; }
 }
 
-/* ---------- "Let's talk": a pill on the footer rule, red arrow at its end ---------- */
+/* ---------- "I would like to explore my options": a pill on the footer rule, red arrow at its end ---------- */
 .talk-button {
   position: absolute; right: 0; top: 0; transform: translateY(-50%);
   display: inline-flex; align-items: center; gap: 18px; height: 64px; padding: 0 8px 0 28px; border-radius: 999px;
@@ -713,7 +713,7 @@ a.about-portrait span { display: block; margin-top: 10px; }
   .talk-button:hover .talk-arrow svg { transform: translateX(3px); }
 }
 .talk-button:active { transform: translateY(-50%) scale(.97); }
-@media (max-width: 640px) { .talk-button { height: 56px; gap: 14px; padding-left: 22px; font-size: 16px; } .talk-arrow { width: 42px; height: 42px; } }
+@media (max-width: 640px) { .talk-button { height: 56px; gap: 12px; padding-left: 20px; font-size: 15px; white-space: nowrap; max-width: 100%; } .talk-arrow { flex: none; width: 42px; height: 42px; } }
 
 
 /* ---------- Home hero slats (desktop): see site.js. The plain images stay underneath for touch screens. ---------- */
