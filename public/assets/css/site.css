@@ -752,3 +752,15 @@ body:has(.showcase) .topnav a:not([aria-current="page"]) { color: #fff; text-sha
 .talk-button:active { transform: translateY(-50%) scale(.97); }
 @media (max-width: 640px) { .talk-button { height: 56px; gap: 14px; padding-left: 22px; font-size: 16px; } .talk-arrow { width: 42px; height: 42px; } }
 
+
+/* ---------- Home hero slats (desktop): see site.js. The plain images stay underneath for touch screens. ---------- */
+.has-slats .showcase-media img { visibility: hidden; }
+.slats { position: absolute; inset: 0; perspective: 1400px; }
+.slat { position: absolute; top: 0; bottom: 0; will-change: transform; backface-visibility: visible; }
+.slat-face { position: absolute; inset: 0; background-repeat: no-repeat; opacity: 0; transition: opacity 1.4s ease; }
+.slat-face.is-on { opacity: 1; }
+/* the faint light division line at each slat's edge, and a soft glassy sheen */
+.slat::before { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(90deg, rgba(255,255,255,.16) 0, rgba(255,255,255,0) 1.5px, rgba(255,255,255,0) 55%, rgba(255,255,255,.05) 100%); }
+/* turned slats darken as they face away */
+.slat::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; background: #000; opacity: calc(var(--turn, 0) * .35); }

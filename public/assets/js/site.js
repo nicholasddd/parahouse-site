@@ -75,6 +75,84 @@ if (showcase && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
   }
 }
 
+// ---------- Home hero: vertical panels that turn as the mouse runs across them (desktop only) ----------
+// The hero is cut into thin vertical slats, each showing its own slice of the current image, with a faint
+// light line between them. Moving the mouse across pushes the slats near the pointer round their vertical
+// axis in the direction of travel (faster = further), and a spring swings them back. The crossfade between
+// projects carries on through the slats (two faces each). Touch screens and reduced motion keep the plain image.
+if (showcase && matchMedia("(hover: hover) and (pointer: fine)").matches && !reduceMotionNow()) {
+  const media = showcase.querySelector("[data-showcase-media]");
+  const imgs = [...media.querySelectorAll("img")];
+  const layer = document.createElement("div");
+  layer.className = "slats";
+  layer.setAttribute("aria-hidden", "true");
+  media.append(layer);
+  showcase.classList.add("has-slats");
+  const SLAT = 64; // target slat width in px
+  let slats = [], W = 0, H = 0, front = 0, frame = 0, lastX = null;
+  const active = () => imgs.find((i) => i.classList.contains("active")) || imgs[0];
+  const paint = (face, img, left) => {
+    const iw = img.naturalWidth || +img.getAttribute("width"), ih = img.naturalHeight || +img.getAttribute("height");
+    const k = Math.max(W / iw, H / ih), w = iw * k, h = ih * k; // object-fit: cover
+    face.style.backgroundImage = `url("${img.currentSrc || img.src}")`;
+    face.style.backgroundSize = `${w}px ${h}px`;
+    face.style.backgroundPosition = `${(W - w) / 2 - left}px ${(H - h) / 2}px`;
+  };
+  const build = () => {
+    W = showcase.clientWidth; H = showcase.clientHeight;
+    const n = Math.max(8, Math.round(W / SLAT)), w = W / n;
+    layer.textContent = "";
+    slats = [];
+    for (let i = 0; i < n; i++) {
+      const el = document.createElement("div");
+      el.className = "slat";
+      el.style.left = Math.floor(i * w) + "px";
+      el.style.width = Math.ceil(w) + 1 + "px"; // 1px overlap: no seams at rest
+      const faces = [document.createElement("div"), document.createElement("div")];
+      faces.forEach((fc) => { fc.className = "slat-face"; el.append(fc); });
+      paint(faces[front], active(), i * w);
+      faces[front].classList.add("is-on");
+      layer.append(el);
+      slats.push({ el, faces, left: i * w, w, a: 0, v: 0 });
+    }
+  };
+  // Crossfade: when the showcase moves to the next image, every slat fades its other face in with it.
+  const swap = (img) => {
+    const next = 1 - front;
+    slats.forEach((sl) => { paint(sl.faces[next], img, sl.left); sl.faces[next].classList.add("is-on"); sl.faces[front].classList.remove("is-on"); });
+    front = next;
+  };
+  new MutationObserver((list) => list.forEach((m) => { if (m.target.classList.contains("active")) swap(m.target); }))
+    .observe(media, { attributes: true, attributeFilter: ["class"], subtree: true });
+  const tick = () => {
+    let moving = false;
+    slats.forEach((sl) => {
+      sl.v += -0.055 * sl.a; // spring back to flat
+      sl.v *= 0.9;          // damping
+      sl.a = Math.max(-65, Math.min(65, sl.a + sl.v));
+      if (Math.abs(sl.a) > 0.05 || Math.abs(sl.v) > 0.05) moving = true; else { sl.a = 0; sl.v = 0; }
+      sl.el.style.transform = sl.a ? `rotateY(${sl.a.toFixed(2)}deg)` : "";
+      sl.el.style.setProperty("--turn", Math.abs(Math.sin((sl.a * Math.PI) / 180)).toFixed(3));
+    });
+    frame = moving ? requestAnimationFrame(tick) : 0;
+  };
+  showcase.addEventListener("pointermove", (event) => {
+    if (event.pointerType !== "mouse") return;
+    const x = event.clientX - showcase.getBoundingClientRect().left;
+    if (lastX === null) { lastX = x; return; }
+    const dx = x - lastX; lastX = x;
+    slats.forEach((sl) => {
+      const reach = sl.w * 1.8, d = Math.abs(sl.left + sl.w / 2 - x);
+      if (d < reach) sl.v += dx * 0.3 * (1 - d / reach);
+    });
+    if (!frame) frame = requestAnimationFrame(tick);
+  }, { passive: true });
+  showcase.addEventListener("pointerleave", () => { lastX = null; });
+  let resizeTimer = 0;
+  addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(build, 150); });
+  build();
+}
+
 // ---------- Work page: search and category filter ----------
 const workFilters = document.querySelector("[data-work-filters]");
 if (workFilters) {
