@@ -26,7 +26,7 @@
   //   npx wrangler secret put RESEND_API_KEY
   "vars": {
     "CONTACT_TO": "parahouse0@gmail.com",
-    "CONTACT_FROM": "Parahouse website <website@your-domain.com>"
+    "CONTACT_FROM": "parahouse website <website@parahouse.co>"
   },
 
   "observability": { "enabled": true }
