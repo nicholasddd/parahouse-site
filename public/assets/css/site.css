@@ -499,8 +499,8 @@ a.about-portrait span { display: block; margin-top: 10px; }
 }
 @media (min-width: 761px) { .pcards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .pcard-cell { padding: clamp(28px, 2.6vw, 40px) var(--pc-gap); }
-.pcard-cell + .pcard-cell { border-top: 1px solid var(--line); }
-@media (min-width: 761px) { .pcard-cell + .pcard-cell { border-top: 0; border-left: 1px solid var(--line); } }
+.pcard-cell:not([hidden]) ~ .pcard-cell { border-top: 1px solid var(--line); }
+@media (min-width: 761px) { .pcard-cell:not([hidden]) ~ .pcard-cell { border-top: 0; border-left: 1px solid var(--line); } }
 .pcard { position: relative; }
 .pcard-link {
   position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: space-between;
