@@ -420,3 +420,47 @@ if (floatCards.length && !reduceMotionNow()) {
   addEventListener("ph:layout", wake);
   wake();
 }
+
+// ---------- Footer strip: the work most related to the last project viewed ----------
+// A project page remembers itself as the last project viewed (this browser only). Every footer strip
+// then shows the six projects most related to it: same category first, then same client, newest
+// first to break ties, never the project itself. Before any project has been viewed it stays newest first.
+const STRIP_PROJECTS = [ // newest first, as on the Work page
+  { slug: "cetaphil-feel-it-in-30", client: "Cetaphil", title: "Feel It in 30 Roadshow", cat: "roadshow" },
+  { slug: "tsubaki-20th-anniversary", client: "TSUBAKI", title: "20th Anniversary", cat: "roadshow" },
+  { slug: "ora-5-unveiling", client: "Cycle & Carriage", title: "ORA 5 Unveiling", cat: "exhibition" },
+  { slug: "propw-token2049", client: "PropW", title: "TOKEN2049 Booth", cat: "exhibition" },
+  { slug: "coinw-token2049-afterparty-2025", client: "CoinW", title: "2025 Afterparty", cat: "brand-events" },
+  { slug: "audemars-piguet-staff-party", client: "Audemars Piguet", title: "150 Years Staff Party", cat: "brand-events" },
+  { slug: "tsubaki-brand-refresh", client: "TSUBAKI", title: "Brand Refresh Activation", cat: "roadshow" },
+  { slug: "coinw-token2049-afterparty-2024", client: "CoinW", title: "2024 Afterparty", cat: "brand-events" },
+  { slug: "don-julio-ultima-glorifier", client: "Don Julio", title: "Ultima Glorifier", cat: "product" },
+  { slug: "1664-brut-private-trade-event", client: "1664", title: "Brut Private Trade Event", cat: "brand-events" },
+];
+{
+  const here = (location.pathname.match(/^\/portfolio\/([^/]+)\/$/) || [])[1];
+  let last = here;
+  try {
+    if (here) localStorage.setItem("ph-last-project", here);
+    else last = localStorage.getItem("ph-last-project");
+  } catch {}
+  const ref = STRIP_PROJECTS.find((p) => p.slug === last);
+  const strip = document.querySelector(".footer-strip");
+  if (strip && ref) {
+    const ranked = STRIP_PROJECTS
+      .map((p, i) => ({ p, i, score: (p.cat === ref.cat ? 3 : 0) + (p.client === ref.client ? 2 : 0) }))
+      .filter(({ p }) => p.slug !== ref.slug)
+      .sort((a, b) => b.score - a.score || a.i - b.i)
+      .map(({ p }) => p);
+    [...strip.querySelectorAll(".strip-item")].forEach((a, k) => {
+      const p = ranked[k];
+      if (!p) { a.hidden = true; return; }
+      a.href = `/portfolio/${p.slug}/`;
+      a.dataset.label = p.client;
+      const img = a.querySelector("img");
+      img.src = `/assets/img/projects/${p.slug}/second.webp`;
+      img.alt = `${p.client} ${p.title}`;
+    });
+    strip.setAttribute("aria-label", "Related projects");
+  }
+}
