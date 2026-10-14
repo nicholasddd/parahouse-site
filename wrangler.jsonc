@@ -22,11 +22,15 @@
     "run_worker_first": ["/api/*"]
   },
 
-  // Non-secret settings for the contact form. Set the API key as a secret:
-  //   npx wrangler secret put RESEND_API_KEY
+  // Contact form: briefs are sent with Cloudflare Email Service, from the parahouse.co routing
+  // domain to the verified Email Routing destination below. Free, no API key. The binding can
+  // only send to that address, so the form can never be used to email anyone else.
+  "send_email": [
+    { "name": "EMAIL", "allowed_destination_addresses": ["parahouse0@gmail.com"] }
+  ],
   "vars": {
     "CONTACT_TO": "parahouse0@gmail.com",
-    "CONTACT_FROM": "parahouse website <website@parahouse.co>"
+    "CONTACT_FROM": "website@parahouse.co"
   },
 
   "observability": { "enabled": true }

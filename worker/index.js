@@ -49,7 +49,7 @@ async function handleContact(request, env) {
     return reply(wantsJson, request, 400, "That email address doesn't look right. Check it and send again.");
   }
 
-  if (!env.RESEND_API_KEY || !env.CONTACT_TO || !env.CONTACT_FROM) {
+  if (!env.EMAIL || !env.CONTACT_TO || !env.CONTACT_FROM) {
     return reply(
       wantsJson,
       request,
@@ -68,23 +68,18 @@ async function handleContact(request, env) {
     fields.message,
   ].join("\n");
 
-  const send = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${env.RESEND_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: env.CONTACT_FROM,
+  // Cloudflare Email Service: the EMAIL binding may only send to the verified Email Routing
+  // destination listed in wrangler.jsonc, which is free and needs no API key.
+  try {
+    await env.EMAIL.send({
+      from: { email: env.CONTACT_FROM, name: "parahouse website" },
       to: env.CONTACT_TO.split(",").map((s) => s.trim()).filter(Boolean),
-      reply_to: fields.email,
+      replyTo: { email: fields.email, name: fields.name },
       subject: `New brief from ${fields.name}${fields.company ? ` (${fields.company})` : ""}`,
       text,
-    }),
-  });
-
-  if (!send.ok) {
-    console.error("Resend error", send.status, await send.text());
+    });
+  } catch (error) {
+    console.error("Email send failed", error.code, error.message);
     return reply(wantsJson, request, 502, "The brief didn't send. Please try again in a moment.");
   }
 

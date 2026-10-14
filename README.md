@@ -32,21 +32,17 @@ wrangler.jsonc              Cloudflare settings
 4. Click **Deploy**. You'll get a `parahouse-site.<your-account>.workers.dev` address within a minute.
 5. From then on, every push to the main branch redeploys the site automatically.
 
-To use your own domain, open the Worker in the dashboard, go to **Settings → Domains & Routes → Add → Custom domain**, and enter e.g. `parahouse.sg`. The domain's DNS needs to be on Cloudflare for this.
+To use your own domain, open the Worker in the dashboard, go to **Settings → Domains & Routes → Add → Custom domain**, and enter e.g. `parahouse.co` (already set up in `wrangler.jsonc` `routes`). The domain's DNS needs to be on Cloudflare for this.
 
-## Turn on the contact form
+## The contact form
 
-The form works out of the box but replies "isn't connected yet" until you add an email service. It uses [Resend](https://resend.com) (free tier covers a studio site easily).
+Briefs are emailed with Cloudflare Email Service, free and with no API key or outside email provider.
 
-1. Create a Resend account and verify your domain there (it gives you DNS records to add in Cloudflare).
-2. Create an API key in Resend.
-3. In the Cloudflare dashboard, open the Worker → **Settings → Variables and Secrets**:
-   - Add a **secret** `RESEND_API_KEY` with the key.
-   - Set `CONTACT_TO` to the inbox that should receive briefs (comma-separate for several).
-   - Set `CONTACT_FROM` to a sender on your verified domain, e.g. `Parahouse website <website@parahouse.sg>`.
-4. Also update `CONTACT_FROM`/`CONTACT_TO` in `wrangler.jsonc` so the next deploy doesn't reset them (the secret is never in the repo).
+- `wrangler.jsonc` has a `send_email` binding (`EMAIL`) that may only send to `parahouse0@gmail.com`, the verified destination in Email Routing. Briefs go out from `website@parahouse.co`.
+- Replies to a brief go straight to the person who sent it.
+- To send briefs to a different inbox: add and verify it under **Email → Email Routing → Destination addresses** in Cloudflare, then change `CONTACT_TO` and `allowed_destination_addresses` in `wrangler.jsonc`.
 
-Replies to an enquiry go straight to the person who sent it.
+Mail sent to hello@parahouse.co is forwarded to the same Gmail by Email Routing.
 
 ## Still to supply
 
