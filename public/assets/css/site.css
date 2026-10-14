@@ -1,12 +1,14 @@
 /* parahouse — site styles
    White, image-led. Colour relationship after Nicholas's reference (the Kinetic studio site): pure white
    ground, deep black text and solid cards, neutral grey for secondary text and soft surfaces, and one
-   accent used sparingly (here a deep red instead of their orange). Type: Inter, as in the reference.
+   accent used sparingly (here a deep red instead of their orange). Type from the original dark site.
    Layout after Zeroframe and Foucault. Colours and type live in the tokens below. */
 
-/* Type: Inter (variable, 300–700) for everything. SIL Open Font License (/assets/fonts/OFL-Inter.txt),
-   self-hosted, Latin subset. */
-@font-face { font-family: "Inter"; src: url("/assets/fonts/inter-var.woff2") format("woff2"); font-weight: 300 700; font-display: swap; }
+/* Type: Archivo (extended widths) for headings, Geist for text, Geist Mono for labels.
+   All SIL Open Font License (see /assets/fonts/OFL-*.txt), self-hosted, Latin subset. */
+@font-face { font-family: "Archivo"; src: url("/assets/fonts/archivo-wide.woff") format("woff"); font-weight: 500 800; font-stretch: 100% 125%; font-display: swap; }
+@font-face { font-family: "Geist"; src: url("/assets/fonts/geist.woff") format("woff"); font-weight: 300 600; font-display: swap; }
+@font-face { font-family: "Geist Mono"; src: url("/assets/fonts/geist-mono.woff") format("woff"); font-weight: 400; font-display: swap; }
 
 :root {
   --ease-out: cubic-bezier(.23, 1, .32, 1);   /* strong ease-out for UI */
@@ -29,9 +31,9 @@
   --bg-top: #ffffff;      /* no tint: the page is plain white */
   --logo: #a3a3a3;        /* client logos at rest: neutral grey; black on hover */
 
-  --font: "Inter", "Helvetica Neue", Arial, sans-serif;
-  --display: "Inter", "Helvetica Neue", Arial, sans-serif;
-  --mono: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font: "Geist", "Helvetica Neue", Arial, sans-serif;
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --radius: clamp(12px, 1.4vw, 20px);
   --gap: 8px;
   --edge: clamp(12px, 1.4vw, 20px);
@@ -276,7 +278,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 @media (hover: hover) and (pointer: fine) { .strip-item:hover img { transform: scale(1.05); } }
 .strip-item.s0 { height: 110px; } .strip-item.s1 { height: 160px; } .strip-item.s2 { height: 90px; } .strip-item.s3 { height: 140px; }
 @media (max-width: 640px) { .strip-item:nth-child(n+4) { display: none; } }
-.footer-mark { font-family: var(--display); font-weight: 600; font-size: 20vw; line-height: .8; letter-spacing: -0.06em; margin: 32px 0 20px; white-space: nowrap; overflow: hidden; color: #dcdcdc; }
+.footer-mark { font-family: var(--display); font-weight: 800; font-stretch: 125%; font-size: 15.3vw; line-height: .78; letter-spacing: -0.05em; margin: 32px 0 20px; white-space: nowrap; overflow: hidden; color: #dcdcdc; }
 
 /* ---------- Home sections ---------- */
 .intro { display: grid; gap: 24px; padding: clamp(72px, 10vw, 150px) var(--edge) 0; }
@@ -720,13 +722,7 @@ body:has(.showcase) .topnav a:not([aria-current="page"]) { color: #fff; text-sha
 /* Reference palette: the dark menu keeps the bright accent for its current item */
 .menu a[aria-current="page"] { color: var(--brand); }
 
-/* ---------- Kinetic colour relationship + Inter ----------
-   Headings in Inter, sentence case, medium weight, tight tracking (no caps, no extended widths). */
-.hero-title, .statement, .menu a, .tile-title, .footer-mark, .intro-line, .service-title, .together-title, .about-title,
-.about-help-title, .help-cols h3, .difference.value h3, .work-title, .pcard-wordmark, .pillars-title, .offer-title, .result dd {
-  text-transform: none; font-stretch: 100%; font-weight: 500; letter-spacing: -0.035em;
-}
-.footer-mark { font-weight: 600; letter-spacing: -0.06em; }
+/* ---------- Kinetic colour relationship ---------- */
 /* Two-tone headlines: deep black, then neutral grey */
 .tone { color: var(--tone); }
 /* Home project cards: deep black blocks with white type, as the reference's black cards */
