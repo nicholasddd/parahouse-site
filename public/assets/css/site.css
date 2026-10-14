@@ -1,40 +1,37 @@
 /* parahouse — site styles
-   White, image-led, coloured and set after Nicholas's reference (Teenage Engineering-style): white
-   ground, near-black type, an orange accent, a pixel display face over monospaced text. Layout after
-   Zeroframe (mono labels, footer strip and wordmark) and Foucault (floating pills, compact menu, tiles).
-   Colours and type live in the tokens below. */
+   White, image-led. Colour relationship after Nicholas's reference (the Kinetic studio site): pure white
+   ground, deep black text and solid cards, neutral grey for secondary text and soft surfaces, and one
+   accent used sparingly (here a deep red instead of their orange). Type: Inter, as in the reference.
+   Layout after Zeroframe and Foucault. Colours and type live in the tokens below. */
 
-/* Type: Silkscreen (pixel caps) for headings, Geist Mono for everything else.
-   All SIL Open Font License (see /assets/fonts/OFL-*.txt), self-hosted, Latin subset. */
-@font-face { font-family: "Silkscreen"; src: url("/assets/fonts/silkscreen-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
-@font-face { font-family: "Silkscreen"; src: url("/assets/fonts/silkscreen-700.woff2") format("woff2"); font-weight: 700 800; font-display: swap; }
-@font-face { font-family: "Archivo"; src: url("/assets/fonts/archivo-wide.woff") format("woff"); font-weight: 500 800; font-stretch: 100% 125%; font-display: swap; }
-@font-face { font-family: "Geist"; src: url("/assets/fonts/geist.woff") format("woff"); font-weight: 300 600; font-display: swap; }
-@font-face { font-family: "Geist Mono"; src: url("/assets/fonts/geist-mono.woff") format("woff"); font-weight: 400; font-display: swap; }
+/* Type: Inter (variable, 300–700) for everything. SIL Open Font License (/assets/fonts/OFL-Inter.txt),
+   self-hosted, Latin subset. */
+@font-face { font-family: "Inter"; src: url("/assets/fonts/inter-var.woff2") format("woff2"); font-weight: 300 700; font-display: swap; }
 
 :root {
   --ease-out: cubic-bezier(.23, 1, .32, 1);   /* strong ease-out for UI */
   --ease-drawer: cubic-bezier(.32, .72, 0, 1); /* panels growing out of a control */
-  --bg: #ffffff;          /* plain white ground, no gradient */
-  --surface: #f3f3f3;     /* light grey cards, fields, pills */
-  --fg: #111111;
-  --muted: #5c5c57;
-  --line: #e2e2e2;
-  --pill: rgba(255, 255, 255, .88);
-  --pill-fg: #111111;
-  --panel: #111111;
-  --panel-fg: #f1f1ef;
-  --panel-muted: #8f8f8a;
-  --brand: #ff6b17;       /* parahouse orange: logo, buttons, fills, glows; project pages set their own */
-  --brand-ink: #111111;   /* text ON the brand colour: black, as in the reference */
-  --brand-text: #c2410c;  /* the brand colour where it IS text on the light ground (current page, hovers, labels) */
-  --curtain: #111111;     /* intro screen and page-change curtain */
+  --bg: #ffffff;          /* pure white ground */
+  --surface: #efefef;     /* neutral grey: soft cards, fields, pills */
+  --fg: #0d0d0d;          /* deep black: text and solid cards */
+  --muted: #6e6e6e;       /* neutral grey text (passes 4.5:1 on white) */
+  --tone: #8c8c8c;        /* the grey half of two-tone headlines (large text only) */
+  --line: #e4e4e4;
+  --pill: rgba(255, 255, 255, .9);
+  --pill-fg: #0d0d0d;
+  --panel: #0d0d0d;
+  --panel-fg: #ffffff;
+  --panel-muted: #8c8c8c;
+  --brand: #c8102e;       /* parahouse red, a deep lipstick red: logo, dots, buttons, labels; project pages set their own */
+  --brand-ink: #ffffff;   /* text on the red */
+  --brand-text: #c8102e;  /* the red as text on white (dark enough already) */
+  --curtain: #0d0d0d;     /* intro screen and page-change curtain: deep black */
   --bg-top: #ffffff;      /* no tint: the page is plain white */
-  --logo: #8d8d88;        /* client logos at rest: grey; dark on hover */       /* client logos at rest: muted red; white on hover */     /* dark red at the top of the background gradient */
+  --logo: #a3a3a3;        /* client logos at rest: neutral grey; black on hover */
 
-  --font: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
-  --display: "Silkscreen", "Geist Mono", ui-monospace, monospace;
-  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --display: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --mono: "Inter", "Helvetica Neue", Arial, sans-serif;
   --radius: clamp(12px, 1.4vw, 20px);
   --gap: 8px;
   --edge: clamp(12px, 1.4vw, 20px);
@@ -279,7 +276,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 @media (hover: hover) and (pointer: fine) { .strip-item:hover img { transform: scale(1.05); } }
 .strip-item.s0 { height: 110px; } .strip-item.s1 { height: 160px; } .strip-item.s2 { height: 90px; } .strip-item.s3 { height: 140px; }
 @media (max-width: 640px) { .strip-item:nth-child(n+4) { display: none; } }
-.footer-mark { font-family: var(--display); font-weight: 800; font-stretch: 125%; font-size: 11.8vw; line-height: .9; letter-spacing: 0; margin: 32px 0 20px; white-space: nowrap; overflow: hidden; color: var(--fg); }
+.footer-mark { font-family: var(--display); font-weight: 600; font-size: 20vw; line-height: .8; letter-spacing: -0.06em; margin: 32px 0 20px; white-space: nowrap; overflow: hidden; color: #dcdcdc; }
 
 /* ---------- Home sections ---------- */
 .intro { display: grid; gap: 24px; padding: clamp(72px, 10vw, 150px) var(--edge) 0; }
@@ -722,3 +719,25 @@ body:has(.showcase) .topnav a:not([aria-current="page"]) { color: #fff; text-sha
 
 /* Reference palette: the dark menu keeps the bright accent for its current item */
 .menu a[aria-current="page"] { color: var(--brand); }
+
+/* ---------- Kinetic colour relationship + Inter ----------
+   Headings in Inter, sentence case, medium weight, tight tracking (no caps, no extended widths). */
+.hero-title, .statement, .menu a, .tile-title, .footer-mark, .intro-line, .service-title, .together-title, .about-title,
+.about-help-title, .help-cols h3, .difference.value h3, .work-title, .pcard-wordmark, .pillars-title, .offer-title, .result dd {
+  text-transform: none; font-stretch: 100%; font-weight: 500; letter-spacing: -0.035em;
+}
+.footer-mark { font-weight: 600; letter-spacing: -0.06em; }
+/* Two-tone headlines: deep black, then neutral grey */
+.tone { color: var(--tone); }
+/* Home project cards: deep black blocks with white type, as the reference's black cards */
+.pcard-link { background: var(--fg); color: #fff; }
+.pcard-logo-img { background: #fff; }
+.bubble { background: #fff; color: var(--fg); }
+.pcard-sub { color: rgba(255,255,255,.62); }
+.chevron { background: rgba(255,255,255,.14); }
+.pcard-outline { border-color: rgba(13,13,13,.25); }
+@media (hover: hover) { .pcard-link:hover .bubble { background: #fff; color: var(--fg); } }
+@media (hover: none) { .pcard-sub { color: rgba(255,255,255,.8); } }
+/* About P pieces at rest: neutral grey; the active one keeps the red gradient */
+.pq-base { fill: #efefef; stroke: rgba(0,0,0,.06); }
+.pq:hover .pq-base { fill: #e3e3e3; }
