@@ -211,6 +211,10 @@ if (pillars) {
   const stop = () => { clearInterval(timer); timer = 0; };
   tabs.forEach((t, i) => t.addEventListener("click", () => { stop(); show(i); }));
   quads.forEach((q, i) => q.addEventListener("click", () => { stop(); show(i); }));
+  // With a mouse, hovering a tab or a piece of the P switches to it; touch screens keep tap to switch.
+  if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    [tabs, quads].forEach((list) => list.forEach((el, i) => el.addEventListener("mouseenter", () => { stop(); if (i !== current) show(i); })));
+  }
   pillars.querySelector('[role="tablist"]').addEventListener("keydown", (event) => {
     const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
     if (!step) return;
