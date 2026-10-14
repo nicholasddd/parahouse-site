@@ -725,3 +725,12 @@ a.about-portrait span { display: block; margin-top: 10px; }
 /* The Let's talk arrow circle carries the key gradient */
 .talk-arrow { background: var(--grad); color: #fff; }
 @media (hover: hover) and (pointer: fine) { .talk-button:hover { background: var(--grad); color: #fff; } .talk-button:hover .talk-arrow { background: #fff; color: var(--ember); } }
+
+/* ---------- About: "We are ___", a vertical ticker of design titles (site.js steps it) ---------- */
+.we-are { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: .32em; margin: clamp(72px, 9vw, 140px) 0 0;
+  font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase;
+  font-size: clamp(26px, 3.9vw, 64px); line-height: 1; letter-spacing: -0.01em; }
+.we-are-ticker { position: relative; display: inline-block; height: 1.1em; overflow: hidden; vertical-align: bottom; color: var(--brand-text); }
+.we-are-track { display: flex; flex-direction: column; transition: transform .7s cubic-bezier(.77, 0, .175, 1); }
+.we-are-track > span { display: block; height: 1.1em; line-height: 1.1; white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { .we-are-track { transition: none; } }

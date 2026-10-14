@@ -542,3 +542,28 @@ const STRIP_PROJECTS = [ // newest first, as on the Work page
     strip.setAttribute("aria-label", "Related projects");
   }
 }
+
+// ---------- About: "We are ___" ticker ----------
+// Titles swipe up one at a time and pause on each. A copy of the first title sits at the end so the loop
+// is seamless: after sliding onto it, the track jumps back to the start without animating.
+// Screen readers get the whole list once from the paragraph's aria-label. Reduced motion: it stays still.
+const ticker = document.querySelector("[data-ticker]");
+if (ticker && !reduceMotionNow()) {
+  const track = ticker.querySelector(".we-are-track");
+  track.append(track.firstElementChild.cloneNode(true));
+  const count = track.children.length;
+  let i = 0;
+  setInterval(() => {
+    if (document.hidden) return;
+    i += 1;
+    track.style.transition = "";
+    track.style.transform = `translateY(-${(i * 100) / count}%)`;
+    if (i === count - 1) {
+      setTimeout(() => {
+        track.style.transition = "none";
+        track.style.transform = "translateY(0)";
+        i = 0;
+      }, 750);
+    }
+  }, 2200);
+}
