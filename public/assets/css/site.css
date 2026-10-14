@@ -760,3 +760,9 @@ a.about-portrait span { display: block; margin-top: 10px; }
 
 /* Services: the line under the design-day tiers */
 .offer-group-note { margin: 16px 0 0; max-width: 70ch; font-size: 15px; color: var(--muted); }
+
+/* Services bundles: tagline under the name, a small "What's included" head, and an example line */
+.offer-tagline { margin: -4px 0 0; font-size: 17px; font-weight: 500; color: var(--brand-text); }
+.offer-list-head { margin: 6px 0 -8px; font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.offer-example { margin: 0; font-size: 14px; line-height: 1.5; color: var(--muted); }
+.offer-example span { display: block; margin-bottom: 4px; font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--fg); }
