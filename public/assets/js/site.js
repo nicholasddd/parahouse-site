@@ -75,40 +75,41 @@ if (showcase && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
   }
 }
 
-// ---------- Work page: search, type and work filters ----------
+// ---------- Work page: search and category filter ----------
 const workFilters = document.querySelector("[data-work-filters]");
 if (workFilters) {
   const cards = [...document.querySelectorAll(".work-card")];
   const empty = document.querySelector("[data-work-empty]");
   const search = workFilters.querySelector("[data-filter-search]");
-  const state = { type: "all", service: "all", q: "" };
+  const state = { type: "all", q: "" };
+  // A category with no projects yet (Multimedia, for now) keeps its button out of sight.
+  workFilters.querySelectorAll("[data-filter-type]").forEach((b) => {
+    const t = b.dataset.filterType;
+    if (t !== "all" && !cards.some((card) => card.dataset.type === t)) b.closest("li").hidden = true;
+  });
   const apply = () => {
     const words = state.q.toLowerCase().split(/\s+/).filter(Boolean);
     let shown = 0;
     cards.forEach((card) => {
-      const ok = (state.type === "all" || card.dataset.type === state.type)
-        && (state.service === "all" || card.dataset.services.split(" ").includes(state.service))
-        && words.every((w) => card.dataset.search.includes(w));
+      const ok = (state.type === "all" || card.dataset.type === state.type) && words.every((w) => card.dataset.search.includes(w));
       card.hidden = !ok;
       if (ok) shown += 1;
     });
     empty.hidden = shown > 0;
+    dispatchEvent(new Event("ph:layout")); // the float-in re-measures the cards that moved
   };
-  const press = (attr, value) => {
-    workFilters.querySelectorAll(`[${attr}]`).forEach((b) => b.setAttribute("aria-pressed", String(b.getAttribute(attr) === value)));
+  const press = (value) => {
+    workFilters.querySelectorAll("[data-filter-type]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.filterType === value)));
   };
   workFilters.addEventListener("click", (event) => {
     const t = event.target.closest("[data-filter-type]");
-    const sv = event.target.closest("[data-filter-service]");
-    if (t) { state.type = t.dataset.filterType; press("data-filter-type", state.type); apply(); }
-    if (sv) { state.service = sv.dataset.filterService; press("data-filter-service", state.service); apply(); }
+    if (t) { state.type = t.dataset.filterType; press(state.type); apply(); }
   });
   search.addEventListener("input", () => { state.q = search.value; apply(); });
   document.querySelector("[data-filter-reset]")?.addEventListener("click", () => {
-    Object.assign(state, { type: "all", service: "all", q: "" });
+    Object.assign(state, { type: "all", q: "" });
     search.value = "";
-    press("data-filter-type", "all");
-    press("data-filter-service", "all");
+    press("all");
     apply();
   });
 }
@@ -365,20 +366,25 @@ if (glitch && !reduceMotion) {
 const eventType = document.getElementById("event_type");
 if (eventType && new URLSearchParams(location.search).get("type") === "pitch") eventType.value = "Pitch support";
 
-// ---------- Selected work floats into place as it scrolls in (after lusion.co's featured work) ----------
-// Each card starts a little low and small and settles as it reaches its spot. Its position follows
-// the scroll, eased so the card trails slightly behind and catches up, which makes it float.
-// Columns arrive one after another. Measures the untransformed cell, so the motion never feeds back.
-const floatCards = [...document.querySelectorAll(".pcard")];
+// ---------- Project cards float into place as they scroll in (after lusion.co's featured work) ----------
+// Home's featured cards and the Work grid. Each card starts a little low and small and settles as it
+// reaches its spot. Its position follows the scroll, eased so the card trails slightly behind and
+// catches up, which makes it float. Columns arrive one after another. The card's resting box is worked
+// back out of its current transform (origin top centre), so the motion never feeds back on itself.
+const floatCards = [...document.querySelectorAll(".pcard, .work-card")];
 if (floatCards.length && !reduceMotionNow()) {
-  const cards = floatCards.map((card) => ({ card, cell: card.closest(".pcard-cell") || card.parentElement, y: 0, s: 1, ready: false }));
+  const cards = floatCards.map((card) => ({ card, y: 0, s: 1, ready: false }));
   let frame = 0;
-  const targetFor = ({ cell }) => {
-    const vh = innerHeight, box = cell.getBoundingClientRect();
-    const column = Math.max(0, Math.round((box.left - (cell.parentElement.getBoundingClientRect().left)) / box.width));
-    const visibleColumn = Math.max(0, Math.min(3, Math.floor(Math.max(0, box.left) / box.width)));
-    const delay = (cell.parentElement.scrollWidth > cell.parentElement.clientWidth ? visibleColumn : column % 4) * 0.08;
-    const p = Math.min(1, Math.max(0, (vh - box.top) / (vh * 0.6) - delay));
+  const targetFor = (c) => {
+    const box = c.card.getBoundingClientRect();
+    if (!box.height) return { y: 0, s: 1 }; // filtered out of view
+    const vh = innerHeight;
+    const top = box.top - c.y;
+    const width = box.width / c.s;
+    const left = box.left - (width * (1 - c.s)) / 2;
+    const grid = c.card.closest(".pcards, .work-grid") || c.card.parentElement;
+    const column = Math.max(0, Math.min(3, Math.round((left - grid.getBoundingClientRect().left) / width)));
+    const p = Math.min(1, Math.max(0, (vh - top) / (vh * 0.6) - column * 0.08));
     const e = 1 - Math.pow(1 - p, 3);
     return { y: (1 - e) * 110, s: 0.88 + 0.12 * e };
   };
@@ -397,6 +403,6 @@ if (floatCards.length && !reduceMotionNow()) {
   const wake = () => { if (!frame) frame = requestAnimationFrame(tick); };
   addEventListener("scroll", wake, { passive: true });
   addEventListener("resize", wake);
-  document.querySelector("[data-pcards]")?.addEventListener("scroll", wake, { passive: true });
+  addEventListener("ph:layout", wake);
   wake();
 }
