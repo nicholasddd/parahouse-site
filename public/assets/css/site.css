@@ -777,3 +777,6 @@ a.about-portrait span { display: block; margin-top: 10px; }
 .project-story .label { display: block; margin: 0 0 6px; color: var(--brand-text); }
 .project-story p { margin: 0 0 22px; }
 .project-story p:last-child { margin-bottom: 0; }
+
+/* Project story without labels: the first sentence leads, a step larger and brighter */
+.project-story .story-lead { font-size: clamp(18px, 1.5vw, 21px); line-height: 1.5; color: var(--fg); }
