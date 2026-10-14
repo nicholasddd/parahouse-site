@@ -29,7 +29,8 @@
   --brand-text: #c8102e;  /* the red as text on white (dark enough already) */
   --curtain: #0d0d0d;     /* intro screen and page-change curtain: deep black */
   --bg-top: #ffffff;      /* no tint: the page is plain white */
-  --logo: #a3a3a3;        /* client logos at rest: neutral grey; black on hover */
+  --logo: #a3a3a3;
+  --wordmark: #dcdcdc;    /* the giant footer wordmark */        /* client logos at rest: neutral grey; black on hover */
 
   --font: "Geist", "Helvetica Neue", Arial, sans-serif;
   --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
@@ -278,7 +279,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 @media (hover: hover) and (pointer: fine) { .strip-item:hover img { transform: scale(1.05); } }
 .strip-item.s0 { height: 110px; } .strip-item.s1 { height: 160px; } .strip-item.s2 { height: 90px; } .strip-item.s3 { height: 140px; }
 @media (max-width: 640px) { .strip-item:nth-child(n+4) { display: none; } }
-.footer-mark { font-family: var(--display); font-weight: 800; font-stretch: 125%; font-size: 15.3vw; line-height: .78; letter-spacing: -0.05em; margin: 32px 0 20px; white-space: nowrap; overflow: hidden; color: #dcdcdc; }
+.footer-mark { font-family: var(--display); font-weight: 800; font-stretch: 125%; font-size: 15.3vw; line-height: .78; letter-spacing: -0.05em; margin: 32px 0 20px; white-space: nowrap; overflow: hidden; color: var(--wordmark); }
 
 /* ---------- Home sections ---------- */
 .intro { display: grid; gap: 24px; padding: clamp(72px, 10vw, 150px) var(--edge) 0; }
@@ -362,9 +363,6 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .together { padding-bottom: clamp(48px, 7vw, 96px); }
 .together-title { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(34px, 6.4vw, 104px); line-height: .92; letter-spacing: -0.01em; }
 .together-rule { position: relative; margin: clamp(40px, 6vw, 80px) 0 clamp(28px, 4vw, 48px); border-top: 1px solid var(--line); }
-.round-button { position: absolute; right: clamp(24px, 12vw, 200px); top: 0; transform: translateY(-50%); display: grid; place-items: center; width: clamp(120px, 12vw, 180px); aspect-ratio: 1; border-radius: 50%; background: var(--brand); color: var(--brand-ink); font-family: var(--mono); font-size: 12px; letter-spacing: .07em; text-transform: uppercase; transition: transform .4s cubic-bezier(.2,.7,.2,1), background-color .25s ease; }
-@media (hover: hover) and (pointer: fine) { .round-button:hover { transform: translateY(-50%) scale(1.06); background: var(--fg); } }
-.round-button:active { transform: translateY(-50%) scale(.97); }
 .contact-pills { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
 .pill-link { display: inline-flex; align-items: center; height: 54px; padding: 0 24px; border: 1px solid var(--line); border-radius: 999px; font-size: 15px; transition: border-color .25s ease, background-color .25s ease; }
 .pill-link:hover { border-color: var(--fg); background: var(--surface); }
@@ -374,7 +372,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .footer-socials { margin-left: auto; }
 .footer-socials a { margin-right: 14px; }
 .footer-socials a:hover, .footer-meta a:hover { color: var(--brand-text); }
-@media (max-width: 640px) { .together-rule { margin-top: 96px; } .round-button { right: 0; width: 108px; } .footer-socials { margin-left: 0; } }
+@media (max-width: 640px) { .together-rule { margin-top: 96px; } .footer-socials { margin-left: 0; } }
 
 /* ---------- About (structure after Dennis Snellenberg's about page) ---------- */
 .about-title { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(30px, 5vw, 80px); line-height: .96; letter-spacing: -0.01em; max-width: 15ch; text-wrap: balance; padding-top: clamp(24px, 6vw, 96px); }
@@ -678,7 +676,6 @@ a.about-portrait span { display: block; margin-top: 10px; }
 /* Press feedback: pressable things give a little under the finger */
 .button, .offer-cta, .pill, .filters button { transition-property: background-color, color, border-color, transform; transition-duration: .25s, .25s, .25s, .16s; transition-timing-function: ease, ease, ease, var(--ease-out); }
 .button:active, .offer-cta:active, .pill:active, .filters button:active { transform: scale(.97); }
-.round-button { transition: transform .16s var(--ease-out), background-color .25s ease; }
 
 /* Project cards (home and Work) float into place as they scroll in (site.js sets the transform; after lusion.co) */
 .pcard, .work-card { transform-origin: 50% 0; }
@@ -713,7 +710,7 @@ body:has(.showcase) .topnav a:not([aria-current="page"]) { color: #fff; text-sha
   .pcard-sub { color: rgba(255,255,255,.8); }
 }
 .cursor-bubble { background: #141414; color: #fff; border-color: transparent; }
-.cursor-dot { background: #141414; box-shadow: 0 0 0 1px rgba(255,255,255,.6), 0 1px 6px rgba(0,0,0,.25); }
+.cursor-dot { background: #fff; box-shadow: none; mix-blend-mode: difference; } /* black on white, white on black */
 /* About: the P pieces at rest are light blocks; the active one keeps its red gradient */
 .pq-base { fill: #ffffff; stroke: rgba(0,0,0,.08); }
 .pq:hover .pq-base { fill: #e8e8e5; }
@@ -737,3 +734,29 @@ body:has(.showcase) .topnav a:not([aria-current="page"]) { color: #fff; text-sha
 /* About P pieces at rest: neutral grey; the active one keeps the red gradient */
 .pq-base { fill: #efefef; stroke: rgba(0,0,0,.06); }
 .pq:hover .pq-base { fill: #e3e3e3; }
+
+/* ---------- "Let's talk": a pill on the footer rule, red arrow at its end ---------- */
+.talk-button {
+  position: absolute; right: 0; top: 0; transform: translateY(-50%);
+  display: inline-flex; align-items: center; gap: 18px; height: 64px; padding: 0 8px 0 28px; border-radius: 999px;
+  background: var(--fg); color: var(--bg); font-family: var(--font); font-size: 18px; font-weight: 500; letter-spacing: -0.01em;
+  transition: background-color .25s ease, color .25s ease, transform .16s var(--ease-out);
+}
+.talk-arrow { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--brand); color: var(--brand-ink); transition: background-color .25s ease, color .25s ease; }
+.talk-arrow svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s var(--ease-out); }
+@media (hover: hover) and (pointer: fine) {
+  .talk-button:hover { background: var(--brand); color: var(--brand-ink); }
+  .talk-button:hover .talk-arrow { background: var(--brand-ink); color: var(--brand); }
+  .talk-button:hover .talk-arrow svg { transform: translateX(3px); }
+}
+.talk-button:active { transform: translateY(-50%) scale(.97); }
+@media (max-width: 640px) { .talk-button { height: 56px; gap: 14px; padding-left: 22px; font-size: 16px; } .talk-arrow { width: 42px; height: 42px; } }
+
+/* ---------- Home: white fades to deep black, then the client logos and footer sit on black (after the Kinetic reference) ---------- */
+.zone-fade { height: clamp(140px, 26vh, 300px); margin-top: clamp(48px, 6vw, 96px); background: linear-gradient(to bottom, #ffffff, #0d0d0d); }
+.zone-dark {
+  --bg: #0d0d0d; --surface: #1a1a1a; --fg: #f2f2f2; --muted: #9a9a9a; --tone: #6e6e6e; --line: #2a2a2a;
+  --logo: #6b6b6b; --wordmark: #242424; --brand-ink: #ffffff;
+  background: var(--bg); color: var(--fg);
+}
+.home-block.zone-dark { margin-top: 0; }

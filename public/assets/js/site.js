@@ -256,26 +256,36 @@ document.querySelectorAll("details.faq-item").forEach((item) => {
 });
 
 // ---------- A small dot that trails the cursor ----------
+// It lags slightly behind the pointer and, when the pointer is still, keeps hovering around it in a
+// small, slow loop (two out-of-step waves), so it never freezes. No lag and no drift with reduced motion.
 if (matchMedia("(hover: hover)").matches) {
   const dot = document.createElement("div");
   dot.className = "cursor-dot";
   dot.setAttribute("aria-hidden", "true");
   document.body.append(dot);
-  let tx = 0, ty = 0, dx = 0, dy = 0, running = 0;
-  const ease = reduceMotionNow() ? 1 : 0.14; // lags behind the pointer; no lag with reduced motion
-  const step = () => {
+  const still = reduceMotionNow();
+  let tx = 0, ty = 0, dx = 0, dy = 0, frame = 0, visible = false;
+  const ease = still ? 1 : 0.14;
+  const step = (now) => {
     dx += (tx - dx) * ease; dy += (ty - dy) * ease;
+    const t = now / 1000;
+    const hx = still ? 0 : Math.sin(t * 1.3) * 3.5 + Math.sin(t * 0.55) * 2;
+    const hy = still ? 0 : Math.cos(t * 1.05) * 3 + Math.sin(t * 0.8 + 1) * 1.5;
     // Sits just above and to the right of the pointer, never on it (the cursor pill sits below).
-    dot.style.transform = `translate3d(${dx + 16}px, ${dy - 14}px, 0)`;
-    running = Math.abs(tx - dx) + Math.abs(ty - dy) > 0.2 ? requestAnimationFrame(step) : 0;
+    dot.style.transform = `translate3d(${dx + 16 + hx}px, ${dy - 14 + hy}px, 0)`;
+    const settling = Math.abs(tx - dx) + Math.abs(ty - dy) > 0.2;
+    frame = visible && !document.hidden && (settling || !still) ? requestAnimationFrame(step) : 0;
   };
+  const wake = () => { if (!frame) frame = requestAnimationFrame(step); };
   document.addEventListener("mousemove", (event) => {
-    if (!dot.classList.contains("is-visible")) { dx = event.clientX; dy = event.clientY; }
+    if (!visible) { dx = event.clientX; dy = event.clientY; }
     tx = event.clientX; ty = event.clientY;
+    visible = true;
     dot.classList.add("is-visible");
-    if (!running) running = requestAnimationFrame(step);
+    wake();
   }, { passive: true });
-  document.documentElement.addEventListener("mouseleave", () => dot.classList.remove("is-visible"));
+  document.documentElement.addEventListener("mouseleave", () => { visible = false; dot.classList.remove("is-visible"); });
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && visible) wake(); });
 }
 
 // ---------- Intro greeting and page-change curtain ----------
