@@ -23,12 +23,13 @@
   --panel: #120c09;
   --panel-fg: #f3ebe3;
   --panel-muted: #8f7f73;
-  --ember: #5a1406;       /* deep red ember */
-  --glow: #c7401a;        /* red-orange, for soft glows */
-  --brand: #ef5a1f;       /* accent: a bright red-orange. Logo, buttons, dots, current page; project pages set their own */
+  --ember: #6e1505;       /* deep red ember */
+  --glow: #ff4a0a;        /* hot orange, for soft glows */
+  --brand: #ff5a0f;       /* accent: a glowing, saturated orange. Logo, buttons, dots, current page; project pages set their own */
   --brand-ink: #1a0c04;   /* dark text on the tangerine */
-  --brand-text: #f47a46;  /* the orange as text on the dark ground */
-  --grad: linear-gradient(180deg, #ffb07a 0%, #f47a2e 14%, #ef5a1f 48%, #d9430f 74%, #6e1a05 100%); /* the key gradient: a peach top, a long band of bright orange, then a short fall to deep red */
+  --brand-text: #ff7a33;  /* the orange as text on the dark ground */
+  --grad: linear-gradient(180deg, #ffc08a 0%, #ff7a1f 14%, #ff5a0f 46%, #f03a0a 72%, #9a1604 100%); /* the key gradient: a hot peach top, a long band of glowing orange, then a short fall to red */
+  --glow-soft: 0 0 32px rgba(255, 90, 15, .45); /* the light the orange gives off */
   --curtain: linear-gradient(180deg, #1c0603 0%, #7a1c08 100%); /* intro screen and page-change curtain */
   --bg-top: #2e0c05;      /* ember at the top of the background */
   --logo: #7d6a5d;        /* client logos at rest: warm grey; white on hover */
@@ -692,10 +693,10 @@ a.about-portrait span { display: block; margin-top: 10px; }
 .cursor-dot { background: #fff; box-shadow: none; mix-blend-mode: difference; } /* white on dark, dark on light images */
 .tone { color: var(--tone); } /* two-tone headlines: off-white, then quiet grey-green */
 /* The giant footer wordmark carries the key gradient */
-.footer-mark { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.footer-mark { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 40px rgba(255, 74, 10, .38)); }
 /* Buttons glow into the gradient on hover */
 @media (hover: hover) and (pointer: fine) {
-  .offer-cta:hover, .button:hover { background: var(--grad); color: #fff; }
+  .offer-cta:hover, .button:hover { background: var(--grad); color: #fff; box-shadow: var(--glow-soft); }
 }
 
 /* ---------- "I would like to explore my options": a pill on the footer rule, red arrow at its end ---------- */
@@ -729,7 +730,7 @@ a.about-portrait span { display: block; margin-top: 10px; }
 .slat::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; background: #000; opacity: calc(var(--turn, 0) * .35); }
 
 /* The Let's talk arrow circle carries the key gradient */
-.talk-arrow { background: var(--grad); color: #fff; }
+.talk-arrow { background: var(--grad); color: #fff; box-shadow: var(--glow-soft); }
 @media (hover: hover) and (pointer: fine) { .talk-button:hover { background: var(--grad); color: #fff; } .talk-button:hover .talk-arrow { background: #fff; color: var(--ember); } }
 
 /* ---------- About: "We are ___", a small vertical carousel of design titles (site.js steps it) ----------
