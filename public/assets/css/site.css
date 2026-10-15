@@ -28,7 +28,7 @@
   --brand: #ef5a1f;       /* accent: a bright red-orange. Logo, buttons, dots, current page; project pages set their own */
   --brand-ink: #1a0c04;   /* dark text on the tangerine */
   --brand-text: #f47a46;  /* the orange as text on the dark ground */
-  --grad: linear-gradient(180deg, #ffb07a 0%, #ef5a1f 38%, #b52a0c 68%, #2a0804 100%); /* the key gradient: peach > bright orange > deep red > near-black */
+  --grad: linear-gradient(180deg, #ffb07a 0%, #f47a2e 14%, #ef5a1f 48%, #d9430f 74%, #6e1a05 100%); /* the key gradient: a peach top, a long band of bright orange, then a short fall to deep red */
   --curtain: linear-gradient(180deg, #1c0603 0%, #7a1c08 100%); /* intro screen and page-change curtain */
   --bg-top: #2e0c05;      /* ember at the top of the background */
   --logo: #7d6a5d;        /* client logos at rest: warm grey; white on hover */
