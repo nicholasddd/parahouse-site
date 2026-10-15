@@ -458,57 +458,67 @@ if (glitch && !reduceMotion) {
 const eventType = document.getElementById("event_type");
 if (eventType && new URLSearchParams(location.search).get("type") === "pitch") eventType.value = "Pitch support";
 
-// ---------- Project cards float into place as they scroll in (after lusion.co's featured work) ----------
-// Home's featured cards, the Work grid and every project page image. Each card starts a little low and small and settles as it
-// reaches its spot. Its position follows the scroll, eased so the card trails slightly behind and
-// catches up, which makes it float. Columns arrive one after another. The card's resting box is worked
-// back out of its current transform (origin top centre), so the motion never feeds back on itself.
-// Cards already on screen at load start low too, so the first row floats in as well. Each fades in as it rises.
+// ---------- Project cards swing into place as they come on screen (lusion.co's featured work, rebuilt in CSS) ----------
+// Lusion draws its cards in WebGL; this is the same entry with transforms and clip-path. When a card comes on
+// screen it plays a 2s entry, timed (not tied to the scroll) and replayed whenever it comes back:
+//  - it starts shifted 5% of the screen width towards the middle and tilted 0.05 rad, left-hand cards one way and
+//    right-hand cards the other, and both ease out together (expo-out over 2s), so it swings in on a curve;
+//  - its visible area opens from 70% to 100% of the card, rounded corners kept (expo-out over 1.5s);
+//  - the image inside starts zoomed in (1 / 0.75) and settles to its normal size at the same pace.
+// Middle-column and full-width cards alternate sides, like Lusion's two-column list.
 const floatCards = [...document.querySelectorAll(".pcard, .work-card, .media.mosaic figure")];
 if (!floatCards.length || reduceMotionNow()) document.documentElement.classList.add("float-ready");
 else {
-  const cards = floatCards.map((card) => ({ card, y: 0, s: 1, o: 1, ready: false }));
-  const targetFor = (c) => {
-    const box = c.card.getBoundingClientRect();
-    if (!box.height) return { y: 0, s: 1, o: 1 }; // filtered out of view
-    const vh = innerHeight;
-    const top = box.top - c.y;
-    const width = box.width / c.s;
-    const left = box.left - (width * (1 - c.s)) / 2;
-    const grid = c.card.closest(".pcards, .work-grid, .media") || c.card.parentElement;
-    const column = Math.max(0, Math.min(3, Math.round((left - grid.getBoundingClientRect().left) / width)));
-    const p = Math.min(1, Math.max(0, (vh - top) / (vh * 0.6) - column * 0.08));
-    const e = 1 - Math.pow(1 - p, 3);
-    return { y: (1 - e) * 110, s: 0.88 + 0.12 * e, o: Math.min(1, e * 1.4) };
+  const expoOut = (x) => (x >= 1 ? 1 : 1 - Math.pow(2, -10 * x));
+  const items = floatCards.map((el, index) => {
+    const mask = el.querySelector(".work-media") || el;
+    return { el, mask, img: mask.querySelector("img"), index, side: 0, start: 0, on: false, done: false };
+  });
+  // Which side of its row the card sits on, from its resting box: -0.5 (left) or 0.5 (right).
+  const sideOf = (it) => {
+    const grid = it.el.closest(".pcards, .work-grid, .media") || it.el.parentElement;
+    const was = it.el.style.transform; it.el.style.transform = "";
+    const g = grid.getBoundingClientRect(), b = it.el.getBoundingClientRect();
+    it.el.style.transform = was;
+    const centre = (b.left + b.width / 2 - g.left) / g.width; // 0 … 1 across the grid
+    if (b.width > g.width * 0.75 || Math.abs(centre - 0.5) < 0.1) return (it.index % 2) - 0.5; // full width or middle: alternate
+    return centre < 0.5 ? -0.5 : 0.5;
   };
-  let frame = 0, timer = 0, last = 0;
+  const paint = (it, t) => {
+    const b = expoOut(Math.min(1, t / 1.5)), k = 1 - expoOut(Math.min(1, t / 2));
+    const x = k * it.side * -innerWidth * 0.1, rot = k * it.side * 0.1; // Lusion: (1 - C) * (index % 2 - 0.5) …
+    it.el.style.transform = k < 0.0005 ? "" : `translate3d(${x.toFixed(2)}px, 0, 0) rotate(${(-rot).toFixed(4)}rad)`;
+    const s = 0.7 + 0.3 * b; // visible area, 70% → 100%
+    it.mask.style.clipPath = b > 0.9995 ? "" : `inset(${(((1 - s) / 2) * 100).toFixed(3)}% round ${getComputedStyle(it.mask).borderRadius || "0px"})`;
+    if (it.img) it.img.style.scale = b > 0.9995 ? "" : (1 / (0.75 + 0.25 * b)).toFixed(4);
+  };
+  let frame = 0, timer = 0;
   const tick = () => {
     cancelAnimationFrame(frame); clearTimeout(timer); frame = timer = 0;
-    const now = performance.now();
-    const k = 1 - Math.pow(0.92, Math.min(100, last ? now - last : 16.7) / 16.7); // the same easing at any frame rate
-    last = now;
-    let moving = false;
-    cards.forEach((c) => {
-      const t = targetFor(c);
-      if (!c.ready) { c.y = 110; c.s = 0.88; c.o = 0; c.ready = true; } // everything starts low and faded
-      c.y += (t.y - c.y) * k;
-      c.s += (t.s - c.s) * k;
-      c.o += (t.o - c.o) * k;
-      if (Math.abs(t.y - c.y) > 0.1 || Math.abs(t.s - c.s) > 0.0005 || Math.abs(t.o - c.o) > 0.005) moving = true;
-      const rest = c.y < 0.1 && c.s > 0.9995;
-      c.card.style.transform = rest ? "" : `translate3d(0, ${c.y.toFixed(2)}px, 0) scale(${c.s.toFixed(4)})`;
-      c.card.style.opacity = c.o > 0.995 ? "" : c.o.toFixed(3);
-    });
-    document.documentElement.classList.add("float-ready");
-    if (moving) schedule(); else last = 0;
+    const now = performance.now(); let running = false;
+    items.forEach((it) => { if (!it.on || it.done) return; const t = (now - it.start) / 1000; paint(it, t); if (t < 2) running = true; else it.done = true; });
+    if (running) { frame = requestAnimationFrame(tick); timer = setTimeout(tick, 120); } // the timer backs up throttled frames
   };
-  // Animation frame first; a timer backs it up when the browser throttles frames, so nothing stays hidden
-  const schedule = () => { if (!frame) frame = requestAnimationFrame(tick); if (!timer) timer = setTimeout(tick, 120); };
-  const wake = () => { if (!frame && !timer) schedule(); };
-  addEventListener("scroll", wake, { passive: true });
-  addEventListener("resize", wake);
-  addEventListener("ph:layout", wake);
-  tick(); // place everything now, before the first paint
+  // On screen or not, checked from each card's box on scroll and resize, so a card can never stay clipped.
+  let checking = 0;
+  const check = () => {
+    checking = 0;
+    const vh = innerHeight, now = performance.now();
+    items.forEach((it) => {
+      const r = it.el.getBoundingClientRect();
+      const visible = r.height > 0 && r.bottom > 0 && r.top < vh;
+      if (visible && !it.on) { it.side = sideOf(it); it.on = true; it.done = false; it.start = now; }
+      else if (!visible && it.on) { it.on = false; it.done = false; paint(it, 0); }
+    });
+    tick();
+  };
+  const queue = () => { if (!checking) checking = setTimeout(check, 16); };
+  addEventListener("scroll", queue, { passive: true });
+  addEventListener("resize", queue);
+  addEventListener("ph:layout", queue);
+  items.forEach((it) => paint(it, 0));
+  check();
+  document.documentElement.classList.add("float-ready");
 }
 
 // ---------- Footer strip: the work most related to the last project viewed ----------
