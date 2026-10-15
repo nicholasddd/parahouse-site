@@ -458,66 +458,133 @@ if (glitch && !reduceMotion) {
 const eventType = document.getElementById("event_type");
 if (eventType && new URLSearchParams(location.search).get("type") === "pitch") eventType.value = "Pitch support";
 
-// ---------- Project cards swing into place as they come on screen (lusion.co's featured work, rebuilt in CSS) ----------
-// Lusion draws its cards in WebGL; this is the same entry with transforms and clip-path. When a card comes on
-// screen it plays a 2s entry, timed (not tied to the scroll) and replayed whenever it comes back:
-//  - it starts shifted 5% of the screen width towards the middle and tilted 0.05 rad, left-hand cards one way and
-//    right-hand cards the other, and both ease out together (expo-out over 2s), so it swings in on a curve;
-//  - its visible area opens from 70% to 100% of the card, rounded corners kept (expo-out over 1.5s);
-//  - the image inside starts zoomed in (1 / 0.75) and settles to its normal size at the same pace.
-// Middle-column and full-width cards alternate sides, like Lusion's two-column list.
+// ---------- Project images: lusion.co's featured-work entry and scroll curve ----------
+// Lusion draws its project images in WebGL. Two parts of it are rebuilt here, with the same numbers:
+//  1. Entry, timed when an image comes on screen (and replayed when it comes back): its visible area opens
+//     from 70% to 100% with the rounded corners kept, and the picture settles from a 1 / 0.75 zoom
+//     (expo-out over 1.5s). Home's black cards get the same opening.
+//  2. Scroll curve, from Lusion's fragment shader:
+//       baseUv.x -= (screenUv.x - 0.5) * (1. - sin(screenUv.y * PI)) * rippleStrength;
+//       rippleStrength = min(0.15, easedScrollStrength * 0.5)
+//     While the page scrolls, every row of an image is stretched sideways about the middle of the screen,
+//     most at the top and bottom of the screen and not at all in the middle, so an image coming up from below
+//     bends like a page over a cylinder, then eases flat when scrolling stops. A transform can't bend rows
+//     differently, so each image is drawn row by row onto its own canvas, which scrolls with the page.
+// The <img> stays in place (hidden) for layout, alt text and as the fallback if the canvas can't draw.
 const floatCards = [...document.querySelectorAll(".pcard, .work-card, .media.mosaic figure")];
 if (!floatCards.length || reduceMotionNow()) document.documentElement.classList.add("float-ready");
 else {
   const expoOut = (x) => (x >= 1 ? 1 : 1 - Math.pow(2, -10 * x));
-  const items = floatCards.map((el, index) => {
+  const PAD = 0.1; // the canvas reaches 10% past each side so stretched rows aren't cut off
+  const items = floatCards.map((el) => {
     const mask = el.querySelector(".work-media") || el;
-    return { el, mask, img: mask.querySelector("img"), index, side: 0, start: 0, on: false, done: false };
+    const img = el.matches(".pcard") ? null : mask.querySelector("img"); // Home's cards are black at rest: no picture to draw
+    return { el, mask, img, start: 0, on: false, hover: 0, hoverTo: 0, canvas: null, ctx: null, ready: false, w: 0, h: 0 };
   });
-  // Which side of its row the card sits on, from its resting box: -0.5 (left) or 0.5 (right).
-  const sideOf = (it) => {
-    const grid = it.el.closest(".pcards, .work-grid, .media") || it.el.parentElement;
-    const was = it.el.style.transform; it.el.style.transform = "";
-    const g = grid.getBoundingClientRect(), b = it.el.getBoundingClientRect();
-    it.el.style.transform = was;
-    const centre = (b.left + b.width / 2 - g.left) / g.width; // 0 … 1 across the grid
-    if (b.width > g.width * 0.75 || Math.abs(centre - 0.5) < 0.1) return (it.index % 2) - 0.5; // full width or middle: alternate
-    return centre < 0.5 ? -0.5 : 0.5;
+
+  // Canvas for each image, made once its picture has decoded. Until then the <img> shows as usual.
+  const dpr = () => Math.min(2, devicePixelRatio || 1);
+  const setup = (it) => {
+    if (!it.img) return;
+    const go = () => {
+      const canvas = document.createElement("canvas");
+      canvas.className = "curve-canvas";
+      canvas.setAttribute("aria-hidden", "true");
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      it.canvas = canvas; it.ctx = ctx;
+      it.mask.append(canvas);
+      it.mask.classList.add("has-curve");
+      it.ready = true; size(it); it.dirty = true; wake();
+    };
+    if (it.img.complete && it.img.naturalWidth) go();
+    else it.img.addEventListener("load", go, { once: true });
+    const enter = () => { it.hoverTo = 1; wake(); }, leave = () => { it.hoverTo = 0; wake(); };
+    it.el.addEventListener("mouseenter", enter); it.el.addEventListener("mouseleave", leave);
   };
-  const paint = (it, t) => {
-    const b = expoOut(Math.min(1, t / 1.5)), k = 1 - expoOut(Math.min(1, t / 2));
-    const x = k * it.side * -innerWidth * 0.1, rot = k * it.side * 0.1; // Lusion: (1 - C) * (index % 2 - 0.5) …
-    it.el.style.transform = k < 0.0005 ? "" : `translate3d(${x.toFixed(2)}px, 0, 0) rotate(${(-rot).toFixed(4)}rad)`;
-    const s = 0.7 + 0.3 * b; // visible area, 70% → 100%
-    it.mask.style.clipPath = b > 0.9995 ? "" : `inset(${(((1 - s) / 2) * 100).toFixed(3)}% round ${getComputedStyle(it.mask).borderRadius || "0px"})`;
-    if (it.img) it.img.style.scale = b > 0.9995 ? "" : (1 / (0.75 + 0.25 * b)).toFixed(4);
+  const size = (it) => {
+    if (!it.canvas) return;
+    it.w = it.mask.clientWidth; it.h = it.mask.clientHeight;
+    const d = dpr();
+    it.canvas.width = Math.round(it.w * (1 + 2 * PAD) * d);
+    it.canvas.height = Math.round(it.h * d);
   };
-  let frame = 0, timer = 0;
+
+  // One image, drawn for reveal ratio b, scroll curve k and hover zoom.
+  const draw = (it, b, k, rect) => {
+    const { ctx, img, w: W, h: H } = it, d = dpr(), P = W * PAD;
+    ctx.setTransform(d, 0, 0, d, 0, 0);
+    ctx.clearRect(0, 0, W + 2 * P, H);
+    if (b <= 0 || !W || !H) return;
+    const radius = parseFloat(getComputedStyle(it.mask).borderTopLeftRadius) || 0;
+    const s = 0.7 + 0.3 * b; // visible area
+    const zoom = (1 / (0.75 + 0.25 * b)) * (1 + 0.03 * it.hover); // the picture inside, plus the hover zoom
+    const iw = img.naturalWidth, ih = img.naturalHeight, cover = Math.max(W / iw, H / ih) * zoom;
+    const x0 = (W * (1 - s)) / 2, y0 = (H * (1 - s)) / 2, bw = W * s, bh = H * s, R = Math.min(radius, bw / 2, bh / 2);
+    const srcX = (X) => ((X - W / 2) / cover) + iw / 2, srcY = (Y) => ((Y - H / 2) / cover) + ih / 2;
+    const S = innerWidth, vh = innerHeight, cx = S / 2 - rect.left; // the middle of the screen, in the image's own px
+    if (k < 0.0005) { // flat: one rounded image
+      ctx.save(); ctx.beginPath(); ctx.roundRect ? ctx.roundRect(P + x0, y0, bw, bh, R) : ctx.rect(P + x0, y0, bw, bh); ctx.clip();
+      ctx.drawImage(img, srcX(x0), srcY(y0), bw / cover, bh / cover, P + x0, y0, bw, bh);
+      ctx.restore(); return;
+    }
+    const ROW = 2;
+    for (let y = y0; y < y0 + bh; y += ROW) {
+      const rh = Math.min(ROW, y0 + bh - y), mid = y + rh / 2;
+      // rounded corners: how far in this row starts and ends
+      const fromTop = mid - y0, fromBottom = y0 + bh - mid;
+      const e = fromTop < R ? R - Math.sqrt(R * R - (R - fromTop) ** 2) : fromBottom < R ? R - Math.sqrt(R * R - (R - fromBottom) ** 2) : 0;
+      const a = x0 + e, z = x0 + bw - e;
+      // Lusion's curve for this row: stretch about the middle of the screen by 1 / (1 - g * W / S)
+      const sy = Math.min(1, Math.max(0, 1 - (rect.top + mid) / vh));
+      const g = (1 - Math.sin(sy * Math.PI)) * k;
+      const m = 1 / (1 - (g * W) / S);
+      const da = P + cx + (a - cx) * m, dz = P + cx + (z - cx) * m;
+      ctx.drawImage(img, srcX(a), srcY(y), (z - a) / cover, rh / cover, da, y, dz - da, rh + 0.5);
+    }
+  };
+
+  // Scroll strength, as Lusion's scroll manager: add the distance moved (in screen heights), ease back to 0.
+  let eased = 0, lastY = scrollY, lastT = performance.now(), frame = 0, timer = 0, curveWas = 0;
   const tick = () => {
     cancelAnimationFrame(frame); clearTimeout(timer); frame = timer = 0;
-    const now = performance.now(); let running = false;
-    items.forEach((it) => { if (!it.on || it.done) return; const t = (now - it.start) / 1000; paint(it, t); if (t < 2) running = true; else it.done = true; });
-    if (running) { frame = requestAnimationFrame(tick); timer = setTimeout(tick, 120); } // the timer backs up throttled frames
-  };
-  // On screen or not, checked from each card's box on scroll and resize, so a card can never stay clipped.
-  let checking = 0;
-  const check = () => {
-    checking = 0;
-    const vh = innerHeight, now = performance.now();
+    const now = performance.now(), dt = Math.min(0.1, (now - lastT) / 1000); lastT = now;
+    eased += Math.abs(scrollY - lastY) / innerHeight; lastY = scrollY;
+    eased += (0 - eased) * (1 - Math.exp(-10 * dt));
+    eased = Math.min(eased, 1);
+    const k = Math.min(0.15, eased * 0.5);
+    const curving = k >= 0.0005, settle = !curving && curveWas; // one last flat frame when the curve ends
+    curveWas = curving;
+    const vh = innerHeight; let busy = curving;
     items.forEach((it) => {
-      const r = it.el.getBoundingClientRect();
-      const visible = r.height > 0 && r.bottom > 0 && r.top < vh;
-      if (visible && !it.on) { it.side = sideOf(it); it.on = true; it.done = false; it.start = now; }
-      else if (!visible && it.on) { it.on = false; it.done = false; paint(it, 0); }
+      const rect = it.mask.getBoundingClientRect();
+      const visible = rect.height > 0 && rect.bottom > 0 && rect.top < vh;
+      if (visible && !it.on) { it.on = true; it.start = now; }
+      else if (!visible && it.on) { it.on = false; it.dirty = true; }
+      const t = it.on ? (now - it.start) / 1000 : 0, b = it.on ? expoOut(Math.min(1, t / 1.5)) : 0;
+      const revealing = it.on && t < 1.5;
+      const hoverMoving = Math.abs(it.hoverTo - it.hover) > 0.001;
+      if (hoverMoving) it.hover += (it.hoverTo - it.hover) * (1 - Math.exp(-dt / 0.15)); else it.hover = it.hoverTo;
+      if (revealing || hoverMoving) busy = true;
+      if (it.ready) {
+        if (visible && (curving || settle || revealing || hoverMoving || it.dirty)) { draw(it, b, k, rect); it.dirty = false; }
+        else if (!visible && it.dirty) { draw(it, 0, 0, rect); it.dirty = false; }
+      } else {
+        // no canvas (yet): open the element itself, as for Home's black cards
+        it.mask.style.clipPath = b > 0.9995 ? "" : `inset(${(((1 - (0.7 + 0.3 * b)) / 2) * 100).toFixed(3)}% round ${getComputedStyle(it.mask).borderRadius || "0px"})`;
+        if (it.img) it.img.style.scale = b > 0.9995 ? "" : (1 / (0.75 + 0.25 * b)).toFixed(4);
+      }
+      if (it.ready && it.mask.style.clipPath) { it.mask.style.clipPath = ""; if (it.img) it.img.style.scale = ""; }
     });
-    tick();
+    if (busy || settle) { frame = requestAnimationFrame(tick); timer = setTimeout(tick, 120); } // the timer backs up throttled frames
   };
-  const queue = () => { if (!checking) checking = setTimeout(check, 16); };
-  addEventListener("scroll", queue, { passive: true });
-  addEventListener("resize", queue);
-  addEventListener("ph:layout", queue);
-  items.forEach((it) => paint(it, 0));
-  check();
+  const wake = () => { if (!frame && !timer) { lastT = performance.now(); frame = requestAnimationFrame(tick); timer = setTimeout(tick, 120); } };
+  addEventListener("scroll", wake, { passive: true });
+  let resizeTimer = 0;
+  addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { items.forEach((it) => { size(it); it.dirty = true; }); wake(); }, 100); });
+  addEventListener("ph:layout", () => { items.forEach((it) => (it.dirty = true)); wake(); });
+  items.forEach(setup);
+  tick();
   document.documentElement.classList.add("float-ready");
 }
 
