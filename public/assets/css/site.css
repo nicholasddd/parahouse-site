@@ -69,7 +69,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 
 /* ---------- Floating controls ---------- */
 .chrome { position: fixed; top: var(--edge); z-index: 40; }
-.chrome-left { left: var(--edge); }
+.chrome-left { left: calc(var(--edge) - 5px); } /* the P's visible edge (inside its 4px padding) lines up with the page margin */
 .chrome-right { right: var(--edge); }
 .pill {
   display: inline-flex; align-items: center; gap: 10px; height: 36px; padding: 0 14px;
@@ -96,7 +96,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 
 /* ---------- Top navigation: full links at the top of the page; once the visitor scrolls,
    they collapse into the Menu pill (after Dennis Snellenberg). site.js sets html.is-scrolled. ---------- */
-.topnav { position: absolute; z-index: 39; top: calc(var(--edge) + 2px); right: calc(var(--edge) + clamp(0px, 4vw, 64px)); transition: opacity .25s var(--ease-out), transform .25s var(--ease-out); }
+.topnav { position: absolute; z-index: 39; top: calc(var(--edge) + 2px); right: var(--edge); /* same margin as the P on the left */ transition: opacity .25s var(--ease-out), transform .25s var(--ease-out); }
 .topnav ul { list-style: none; margin: 0; padding: 0; display: grid; justify-items: end; text-align: right; }
 .topnav a { position: relative; display: block; padding: 1px 0; font-family: var(--font); font-weight: 500; font-size: clamp(17px, 1.55vw, 23px); line-height: 1.12; letter-spacing: .01em; text-transform: uppercase; color: var(--fg); text-shadow: 0 1px 10px rgba(0,0,0,.5); transition: color .25s ease; }
 .topnav a:hover { color: var(--brand-text); }
