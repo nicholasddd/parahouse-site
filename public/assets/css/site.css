@@ -417,10 +417,10 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
    middle, so it never stays covered even if site.js fails. Leaving uses .curtain-leave from site.js:
    the doors slide shut, then the browser navigates. One layer, cut open from the middle by a mask
    whose gap (--door) animates; registered so it can animate smoothly. */
-@property --door { syntax: "<percentage>"; inherits: false; initial-value: 0%; }
+@property --door { syntax: "<percentage>"; inherits: false; initial-value: -1%; } /* shut = the halves overlap slightly, so no hairline shows at the seam */
 html.is-intro::before, html.is-entering::before, .curtain-leave {
   content: ""; position: fixed; z-index: 1000; inset: 0; background: var(--curtain); pointer-events: none;
-  --door: 0%;
+  --door: -1%;
   -webkit-mask-image: linear-gradient(90deg, #000 calc(50% - var(--door)), transparent calc(50% - var(--door)), transparent calc(50% + var(--door)), #000 calc(50% + var(--door)));
   mask-image: linear-gradient(90deg, #000 calc(50% - var(--door)), transparent calc(50% - var(--door)), transparent calc(50% + var(--door)), #000 calc(50% + var(--door)));
 }
@@ -434,8 +434,8 @@ html.is-intro::before { animation-delay: 1.3s; }
 html.is-intro::after { animation-delay: 1.1s; }
 html.is-entering::before { animation-delay: .05s; }
 html.is-entering::after { animation-delay: 0s; }
-@keyframes doors-open { from { --door: 0%; } to { --door: 51%; } }
-@keyframes doors-close { from { --door: 51%; } to { --door: 0%; } }
+@keyframes doors-open { from { --door: -1%; } to { --door: 51%; } }
+@keyframes doors-close { from { --door: 51%; } to { --door: -1%; } }
 @keyframes curtain-label { to { opacity: 0; } }
 .curtain-leave { animation: doors-close .38s cubic-bezier(.76,0,.24,1) forwards; color: #ecece9; }
 /* The leaving label sits on the seam, at exactly the spot the arriving label appears. */
@@ -443,7 +443,7 @@ html.is-entering::after { animation-delay: 0s; }
 @keyframes curtain-label-in { to { opacity: 1; } }
 
 /* Lights on: Home's hero opens dim and brightens once, as the doors open. */
-.showcase-media { animation: lights-on 1.6s cubic-bezier(.2,.7,.2,1) both; }
+.showcase-media { position: absolute; inset: 0; animation: lights-on 1.6s cubic-bezier(.2,.7,.2,1) both; } /* sized to the hero: a filter makes this the box the images are placed in */
 html.is-entering .showcase-media { animation-delay: .25s; }
 html.is-intro .showcase-media { animation-delay: 1.45s; }
 @keyframes lights-on { from { filter: brightness(.45); } to { filter: none; } }
