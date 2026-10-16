@@ -385,9 +385,18 @@ if (root.classList.contains("is-intro")) {
     setTimeout(step, 80);
   }, 300);
 }
-["is-intro", "is-entering"].forEach((cls) => {
-  if (root.classList.contains(cls)) setTimeout(() => root.classList.remove(cls), cls === "is-intro" ? 2100 : 800);
-});
+if (root.classList.contains("is-intro")) setTimeout(() => root.classList.remove("is-intro"), 2100);
+// Arriving from another page: open the doors once this page is really on screen, i.e. after the browser's
+// page swap (a cross-document view transition) has finished, so the opening is seen rather than missed.
+if (root.classList.contains("is-entering")) {
+  // Once this page is drawing frames, wait out the browser's short page swap (about 0.25s), then open.
+  const open = () => root.classList.add("doors-go");
+  requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(open, 280)));
+  setTimeout(open, 700); // in case frames are held back
+  const done = () => root.classList.remove("is-entering", "doors-go");
+  root.addEventListener("animationend", (e) => { if (/^doors-open/.test(e.animationName)) done(); });
+  setTimeout(done, 3500); // never leave the page covered
+}
 
 const PAGE_NAMES = { "/": "Home", "/portfolio/": "Work", "/services/": "Services", "/about/": "About", "/contact/": "Contact" };
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
