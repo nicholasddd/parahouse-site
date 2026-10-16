@@ -70,7 +70,8 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 /* ---------- Floating controls ---------- */
 .chrome { position: fixed; top: var(--edge); z-index: 40; }
 .chrome-left { left: calc(var(--edge) - 5px); } /* the P's visible edge (inside its 4px padding) lines up with the page margin */
-.chrome-right { right: var(--edge); }
+.chrome-right { right: var(--edge); pointer-events: none; } /* only the Menu pill takes clicks, never the box around it (it sits over the top links) */
+.chrome-right > * { pointer-events: auto; }
 .pill {
   display: inline-flex; align-items: center; gap: 10px; height: 36px; padding: 0 14px;
   background: var(--pill); color: var(--pill-fg); border: 0; border-radius: 11px;
