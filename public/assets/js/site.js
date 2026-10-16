@@ -495,7 +495,7 @@ else {
       it.canvas = canvas; it.ctx = ctx;
       it.mask.append(canvas);
       it.mask.classList.add("has-curve");
-      it.ready = true; size(it); it.dirty = true; wake();
+      it.ready = true; size(it); it.dirty = true; it.settled = false; wake();
     };
     if (it.img.complete && it.img.naturalWidth) go();
     else it.img.addEventListener("load", go, { once: true });
@@ -545,7 +545,12 @@ else {
   };
 
   // Scroll strength, as Lusion's scroll manager: add the distance moved (in screen heights), ease back to 0.
-  let eased = 0, lastY = scrollY, lastT = performance.now(), frame = 0, timer = 0, curveWas = 0;
+  let eased = 0, lastY = scrollY, lastT = performance.now(), frame = 0, timer = 0, curveWas = 0, opening = true;
+  // While the page is still opening (until just after load, including a restored scroll position), cards that are
+  // on screen count as already there.
+  const opened = () => setTimeout(() => (opening = false), 300);
+  if (document.readyState === "complete") opened(); else addEventListener("load", opened, { once: true });
+  setTimeout(() => (opening = false), 2500); // never longer than this, even if an image is slow
   const tick = () => {
     cancelAnimationFrame(frame); clearTimeout(timer); frame = timer = 0;
     const now = performance.now(), dt = Math.min(0.1, (now - lastT) / 1000); lastT = now;
@@ -559,10 +564,14 @@ else {
     items.forEach((it) => {
       const rect = it.mask.getBoundingClientRect();
       const visible = rect.height > 0 && rect.bottom > 0 && rect.top < vh;
-      if (visible && !it.on) { it.on = true; it.start = now; }
-      else if (!visible && it.on) { it.on = false; it.dirty = true; }
-      const t = it.on ? (now - it.start) / 1000 : 0, b = it.on ? expoOut(Math.min(1, t / 1.5)) : 0;
+      // Already on screen when the page opens: show it whole (as on Lusion, the entry plays as cards scroll in)
+      if (visible && !it.on) { it.on = true; it.settled = false; it.start = opening ? now - 1500 : now; }
+      else if (!visible && it.on) { it.on = false; it.settled = false; it.dirty = true; }
+      const t = it.on ? (now - it.start) / 1000 : 0;
       const revealing = it.on && t < 1.5;
+      const settling = it.on && !revealing && !it.settled; // one exact last frame at full size
+      if (settling) { it.settled = true; it.dirty = true; }
+      const b = it.on ? (revealing ? expoOut(t / 1.5) : 1) : 0;
       const hoverMoving = Math.abs(it.hoverTo - it.hover) > 0.001;
       if (hoverMoving) it.hover += (it.hoverTo - it.hover) * (1 - Math.exp(-dt / 0.15)); else it.hover = it.hoverTo;
       if (revealing || hoverMoving) busy = true;
