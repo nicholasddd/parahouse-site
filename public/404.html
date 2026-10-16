@@ -50,9 +50,26 @@
 
   <main id="main">
     <div class="page notfound">
-      <h1 class="statement">Page not found</h1>
-      <p class="lede">The link may be old or mistyped.</p>
-      <p><a class="button" href="/portfolio/">See the portfolio <span class="dot" aria-hidden="true"></span></a></p>
+      <h1 class="statement">Wrong room.</h1>
+      <p class="lede">This page isn’t part of the house. Pick a room.</p>
+      <div class="floorplan">
+        <svg class="floorplan-lines" viewBox="0 0 600 360" aria-hidden="true">
+          <path class="wall" d="M20 20H580V340H510M470 340H20V20
+            M260 20V120M260 160V200
+            M440 20V60M440 100V200
+            M20 200H100M140 200H300M340 200H500M540 200H580
+            M200 200V250M200 290V340
+            M400 200V250M400 290V340"/>
+          <path class="swing" d="M260 120A40 40 0 0 1 300 160M440 60A40 40 0 0 0 400 100M100 200A40 40 0 0 0 140 240M300 200A40 40 0 0 1 340 240M500 200A40 40 0 0 0 540 240M200 250A40 40 0 0 1 240 290M400 250A40 40 0 0 0 360 290M470 340A40 40 0 0 1 510 300"/>
+          <rect class="missing" x="212" y="212" width="176" height="116" rx="4"/>
+        </svg>
+        <a class="room" href="/portfolio/" style="left:3.333%;top:5.556%;width:40%;height:50%"><span>Work</span></a>
+        <a class="room" href="/services/" style="left:43.333%;top:5.556%;width:30%;height:50%"><span>Services</span></a>
+        <a class="room" href="/about/" style="left:73.333%;top:5.556%;width:23.333%;height:50%"><span>About</span></a>
+        <a class="room" href="/contact/" style="left:3.333%;top:55.556%;width:30%;height:38.889%"><span>Contact</span></a>
+        <div class="room room-missing" style="left:33.333%;top:55.556%;width:33.333%;height:38.889%"><span>404</span><span class="here"><i aria-hidden="true"></i>You are here</span></div>
+        <a class="room" href="/" style="left:66.667%;top:55.556%;width:30%;height:38.889%"><span>Entrance</span><small>Home</small></a>
+      </div>
     </div>
   </main>
   <footer class="site-footer">
