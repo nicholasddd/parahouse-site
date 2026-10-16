@@ -496,7 +496,16 @@ else {
   const dpr = () => Math.min(2, devicePixelRatio || 1);
   const setup = (it) => {
     if (!it.img) return;
+    // Draw from a plain copy of the file the browser picked (from srcset): its natural size is the file's
+    // real pixel size, whereas the <img> reports a display-adjusted size when it has srcset.
     const go = () => {
+      if (!it.pic) {
+        const pic = new Image();
+        pic.onload = () => { it.pic = pic; go(); };
+        pic.src = it.img.currentSrc || it.img.src;
+        return;
+      }
+      if (it.canvas) return;
       const canvas = document.createElement("canvas");
       canvas.className = "curve-canvas";
       canvas.setAttribute("aria-hidden", "true");
@@ -522,7 +531,7 @@ else {
 
   // One image, drawn for reveal ratio b, scroll curve k and hover zoom.
   const draw = (it, b, k, rect) => {
-    const { ctx, img, w: W, h: H } = it, d = dpr(), P = W * PAD;
+    const { ctx, pic: img, w: W, h: H } = it, d = dpr(), P = W * PAD;
     ctx.setTransform(d, 0, 0, d, 0, 0);
     ctx.clearRect(0, 0, W + 2 * P, H);
     if (b <= 0 || !W || !H) return;
@@ -646,7 +655,7 @@ const STRIP_PROJECTS = [ // newest first, as on the Work page
       a.href = `/portfolio/${p.slug}/`;
       a.dataset.label = p.client;
       const img = a.querySelector("img");
-      img.src = `/assets/img/projects/${p.slug}/second.webp`;
+      img.src = `/assets/img/projects/${p.slug}/second-800.webp`; // thumbnails are small: the 800px copy is plenty
       img.alt = `${p.client} ${p.title}`;
     });
     strip.setAttribute("aria-label", "Related projects");
