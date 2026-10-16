@@ -372,7 +372,7 @@ if (matchMedia("(hover: hover)").matches) {
 }
 
 // ---------- Intro greeting and page-change curtain ----------
-// First visit in a session: the <head> script shows "• Hello" on the curtain; here we cycle it
+// First visit in a session: the <head> script shows "Hello" on the curtain; here we cycle it
 // through greetings before the CSS lifts it. Internal links: a curtain rises with the page
 // name, then the browser navigates; the next page opens with the same curtain and lifts it.
 if (root.classList.contains("is-intro")) {
@@ -418,7 +418,7 @@ document.addEventListener("click", (event) => {
   curtain.style.background = (window.PH_CURTAINS || {})[url.pathname] || "linear-gradient(180deg, #1c0603 0%, #7a1c08 100%)";
   curtain.setAttribute("aria-hidden", "true");
   const text = document.createElement("span");
-  text.textContent = "\u2022\u2002" + label;
+  text.textContent = label;
   curtain.append(text);
   document.body.append(curtain);
   // Navigate the moment the curtain has fully risen (the page is usually prefetched by then).

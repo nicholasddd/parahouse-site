@@ -101,7 +101,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .topnav ul { list-style: none; margin: 0; padding: 0; display: grid; justify-items: end; text-align: right; }
 .topnav a { position: relative; display: block; padding: 1px 0; font-family: var(--font); font-weight: 500; font-size: clamp(17px, 1.55vw, 23px); line-height: 1.12; letter-spacing: .01em; text-transform: uppercase; color: var(--fg); text-shadow: 0 1px 10px rgba(0,0,0,.5); transition: color .25s ease; }
 .topnav a:hover { color: var(--brand-text); }
-.topnav a::after { content: ""; position: absolute; left: -14px; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: currentColor; opacity: 0; transform: scale(.5); transition: transform .2s var(--ease-out), opacity .2s var(--ease-out); }
+.topnav a::after { content: none; position: absolute; left: -14px; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: currentColor; opacity: 0; transform: scale(.5); transition: transform .2s var(--ease-out), opacity .2s var(--ease-out); }
 .topnav a[aria-current="page"]::after { opacity: 1; transform: none; }
 @media (hover: hover) and (pointer: fine) { .topnav a:hover::after { opacity: 1; transform: none; } }
 .topnav a[aria-current="page"] { color: var(--brand-text); }
@@ -426,7 +426,7 @@ html.is-intro::before, html.is-entering::before, .curtain-leave {
 }
 html.is-intro::before, html.is-entering::before { animation: doors-open .6s cubic-bezier(.76,0,.24,1) forwards; }
 html.is-intro::after, html.is-entering::after {
-  content: "\2022\2002" attr(data-curtain); position: fixed; z-index: 1001; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  content: attr(data-curtain); position: fixed; z-index: 1001; left: 50%; top: 50%; transform: translate(-50%, -50%);
   color: #ecece9; font-family: var(--font); font-size: clamp(28px, 3.4vw, 48px); letter-spacing: -0.01em; white-space: nowrap;
   animation: curtain-label .3s ease forwards; pointer-events: none;
 }
