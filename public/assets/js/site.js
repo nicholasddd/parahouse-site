@@ -243,9 +243,9 @@ if (cursorTargets.length && matchMedia("(hover: hover)").matches) {
   const bubble = document.createElement("div");
   bubble.className = "cursor-bubble";
   bubble.setAttribute("aria-hidden", "true");
-  bubble.innerHTML = '<span></span><svg viewBox="0 0 24 24" fill="none"><polyline points="9 5 16 12 9 19"/></svg>';
+  bubble.innerHTML = '<span></span><em>Step inside</em><svg viewBox="0 0 24 24" fill="none"><polyline points="9 5 16 12 9 19"/></svg>';
   document.body.append(bubble);
-  const label = bubble.querySelector("span");
+  const label = bubble.querySelector("span"), invite = bubble.querySelector("em");
   let x = 0, y = 0, bx = 0, by = 0, moving = 0, flip = false;
   const follow = () => {
     bx += (x - bx) * 0.2; by += (y - by) * 0.2; // eases behind the cursor
@@ -263,6 +263,7 @@ if (cursorTargets.length && matchMedia("(hover: hover)").matches) {
       flip = r.left + r.width / 2 > innerWidth / 2;
       if (!bubble.classList.contains("is-active")) { bx = event.clientX; by = event.clientY; }
       bubble.classList.add("is-active");
+      invite.hidden = !el.closest("a[href]"); // only project links get "Step inside"
       scramble(label, el.dataset.cursorText);
     });
     el.addEventListener("mouseleave", () => bubble.classList.remove("is-active"));
@@ -728,5 +729,33 @@ document.querySelector("[data-back]")?.addEventListener("click", (event) => {
     card.classList.add("is-returned");
     requestAnimationFrame(() => card.classList.add("is-fading"));
     history.replaceState(null, "", location.pathname); // keep the address clean
+  }
+}
+
+// ---------- Contact: confirm a sent brief (the form posts natively; the worker redirects back with ?sent=1 or ?error=1) ----------
+{
+  const status = document.querySelector("[data-status]");
+  const q = new URLSearchParams(location.search);
+  if (status && (q.has("sent") || q.has("error"))) {
+    const sent = q.has("sent");
+    status.dataset.state = sent ? "ok" : "error";
+    status.textContent = sent ? "We heard the knock. We’ll reply within one working day." : "That didn’t send. Please try again.";
+    history.replaceState(null, "", location.pathname); // a refresh doesn't repeat the message
+  }
+}
+
+// ---------- About, How we work: the steps light up in turn as they come on screen ----------
+{
+  const steps = [...document.querySelectorAll(".help-steps li")];
+  if (steps.length) {
+    const light = () => {
+      const due = steps.filter((li) => !li.classList.contains("is-lit") && li.getBoundingClientRect().top < innerHeight * 0.85);
+      due.forEach((li, i) => { li.style.setProperty("--lit-delay", (i * 0.3).toFixed(1) + "s"); li.classList.add("is-lit"); });
+      if (steps.every((li) => li.classList.contains("is-lit"))) removeEventListener("scroll", queue);
+    };
+    let pending = 0;
+    const queue = () => { if (!pending) pending = setTimeout(() => { pending = 0; light(); }, 50); };
+    if (reduceMotionNow()) steps.forEach((li) => li.classList.add("is-lit"));
+    else { addEventListener("scroll", queue, { passive: true }); light(); }
   }
 }
