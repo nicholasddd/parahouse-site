@@ -749,8 +749,8 @@ document.querySelector("[data-back]")?.addEventListener("click", (event) => {
   const steps = [...document.querySelectorAll(".help-steps li")];
   if (steps.length) {
     const light = () => {
-      const due = steps.filter((li) => !li.classList.contains("is-lit") && li.getBoundingClientRect().top < innerHeight * 0.85);
-      due.forEach((li, i) => { li.style.setProperty("--lit-delay", (i * 0.3).toFixed(1) + "s"); li.classList.add("is-lit"); });
+      const due = steps.filter((li) => !li.classList.contains("is-lit") && li.getBoundingClientRect().top < innerHeight * 0.7); // well into view, so it's seen lighting
+      due.forEach((li, i) => { li.style.setProperty("--lit-delay", (i * 0.4).toFixed(1) + "s"); li.classList.add("is-lit"); });
       if (steps.every((li) => li.classList.contains("is-lit"))) removeEventListener("scroll", queue);
     };
     let pending = 0;
