@@ -58,6 +58,7 @@ Every project page has the same structure (Nicholas asked for this): the meta gr
 4. Add a `.work-card` to `public/portfolio/index.html` with its category in `data-type` (`roadshow` | `brand-events` | `product` | `exhibition` | `multimedia`) and the same category under Type on its page. Also add its `.pcard-cell` (with `data-client` and `hidden`) to Home's list so it can be picked at random.
 5. Optionally add it to the home showcase: one `<img>` in `[data-showcase-media]` and one `<li>` in `[data-showcase-list]`, in the same position. The link's `data-meta` fills the top-right label.
 6. Fix the `.next-pill` links so every project points to the next and the last loops to the first.
+7. SEO, on the new page and the site: in the `<head>`, an absolute `og:image` (https://parahouse.co/assets/img/projects/<slug>/cover.webp), `og:url`, `og:type` website, `og:site_name` parahouse, `twitter:card` summary_large_image and `<link rel="canonical">` (all https://parahouse.co/portfolio/<slug>/, trailing slash), plus the JSON-LD block copied from another project page with its CreativeWork (name, url, image, the page's meta description) and BreadcrumbList (Home > Work > project) updated. No FAQPage or HowTo schema; no email, phone or prices in it. Add the page to `public/sitemap.xml` with today's `<lastmod>`.
 
 ## Checks before committing
 - Every page works at 390px wide with no horizontal scroll.
