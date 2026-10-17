@@ -888,3 +888,10 @@ button, .pill, .button, .offer-cta, .talk-button, .filters button, .next-pill { 
 .chrome-right { right: max(var(--edge), env(safe-area-inset-right, 0px)); }
 .next-pill { bottom: calc(var(--edge) + env(safe-area-inset-bottom, 0px)); }
 body { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }
+
+/* Services intro: four short promises under the lede */
+.promises { list-style: none; margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: 0; max-width: 980px; }
+@media (min-width: 760px) { .promises { grid-template-columns: repeat(2, 1fr); column-gap: var(--gap); } }
+@media (min-width: 1100px) { .promises { grid-template-columns: repeat(4, 1fr); } }
+.promises li { position: relative; padding: 12px 0 14px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--fg); }
+.promises li::before { content: ""; position: absolute; left: 0; top: -1px; width: 28px; height: 1px; background: var(--brand); } /* a short orange start to each rule, no bullets */
