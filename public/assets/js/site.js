@@ -128,13 +128,16 @@ if (showcase && !reduceMotionNow()) {
       layer.classList.add("is-wave");
       slats.forEach((sl, i) => {
         paint(sl.faces[next], img, sl.left);
-        const half = sl.el.animate([{ transform: "rotateY(0deg)" }, { transform: "rotateY(90deg)" }],
-          { duration: 260, delay: i * 45, easing: "cubic-bezier(.55,0,1,.45)", fill: "forwards" });
-        half.onfinish = () => {
-          sl.faces[next].classList.add("is-on"); sl.faces[was].classList.remove("is-on");
-          half.cancel();
-          sl.el.animate([{ transform: "rotateY(-90deg)" }, { transform: "rotateY(0deg)" }], { duration: 340, easing: "cubic-bezier(0,.55,.45,1)" });
-        };
+        // One animation per slat with no fill: if it is ever paused or dropped, the slat simply shows flat
+        // (never stuck edge-on). The picture swaps on its far side as it passes edge-on.
+        const delay = i * 45;
+        sl.el.animate([
+          { transform: "rotateY(0deg)", easing: "cubic-bezier(.55,0,1,.45)" },
+          { transform: "rotateY(90deg)", offset: 0.43 },
+          { transform: "rotateY(-90deg)", offset: 0.43, easing: "cubic-bezier(0,.55,.45,1)" },
+          { transform: "rotateY(0deg)" },
+        ], { duration: 600, delay });
+        setTimeout(() => { sl.faces[next].classList.add("is-on"); sl.faces[was].classList.remove("is-on"); }, delay + 258);
       });
       front = next;
       return;
