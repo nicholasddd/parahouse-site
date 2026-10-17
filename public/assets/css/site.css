@@ -79,7 +79,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
   backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 0 0 1px rgba(255,255,255,.08);
 }
-.pill:hover { background: rgba(60, 60, 60, .8); }
+@media (hover: hover) and (pointer: fine) { .pill:hover { background: rgba(60, 60, 60, .8); } }
 .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; transition: transform .3s ease; }
 .pill[aria-expanded="true"] .dot { transform: scale(1.6); }
 .logo { display: block; padding: 4px; color: var(--brand); }
@@ -100,7 +100,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .topnav { position: absolute; z-index: 39; top: calc(var(--edge) + 2px); right: var(--edge); /* same margin as the P on the left */ transition: opacity .25s var(--ease-out), transform .25s var(--ease-out); }
 .topnav ul { list-style: none; margin: 0; padding: 0; display: grid; justify-items: end; text-align: right; }
 .topnav a { position: relative; display: block; padding: 1px 0; font-family: var(--font); font-weight: 500; font-size: clamp(17px, 1.55vw, 23px); line-height: 1.12; letter-spacing: .01em; text-transform: uppercase; color: var(--fg); text-shadow: 0 1px 10px rgba(0,0,0,.5); transition: color .25s ease; }
-.topnav a:hover { color: var(--brand-text); }
+@media (hover: hover) and (pointer: fine) { .topnav a:hover { color: var(--brand-text); } }
 .topnav a::after { content: none; position: absolute; left: -14px; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: currentColor; opacity: 0; transform: scale(.5); transition: transform .2s var(--ease-out), opacity .2s var(--ease-out); }
 .topnav a[aria-current="page"]::after { opacity: 1; transform: none; }
 @media (hover: hover) and (pointer: fine) { .topnav a:hover::after { opacity: 1; transform: none; } }
@@ -132,7 +132,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .menu-toggle[aria-expanded="true"] { background: var(--panel); color: var(--panel-fg); box-shadow: none; }
 .menu ul { list-style: none; margin: 0; padding: 0; }
 .menu a { display: block; padding: 8px 12px; border-radius: 10px; font-family: var(--display); font-stretch: 125%; font-weight: 700; font-size: 20px; line-height: 1.1; text-transform: uppercase; }
-.menu a:hover { background: rgba(255,255,255,.08); }
+@media (hover: hover) and (pointer: fine) { .menu a:hover { background: rgba(255,255,255,.08); } }
 .menu a[aria-current="page"] { color: var(--brand-text); }
 /* Mono labels: small uppercase metadata, as in Zeroframe */
 .label, .mono { font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
@@ -199,13 +199,13 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
   font-family: var(--mono); font-size: 12px; letter-spacing: .07em; text-transform: uppercase; cursor: pointer;
   transition: background-color .25s ease;
 }
-.button:hover { background: var(--brand); color: var(--brand-ink); }
+@media (hover: hover) and (pointer: fine) { .button:hover { background: var(--brand); color: var(--brand-ink); } }
 .button .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
 /* ---------- Portfolio grid ---------- */
 .filters { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .filters button { height: 32px; padding: 0 12px; border-radius: 9px; border: 1px solid var(--line); background: transparent; color: var(--muted); font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; cursor: pointer; }
-.filters button:hover { color: var(--fg); border-color: var(--fg); }
+@media (hover: hover) and (pointer: fine) { .filters button:hover { color: var(--fg); border-color: var(--fg); } }
 .filters button[aria-pressed="true"] { background: var(--fg); border-color: var(--fg); color: var(--bg); }
 
 .tile { position: relative; display: block; border-radius: var(--radius); overflow: hidden; aspect-ratio: 1 / 1; background: var(--surface); color: #fff; isolation: isolate; }
@@ -218,7 +218,8 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .tile-title { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(17px, 1.6vw, 24px); line-height: 1; text-wrap: balance; }
 .tile-client { display: block; font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: .07em; opacity: .8; margin-bottom: 8px; }
 .tile-hint { position: absolute; z-index: 2; top: clamp(16px, 1.8vw, 24px); right: clamp(16px, 1.8vw, 24px); font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; opacity: 0; transform: translateY(-4px); transition: opacity .3s ease, transform .3s ease; }
-.tile:hover .tile-hint, .tile:focus-visible .tile-hint { opacity: .9; transform: none; }
+.tile:focus-visible .tile-hint { opacity: .9; transform: none; }
+@media (hover: hover) and (pointer: fine) { .tile:hover .tile-hint { opacity: .9; transform: none; } }
 @media (hover: none) { .tile-hint { display: none; } }
 .tile[hidden] { display: none; }
 
@@ -226,7 +227,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 /* Back to work: stays under the logo while the project scrolls */
 .back { display: inline-flex; margin-bottom: 28px; position: sticky; z-index: 30; top: calc(var(--edge) + clamp(40px, 4.4vw, 56px) + 18px); }
 .back-arrow { display: inline-block; transition: transform .25s var(--ease-out); }
-.back:hover .back-arrow { transform: translateX(-3px); }
+@media (hover: hover) and (pointer: fine) { .back:hover .back-arrow { transform: translateX(-3px); } }
 /* The card you came back to glows briefly */
 .work-card.is-returned { outline: 1px solid var(--brand); outline-offset: 6px; transition: outline-color 1.2s ease 1.4s; }
 .work-card.is-returned.is-fading { outline-color: transparent; }
@@ -264,7 +265,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .details div { border-top: 1px solid var(--line); padding: 12px 0 16px; }
 .details dt { font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
 .details dd { margin: 2px 0 0; font-size: 16px; }
-.details a:hover { color: var(--muted); }
+@media (hover: hover) and (pointer: fine) { .details a:hover { color: var(--muted); } }
 .form { display: grid; gap: 14px; }
 .form .row { display: grid; gap: 14px; }
 @media (min-width: 640px) { .form .row { grid-template-columns: 1fr 1fr; } }
@@ -301,7 +302,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .block-head h2 { font: inherit; color: var(--fg); }
 .block-head .muted { font-size: inherit; }
 .text-link { margin-left: auto; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: .3em; }
-.text-link:hover { text-decoration-color: currentColor; }
+@media (hover: hover) and (pointer: fine) { .text-link:hover { text-decoration-color: currentColor; } }
 
 /* Featured work: one wide, then two side by side */
 .features { display: grid; gap: var(--gap); grid-template-columns: 1fr; padding-top: var(--gap); }
@@ -323,7 +324,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
   background-color: var(--logo); transition: background-color .35s ease;
   -webkit-mask: var(--src) center / contain no-repeat; mask: var(--src) center / contain no-repeat;
 }
-.brand-wall li:hover .brand-logo, .brand-track li:hover .brand-logo { background-color: #fff; }
+@media (hover: hover) and (pointer: fine) { .brand-wall li:hover .brand-logo, .brand-track li:hover .brand-logo { background-color: #fff; } }
 
 /* Brand carousel: outlined squares drifting left, without pausing on hover.
    With reduced motion it becomes a still, wrapping grid. */
@@ -348,7 +349,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .service summary { list-style: none; display: grid; grid-template-columns: 1fr; align-items: baseline; gap: 16px; padding: 22px 0; cursor: pointer; }
 .service summary::-webkit-details-marker { display: none; }
 .service-title { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(20px, 2.6vw, 40px); line-height: 1; }
-.service summary:hover .service-title { color: var(--brand-text); }
+@media (hover: hover) and (pointer: fine) { .service summary:hover .service-title { color: var(--brand-text); } }
 .service-body { display: grid; gap: 18px; padding: 0 0 26px; }
 @media (min-width: 900px) { .service-body { grid-template-columns: 1fr 1fr; } }
 .service-body p { margin: 0; max-width: 46ch; color: var(--muted); font-size: 16px; }
@@ -374,13 +375,13 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .together-rule { position: relative; margin: clamp(40px, 6vw, 80px) 0 clamp(28px, 4vw, 48px); border-top: 1px solid var(--line); }
 .contact-pills { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
 .pill-link { display: inline-flex; align-items: center; height: 54px; padding: 0 24px; border: 1px solid var(--line); border-radius: 999px; font-size: 15px; transition: border-color .25s ease, background-color .25s ease; }
-.pill-link:hover { border-color: var(--fg); background: var(--surface); }
+@media (hover: hover) and (pointer: fine) { .pill-link:hover { border-color: var(--fg); background: var(--surface); } }
 .footer-meta { display: flex; flex-wrap: wrap; gap: 18px 48px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 13px; }
 .footer-meta > div { display: grid; gap: 4px; }
 .footer-meta .label { margin: 0; }
 .footer-socials { margin-left: auto; }
 .footer-socials a { margin-right: 14px; }
-.footer-socials a:hover, .footer-meta a:hover { color: var(--brand-text); }
+@media (hover: hover) and (pointer: fine) { .footer-socials a:hover, .footer-meta a:hover { color: var(--brand-text); } }
 @media (max-width: 640px) { .together-rule { margin-top: 96px; } .footer-socials { margin-left: 0; } }
 
 /* ---------- About (structure after Dennis Snellenberg's about page) ---------- */
@@ -484,7 +485,8 @@ html.is-intro .showcase-media { animation-delay: 1.45s; }
 @keyframes missing-march { to { stroke-dashoffset: -12; } }
 .room { position: absolute; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: clamp(8px, 1.4vw, 18px); border-radius: 4px; font-family: var(--mono); font-size: clamp(10px, 1.05vw, 13px); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); transition: background-color .25s ease, color .25s ease; }
 .room small { font-size: .85em; opacity: .7; }
-a.room:hover, a.room:focus-visible { background: color-mix(in srgb, var(--brand) 12%, transparent); color: var(--brand-text); }
+a.room:focus-visible { background: color-mix(in srgb, var(--brand) 12%, transparent); color: var(--brand-text); }
+@media (hover: hover) and (pointer: fine) { a.room:hover { background: color-mix(in srgb, var(--brand) 12%, transparent); color: var(--brand-text); } }
 .room-missing { align-items: center; justify-content: center; color: var(--brand-text); }
 .room-missing > span:first-child { font-family: var(--display); font-weight: 700; font-stretch: 125%; font-size: clamp(22px, 3.4vw, 46px); letter-spacing: 0; line-height: 1; }
 .room .here { display: inline-flex; align-items: center; gap: 8px; color: var(--fg); }
@@ -518,7 +520,7 @@ a.room:hover, a.room:focus-visible { background: color-mix(in srgb, var(--brand)
 .work-card:focus-visible .work-media img { transform: scale(1.04); }
 @media (hover: hover) and (pointer: fine) { .work-card:hover .work-media img { transform: scale(1.04); } }
 .work-title { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(18px, 1.6vw, 24px); line-height: 1.05; transition: color .25s ease; }
-.work-card:hover .work-title { color: var(--brand-text); }
+@media (hover: hover) and (pointer: fine) { .work-card:hover .work-title { color: var(--brand-text); } }
 .work-meta { font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
 .work-empty { color: var(--muted); padding: 40px 0; }
 .work-empty button { background: none; border: 0; padding: 0; font: inherit; color: var(--fg); text-decoration: underline; cursor: pointer; }
@@ -625,11 +627,18 @@ a.about-portrait span { display: block; margin-top: 10px; }
   .pcard-link:hover .pcard-media img { transform: scale(1); }
   .pcard-link:hover .pcard-sub { color: rgba(255,255,255,.8); }
 }
-/* Touch screens have no hover: the project image is simply there, with no motion. */
-@media (hover: none) {
-  .pcard-media { opacity: 1; transition: none; }
-  .pcard-media img { transform: none; transition: none; }
+/* Touch screens have no hover: a card lights up when it reaches the middle of the screen (site.js adds .is-focus). */
+@media (hover: none), (pointer: coarse) {
+  .pcard-media { opacity: 0; transition: opacity .5s var(--ease-out); }
+  .pcard-media img { transform: scale(1.06); transition: transform .9s var(--ease-out); }
+  .pcard.is-focus .pcard-media { opacity: 1; }
+  .pcard.is-focus .pcard-media img { transform: none; }
+  .pcard-name { transition: color .4s ease; }
+  .pcard.is-focus .pcard-name { color: var(--brand-text); }
   .pcard-sub { color: rgba(255,255,255,.8); }
+}
+@media (hover: none) and (prefers-reduced-motion: reduce), (pointer: coarse) and (prefers-reduced-motion: reduce) {
+  .pcard-media { opacity: 1; transition: none; } .pcard-media img { transform: none; transition: none; }
 }
 
 /* A small dot that trails the cursor (site.js); pointer devices only */
@@ -664,7 +673,7 @@ a.about-portrait span { display: block; margin-top: 10px; }
 .pq { cursor: pointer; transition: transform .7s cubic-bezier(.65,0,.2,1); }
 .pq.is-active { transform: translate(var(--dx), var(--dy)); }
 .pq-base { fill: #1a1a1a; stroke: rgba(255,255,255,.07); stroke-width: 1; stroke-linejoin: round; transition: fill .4s ease; }
-.pq:hover .pq-base { fill: #262626; }
+@media (hover: hover) and (pointer: fine) { .pq:hover .pq-base { fill: #262626; } }
 .pq-glow { opacity: 0; transition: opacity .7s ease; }
 .pq.is-active .pq-glow { opacity: 1; }
 .pillars-copy { display: grid; gap: 28px; align-content: center; }
@@ -676,7 +685,7 @@ a.about-portrait span { display: block; margin-top: 10px; }
   color: var(--muted); transition: color .3s ease;
 }
 .pillar-tabs button::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--brand); transform: scaleX(0); transition: transform .4s cubic-bezier(.65,0,.2,1); }
-.pillar-tabs button:hover { color: var(--fg); }
+@media (hover: hover) and (pointer: fine) { .pillar-tabs button:hover { color: var(--fg); } }
 .pillar-tabs button[aria-selected="true"] { color: var(--fg); }
 .pillar-tabs button[aria-selected="true"]::after { transform: scaleX(1); }
 .pillar-text { margin: 0; max-width: 46ch; min-height: 5.2em; font-size: clamp(17px, 1.45vw, 21px); line-height: 1.55; color: rgba(236,236,233,.75); animation: pillar-in .5s ease; }
@@ -711,14 +720,14 @@ a.about-portrait span { display: block; margin-top: 10px; }
 
 /* Offer cards end with a direct ask */
 .offer-cta { justify-self: start; margin-top: 6px; padding: 10px 16px 11px; border-radius: 99px; background: var(--brand); color: var(--brand-ink); font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; transition: background-color .25s ease, color .25s ease; }
-.offer-cta:hover { background: var(--fg); color: var(--bg); }
+@media (hover: hover) and (pointer: fine) { .offer-cta:hover { background: var(--fg); color: var(--bg); } }
 
 /* Project result: the outcome, pulled out of the story */
 .result { display: grid; gap: 6px; margin: clamp(24px, 3vw, 40px) 0 0; padding: 14px 0 0; border-top: 1px solid var(--brand); }
 .result dt { font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--brand-text); }
 .result dd { margin: 0; max-width: 40ch; font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(18px, 1.8vw, 26px); line-height: 1.15; }
 .intro-link { display: block; width: fit-content; margin-top: 14px; color: var(--fg); text-decoration: underline; text-decoration-color: var(--brand); text-underline-offset: .35em; }
-.intro-link:hover { color: var(--brand-text); }
+@media (hover: hover) and (pointer: fine) { .intro-link:hover { color: var(--brand-text); } }
 
 /* Press feedback: pressable things give a little under the finger */
 .button, .offer-cta, .pill, .filters button { transition-property: background-color, color, border-color, transform; transition-duration: .25s, .25s, .25s, .16s; transition-timing-function: ease, ease, ease, var(--ease-out); }
@@ -832,3 +841,50 @@ main { overflow-x: clip; } /* stretched rows may reach past the page edge; never
 
 /* Project story without labels: the first sentence leads, a step larger and brighter */
 .project-story .story-lead { font-size: clamp(18px, 1.5vw, 21px); line-height: 1.5; color: var(--fg); }
+
+/* ---------- Touch screens (phones, tablets) ---------- */
+html { -webkit-tap-highlight-color: transparent; }
+a, button, summary, label, [role="button"], [role="tab"] { touch-action: manipulation; }
+button, .pill, .button, .offer-cta, .talk-button, .filters button, .next-pill { -webkit-user-select: none; user-select: none; }
+@media (hover: none), (pointer: coarse) {
+  /* Services: the card in the middle of the screen warms up, like hover on desktop */
+  .offer { transition: border-color .4s ease, box-shadow .4s ease; }
+  .offer.is-focus { border-color: rgba(255, 90, 15, .55); box-shadow: 0 22px 50px -24px rgba(255, 90, 15, .5); }
+  .offer.is-focus::before { opacity: 1; }
+  .offer-name { transition: color .4s ease; }
+  .offer.is-focus .offer-name { color: var(--brand-text); }
+  /* Tapping a project card: it dips, and "Step inside" slides up while the doors close */
+  .pcard, .work-card { transition: transform .16s var(--ease-out); }
+  .pcard:active, .work-card:active, .pcard.is-stepping, .work-card.is-stepping { transform: scale(.98); }
+  .work-media { position: relative; }
+  .step-inside { position: absolute; left: 12px; bottom: 12px; z-index: 4; padding: 6px 10px 7px; border-radius: 6px; background: #000; color: var(--fg);
+    font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; pointer-events: none;
+    opacity: 0; transform: translateY(6px); transition: opacity .2s ease, transform .25s var(--ease-out); }
+  .is-stepping .step-inside { opacity: 1; transform: none; }
+  /* The P springs apart (site.js adds .is-spring as the doors open, and on tap) */
+  .logo.is-spring .p-head { animation: p-head .7s cubic-bezier(.3,1.6,.5,1); }
+  .logo.is-spring .p-stem { animation: p-stem .7s cubic-bezier(.3,1.6,.5,1); }
+  /* Faster doors on the go */
+  .curtain-leave { animation-duration: .25s; }
+  .curtain-leave span { animation-delay: .14s; }
+  html.is-entering.doors-go::before { animation-duration: .42s; animation-delay: .04s; }
+  /* Hero slats flip in a wave on each image change (site.js); no slow crossfade on the faces */
+  .slats.is-wave .slat-face { transition: none; }
+  /* Tap targets of at least 44px */
+  .pill, .next-pill, .filters button { min-height: 44px; }
+  .social-icon { width: 44px; height: 44px; margin: -11px 0 0 -11px; }
+}
+/* Phones: the footer strip becomes a row you swipe, snapping to each project */
+@media (max-width: 760px) {
+  .footer-strip { overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none;
+    margin-left: calc(-1 * var(--edge)); margin-right: calc(-1 * var(--edge)); padding-left: var(--edge); padding-right: var(--edge); scroll-padding-left: var(--edge); }
+  .footer-strip::-webkit-scrollbar { display: none; }
+  .strip-item { flex: 0 0 46%; scroll-snap-align: start; }
+  .strip-item:nth-child(n+4) { display: block; }
+}
+/* Notches and home bars: keep the floating controls clear of them (with viewport-fit=cover) */
+.chrome { top: max(var(--edge), env(safe-area-inset-top, 0px)); }
+.chrome-left { left: max(calc(var(--edge) - 5px), env(safe-area-inset-left, 0px)); }
+.chrome-right { right: max(var(--edge), env(safe-area-inset-right, 0px)); }
+.next-pill { bottom: calc(var(--edge) + env(safe-area-inset-bottom, 0px)); }
+body { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }

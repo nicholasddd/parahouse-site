@@ -1,6 +1,8 @@
 // Parahouse — small progressive enhancements. Every page still works without this file.
 const root = document.documentElement;
 root.classList.add("js");
+// Touch screens (no hover, or a coarse pointer) get their own versions of the hover effects.
+const TOUCH = matchMedia("(hover: none), (pointer: coarse)").matches;
 
 const storage = { // per-visitor conveniences only
   get(key) { try { return localStorage.getItem(key); } catch { return null; } },
@@ -80,7 +82,10 @@ if (showcase && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
 // light line between them. Moving the mouse across pushes the slats near the pointer round their vertical
 // axis in the direction of travel (faster = further), and a spring swings them back. The crossfade between
 // projects carries on through the slats (two faces each). Touch screens and reduced motion keep the plain image.
-if (showcase && matchMedia("(hover: hover) and (pointer: fine)").matches && !reduceMotionNow()) {
+// On touch screens there's no mouse to run across them, so each image change flips the slats over in a wave
+// from left to right instead (the new picture on their far side).
+if (showcase && !reduceMotionNow()) {
+  const mouse = matchMedia("(hover: hover) and (pointer: fine)").matches;
   const media = showcase.querySelector("[data-showcase-media]");
   const imgs = [...media.querySelectorAll("img")];
   const layer = document.createElement("div");
@@ -118,7 +123,22 @@ if (showcase && matchMedia("(hover: hover) and (pointer: fine)").matches && !red
   };
   // Crossfade: when the showcase moves to the next image, every slat fades its other face in with it.
   const swap = (img) => {
-    const next = 1 - front;
+    const next = 1 - front, was = front;
+    if (!mouse) {
+      layer.classList.add("is-wave");
+      slats.forEach((sl, i) => {
+        paint(sl.faces[next], img, sl.left);
+        const half = sl.el.animate([{ transform: "rotateY(0deg)" }, { transform: "rotateY(90deg)" }],
+          { duration: 260, delay: i * 45, easing: "cubic-bezier(.55,0,1,.45)", fill: "forwards" });
+        half.onfinish = () => {
+          sl.faces[next].classList.add("is-on"); sl.faces[was].classList.remove("is-on");
+          half.cancel();
+          sl.el.animate([{ transform: "rotateY(-90deg)" }, { transform: "rotateY(0deg)" }], { duration: 340, easing: "cubic-bezier(0,.55,.45,1)" });
+        };
+      });
+      front = next;
+      return;
+    }
     slats.forEach((sl) => { paint(sl.faces[next], img, sl.left); sl.faces[next].classList.add("is-on"); sl.faces[front].classList.remove("is-on"); });
     front = next;
   };
@@ -136,7 +156,7 @@ if (showcase && matchMedia("(hover: hover) and (pointer: fine)").matches && !red
     });
     frame = moving ? requestAnimationFrame(tick) : 0;
   };
-  showcase.addEventListener("pointermove", (event) => {
+  if (mouse) showcase.addEventListener("pointermove", (event) => {
     if (event.pointerType !== "mouse") return;
     const x = event.clientX - showcase.getBoundingClientRect().left;
     if (lastX === null) { lastX = x; return; }
@@ -147,7 +167,7 @@ if (showcase && matchMedia("(hover: hover) and (pointer: fine)").matches && !red
     });
     if (!frame) frame = requestAnimationFrame(tick);
   }, { passive: true });
-  showcase.addEventListener("pointerleave", () => { lastX = null; });
+  if (mouse) showcase.addEventListener("pointerleave", () => { lastX = null; });
   let resizeTimer = 0;
   addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(build, 150); });
   build();
@@ -299,6 +319,13 @@ if (pillars) {
     if (!step) return;
     stop(); show((current + step + tabs.length) % tabs.length); tabs[current].focus();
   });
+  // Touch: swipe left or right across the section to change tab.
+  let sx = 0, sy = 0;
+  pillars.addEventListener("touchstart", (e) => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  pillars.addEventListener("touchend", (e) => {
+    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) { stop(); show((current + (dx < 0 ? 1 : -1) + tabs.length) % tabs.length); }
+  }, { passive: true });
   show(0);
   if (reduceMotionNow()) {
     pillars.querySelectorAll("animateTransform").forEach((a) => a.remove());
@@ -547,7 +574,7 @@ else {
       ctx.drawImage(img, srcX(x0), srcY(y0), bw / cover, bh / cover, P + x0, y0, bw, bh);
       ctx.restore(); return;
     }
-    const ROW = 2;
+    const ROW = TOUCH ? 4 : 2; // phones: half the rows, same look at phone size
     for (let y = y0; y < y0 + bh; y += ROW) {
       const rh = Math.min(ROW, y0 + bh - y), mid = y + rh / 2;
       // rounded corners: how far in this row starts and ends
@@ -694,15 +721,18 @@ if (ticker) {
 // ---------- Services: offer names glitch when their card comes into focus ----------
 // The same letter-by-letter glitch as the Work heading (random glyphs that lock in from left to right),
 // playing once each time the mouse enters a card. Mouse only; screen readers keep the real name.
-if (matchMedia("(hover: hover) and (pointer: fine)").matches && !reduceMotionNow()) {
+// Touch screens play it when the card comes to the middle of the screen (see "Touch: cards light up" below).
+const offerGlitch = new Map();
+if (!reduceMotionNow()) {
   const glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&/<>-_";
+  const mouse = matchMedia("(hover: hover) and (pointer: fine)").matches;
   document.querySelectorAll(".offer").forEach((card) => {
     const name = card.querySelector(".offer-name");
     if (!name) return;
     const text = name.textContent;
     name.closest(".offer-title").setAttribute("aria-label", name.closest(".offer-title").textContent.trim());
     let raf = 0;
-    card.addEventListener("mouseenter", () => {
+    const play = () => {
       cancelAnimationFrame(raf);
       if (!name.style.minWidth) name.style.minWidth = name.getBoundingClientRect().width + "px"; // no jiggle while letters change
       const start = performance.now(), duration = 520;
@@ -717,7 +747,9 @@ if (matchMedia("(hover: hover) and (pointer: fine)").matches && !reduceMotionNow
         if (t < 1) raf = requestAnimationFrame(frame);
       };
       raf = requestAnimationFrame(frame);
-    });
+    };
+    offerGlitch.set(card, play);
+    if (mouse) card.addEventListener("mouseenter", play);
   });
 }
 
@@ -775,5 +807,61 @@ document.querySelector("[data-back]")?.addEventListener("click", (event) => {
     const queue = () => { if (!pending) pending = setTimeout(() => { pending = 0; light(); }, 50); };
     if (reduceMotionNow()) steps.forEach((li) => li.classList.add("is-lit"));
     else { addEventListener("scroll", queue, { passive: true }); light(); }
+  }
+}
+
+// ---------- Touch: cards light up as they reach the middle of the screen (the touch version of hover) ----------
+// Home's project cards start dark; the one nearest the middle shows its image, its name turns orange and
+// scrambles in once. Services cards get their orange border and glow, and the name glitches once.
+if (TOUCH && !reduceMotionNow()) {
+  const groups = [
+    { cards: [...document.querySelectorAll(".pcard")], enter: (card) => card.querySelectorAll("[data-scramble]").forEach((s) => { s.dataset.text ??= s.textContent; scramble(s, s.dataset.text); }) },
+    { cards: [...document.querySelectorAll(".offer")], enter: (card) => offerGlitch.get(card)?.() },
+  ].filter((g) => g.cards.length);
+  if (groups.length) {
+    let pending = 0;
+    const focus = () => {
+      pending = 0;
+      const mid = innerHeight / 2;
+      groups.forEach((g) => {
+        let best = null, bestD = innerHeight * 0.32; // only cards near the middle count
+        g.cards.forEach((card) => {
+          const r = card.getBoundingClientRect();
+          if (!r.height) return;
+          const d = Math.abs(r.top + r.height / 2 - mid);
+          if (d < bestD) { best = card; bestD = d; }
+        });
+        if (best === g.current) return;
+        g.current?.classList.remove("is-focus");
+        g.current = best;
+        if (best) { best.classList.add("is-focus"); g.enter(best); }
+      });
+    };
+    addEventListener("scroll", () => { if (!pending) pending = setTimeout(focus, 60); }, { passive: true });
+    addEventListener("resize", () => { if (!pending) pending = setTimeout(focus, 60); });
+    focus();
+  }
+}
+
+// ---------- Touch: tapping a project card dips it and shows "Step inside" as the doors close ----------
+if (TOUCH) {
+  document.querySelectorAll(".pcard, .work-card").forEach((card) => {
+    const host = card.querySelector(".work-media") || card;
+    const tag = document.createElement("span");
+    tag.className = "step-inside"; tag.setAttribute("aria-hidden", "true"); tag.textContent = "Step inside →";
+    host.append(tag);
+  });
+  document.addEventListener("click", (e) => { const card = e.target.closest(".pcard, .work-card"); if (card) card.classList.add("is-stepping"); }, true);
+  addEventListener("pageshow", () => document.querySelectorAll(".is-stepping").forEach((c) => c.classList.remove("is-stepping")));
+}
+
+// ---------- Touch: the P springs apart as the doors open, and when tapped ----------
+if (TOUCH && !reduceMotionNow()) {
+  const logo = document.querySelector(".logo");
+  if (logo) {
+    const spring = () => { logo.classList.remove("is-spring"); void logo.offsetWidth; logo.classList.add("is-spring"); };
+    logo.addEventListener("animationend", (e) => { if (e.animationName === "p-head") logo.classList.remove("is-spring"); });
+    logo.addEventListener("pointerdown", spring);
+    setTimeout(spring, root.classList.contains("is-intro") ? 2000 : root.classList.contains("is-entering") ? 900 : 300);
   }
 }
