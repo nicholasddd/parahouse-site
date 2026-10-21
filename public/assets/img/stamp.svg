@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 340" width="300" height="340">
+  <defs>
+    <mask id="perf" maskUnits="userSpaceOnUse" x="0" y="0" width="300" height="340"><rect width="300" height="340" fill="#fff"/><g fill="#000"><circle cx="17" cy="10" r="4.6"/><circle cx="17" cy="330" r="4.6"/><circle cx="31" cy="10" r="4.6"/><circle cx="31" cy="330" r="4.6"/><circle cx="45" cy="10" r="4.6"/><circle cx="45" cy="330" r="4.6"/><circle cx="59" cy="10" r="4.6"/><circle cx="59" cy="330" r="4.6"/><circle cx="73" cy="10" r="4.6"/><circle cx="73" cy="330" r="4.6"/><circle cx="87" cy="10" r="4.6"/><circle cx="87" cy="330" r="4.6"/><circle cx="101" cy="10" r="4.6"/><circle cx="101" cy="330" r="4.6"/><circle cx="115" cy="10" r="4.6"/><circle cx="115" cy="330" r="4.6"/><circle cx="129" cy="10" r="4.6"/><circle cx="129" cy="330" r="4.6"/><circle cx="143" cy="10" r="4.6"/><circle cx="143" cy="330" r="4.6"/><circle cx="157" cy="10" r="4.6"/><circle cx="157" cy="330" r="4.6"/><circle cx="171" cy="10" r="4.6"/><circle cx="171" cy="330" r="4.6"/><circle cx="185" cy="10" r="4.6"/><circle cx="185" cy="330" r="4.6"/><circle cx="199" cy="10" r="4.6"/><circle cx="199" cy="330" r="4.6"/><circle cx="213" cy="10" r="4.6"/><circle cx="213" cy="330" r="4.6"/><circle cx="227" cy="10" r="4.6"/><circle cx="227" cy="330" r="4.6"/><circle cx="241" cy="10" r="4.6"/><circle cx="241" cy="330" r="4.6"/><circle cx="255" cy="10" r="4.6"/><circle cx="255" cy="330" r="4.6"/><circle cx="269" cy="10" r="4.6"/><circle cx="269" cy="330" r="4.6"/><circle cx="283" cy="10" r="4.6"/><circle cx="283" cy="330" r="4.6"/><circle cx="10" cy="16.96" r="4.6"/><circle cx="290" cy="16.96" r="4.6"/><circle cx="10" cy="30.87" r="4.6"/><circle cx="290" cy="30.87" r="4.6"/><circle cx="10" cy="44.78" r="4.6"/><circle cx="290" cy="44.78" r="4.6"/><circle cx="10" cy="58.7" r="4.6"/><circle cx="290" cy="58.7" r="4.6"/><circle cx="10" cy="72.61" r="4.6"/><circle cx="290" cy="72.61" r="4.6"/><circle cx="10" cy="86.52" r="4.6"/><circle cx="290" cy="86.52" r="4.6"/><circle cx="10" cy="100.43" r="4.6"/><circle cx="290" cy="100.43" r="4.6"/><circle cx="10" cy="114.35" r="4.6"/><circle cx="290" cy="114.35" r="4.6"/><circle cx="10" cy="128.26" r="4.6"/><circle cx="290" cy="128.26" r="4.6"/><circle cx="10" cy="142.17" r="4.6"/><circle cx="290" cy="142.17" r="4.6"/><circle cx="10" cy="156.09" r="4.6"/><circle cx="290" cy="156.09" r="4.6"/><circle cx="10" cy="170" r="4.6"/><circle cx="290" cy="170" r="4.6"/><circle cx="10" cy="183.91" r="4.6"/><circle cx="290" cy="183.91" r="4.6"/><circle cx="10" cy="197.83" r="4.6"/><circle cx="290" cy="197.83" r="4.6"/><circle cx="10" cy="211.74" r="4.6"/><circle cx="290" cy="211.74" r="4.6"/><circle cx="10" cy="225.65" r="4.6"/><circle cx="290" cy="225.65" r="4.6"/><circle cx="10" cy="239.57" r="4.6"/><circle cx="290" cy="239.57" r="4.6"/><circle cx="10" cy="253.48" r="4.6"/><circle cx="290" cy="253.48" r="4.6"/><circle cx="10" cy="267.39" r="4.6"/><circle cx="290" cy="267.39" r="4.6"/><circle cx="10" cy="281.3" r="4.6"/><circle cx="290" cy="281.3" r="4.6"/><circle cx="10" cy="295.22" r="4.6"/><circle cx="290" cy="295.22" r="4.6"/><circle cx="10" cy="309.13" r="4.6"/><circle cx="290" cy="309.13" r="4.6"/><circle cx="10" cy="323.04" r="4.6"/><circle cx="290" cy="323.04" r="4.6"/></g></mask>
+    <clipPath id="panel"><rect x="32" y="32" width="236" height="276"/></clipPath>
+  </defs>
+  <rect mask="url(#perf)" x="10" y="10" width="280" height="320" fill="#f3ead8"/>
+  <rect x="32" y="32" width="236" height="276" fill="#ff5a0f"/>
+  <g clip-path="url(#panel)"><g transform="translate(150 186) scale(1.08) translate(-140 -170)">
+    <g fill="#f3ead8"><rect x="202.4" y="88" width="3.2" height="21"/><circle cx="204" cy="88" r="12"/><rect x="222.4" y="104" width="3.2" height="18"/><circle cx="224" cy="104" r="9"/><rect x="182.4" y="104" width="3.2" height="17"/><circle cx="184" cy="104" r="8"/></g>
+    <ellipse cx="138.21" cy="185.5" rx="94" ry="54.24" fill="none" stroke="#f3ead8" stroke-width="2.6" stroke-linecap="round" pathLength="140" stroke-dasharray="5 3"/>
+    <g fill="#f3ead8"><path d="M165.71 201.42L161.9 203.62L165.71 205.82L169.52 203.62Z"/><path d="M174.8 206.49L170.68 208.87L174.8 211.25L178.93 208.87Z"/><path d="M183.9 211.56L179.46 214.12L183.9 216.68L188.33 214.12Z"/><path d="M192.99 216.63L188.24 219.37L192.99 222.11L197.73 219.37Z"/><path d="M211.18 226.77L205.81 229.87L211.18 232.97L216.54 229.87Z"/><path d="M220.27 231.84L214.59 235.12L220.27 238.4L225.95 235.12Z"/></g>
+    <g fill="#f3ead8" stroke="#ff5a0f" stroke-width="1.8" stroke-linejoin="round">
+      <path d="M102.7 181L146 206L146 176L102.7 151Z"/>
+      <path d="M146 206L173.71 190L173.71 160L159.86 149L146 176Z"/>
+      <path d="M100.79 151.5L147.91 178.7L161.76 150.1L114.65 122.9Z"/>
+    </g>
+    <path d="M108.65 156.03L122.5 127.43M116.5 160.57L130.35 131.97M124.35 165.1L138.21 136.5M132.2 169.63L146.06 141.03M140.05 174.17L153.91 145.57" stroke="#ff5a0f" stroke-width="1.3" fill="none"/>
+    <g fill="#ff5a0f">
+      <path d="M154.31 201.2L161.52 197.04L161.52 182.04L154.31 186.2Z"/>
+      <path d="M164.29 186.44L169.28 183.56L169.28 176.56L164.29 179.44Z"/>
+      <path d="M139.07 192L133.01 188.5L133.01 180.5L139.07 184Z"/>
+      <path d="M126.95 185L120.89 181.5L120.89 173.5L126.95 177Z"/>
+      <path d="M114.82 178L108.76 174.5L108.76 166.5L114.82 170Z"/>
+    </g>
+    </g>
+    <g fill="none" stroke="#f3ead8" stroke-width="1.6" stroke-linecap="square"><path d="M43 38H38V43"/><path d="M257 38H262V43"/><path d="M43 302H38V297"/><path d="M257 302H262V297"/></g>
+  </g>
+</svg>

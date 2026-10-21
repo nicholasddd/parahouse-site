@@ -369,8 +369,7 @@ document.querySelectorAll("details.faq-item").forEach((item) => {
 });
 
 // ---------- A small dot that trails the cursor ----------
-// It lags slightly behind the pointer and, when the pointer is still, keeps hovering around it in a
-// small, slow loop (two out-of-step waves), so it never freezes. No lag and no drift with reduced motion.
+// It lags slightly behind the pointer and settles when the pointer stops (no idle drift). No lag with reduced motion.
 if (matchMedia("(hover: hover)").matches) {
   const dot = document.createElement("div");
   dot.className = "cursor-dot";
@@ -379,15 +378,12 @@ if (matchMedia("(hover: hover)").matches) {
   const still = reduceMotionNow();
   let tx = 0, ty = 0, dx = 0, dy = 0, frame = 0, visible = false;
   const ease = still ? 1 : 0.14;
-  const step = (now) => {
+  const step = () => {
     dx += (tx - dx) * ease; dy += (ty - dy) * ease;
-    const t = now / 1000;
-    const hx = still ? 0 : Math.sin(t * 1.3) * 3.5 + Math.sin(t * 0.55) * 2;
-    const hy = still ? 0 : Math.cos(t * 1.05) * 3 + Math.sin(t * 0.8 + 1) * 1.5;
     // Sits just above and to the right of the pointer, never on it (the cursor pill sits below).
-    dot.style.transform = `translate3d(${dx + 16 + hx}px, ${dy - 14 + hy}px, 0)`;
+    dot.style.transform = `translate3d(${dx + 16}px, ${dy - 14}px, 0)`;
     const settling = Math.abs(tx - dx) + Math.abs(ty - dy) > 0.2;
-    frame = visible && !document.hidden && (settling || !still) ? requestAnimationFrame(step) : 0;
+    frame = visible && !document.hidden && settling ? requestAnimationFrame(step) : 0;
   };
   const wake = () => { if (!frame) frame = requestAnimationFrame(step); };
   document.addEventListener("mousemove", (event) => {
@@ -416,53 +412,52 @@ if (root.classList.contains("is-intro")) {
   }, 300);
 }
 if (root.classList.contains("is-intro")) setTimeout(() => root.classList.remove("is-intro"), 2100);
-// Arriving from another page: open the doors once this page is really on screen, i.e. after the browser's
-// page swap (a cross-document view transition) has finished, so the opening is seen rather than missed.
-if (root.classList.contains("is-entering")) {
-  // Once this page is drawing frames, wait out the browser's short page swap (about 0.25s), then open.
-  const open = () => root.classList.add("doors-go");
-  requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(open, 280)));
-  setTimeout(open, 700); // in case frames are held back
-  const done = () => root.classList.remove("is-entering", "doors-go");
-  root.addEventListener("animationend", (e) => { if (/^doors-open/.test(e.animationName)) done(); });
-  setTimeout(done, 3500); // never leave the page covered
-}
-
-const PAGE_NAMES = { "/": "Home", "/portfolio/": "Work", "/services/": "Services", "/about/": "About", "/contact/": "Contact" };
+// ---------- Page changes: no doors after the first visit ----------
+// The doors open once per session (the intro above). After that, links change pages straight away with a
+// short crossfade (a cross-document view transition, see the CSS), and pages are prefetched on hover.
+// A project card is the one exception: its image grows from the card to fill the screen, then dissolves
+// into the project page ("step inside"). Clip-path and transform only, so it stays smooth.
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const PROJECT_PAGE = /^\/portfolio\/[^/]+\/$/;
 document.addEventListener("click", (event) => {
   if (reduceMotion || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
   const link = event.target.closest("a[href]");
   if (!link || link.target || link.hasAttribute("download")) return;
   const url = new URL(link.href, location.href);
-  if (url.origin !== location.origin || !/^https?:$/.test(url.protocol)) return;
-  if (url.pathname === location.pathname) return;
-  if (/\.[a-z0-9]+$/i.test(url.pathname) && !url.pathname.endsWith(".html")) return;
+  if (url.origin !== location.origin || url.pathname === location.pathname || !PROJECT_PAGE.test(url.pathname)) return;
+  const img = link.querySelector("img");
+  const frame = link.querySelector(".pcard-media, .work-media") || img;
+  const box = frame?.getBoundingClientRect();
+  if (!img || !box || !box.width || box.bottom < 0 || box.top > innerHeight) return;
   event.preventDefault();
-  const label = link.dataset.label || PAGE_NAMES[url.pathname] || link.textContent.trim().split("\n")[0] || "parahouse";
-  try { sessionStorage.setItem("ph-curtain", label); } catch {}
-  const curtain = document.createElement("div");
-  curtain.className = "curtain-leave";
-  // The curtain always takes the colour of the page it reveals: a project's own colour, or the
-  // the deep ember gradient (the default --curtain) for every other page, even when leaving a coloured project page.
-  curtain.style.background = (window.PH_CURTAINS || {})[url.pathname] || "linear-gradient(180deg, #1c0603 0%, #7a1c08 100%)";
-  curtain.setAttribute("aria-hidden", "true");
-  const text = document.createElement("span");
-  text.textContent = label;
-  curtain.append(text);
-  document.body.append(curtain);
-  // Navigate the moment the curtain has fully risen (the page is usually prefetched by then).
+  const W = innerWidth, H = innerHeight;
+  const zoom = document.createElement("div");
+  zoom.className = "step-zoom";
+  zoom.setAttribute("aria-hidden", "true");
+  const pic = document.createElement("img");
+  pic.src = img.currentSrc || img.src;
+  pic.alt = "";
+  zoom.append(pic);
+  document.body.append(zoom);
+  const radius = parseFloat(getComputedStyle(frame).borderRadius) || 0;
+  const scale = Math.max(box.width / W, box.height / H);
+  const dx = box.left + box.width / 2 - W / 2, dy = box.top + box.height / 2 - H / 2;
+  const timing = { duration: TOUCH ? 420 : 520, easing: "cubic-bezier(.77,0,.175,1)", fill: "forwards" };
+  zoom.animate([
+    { clipPath: `inset(${box.top}px ${W - box.right}px ${H - box.bottom}px ${box.left}px round ${radius}px)` },
+    { clipPath: "inset(0px 0px 0px 0px round 0px)" },
+  ], timing);
+  pic.animate([{ transform: `translate(${dx}px, ${dy}px) scale(${scale})` }, { transform: "none" }], timing);
   let gone = false;
   const go = () => { if (!gone) { gone = true; location.href = url.href; } };
-  curtain.addEventListener("animationend", (e) => { if (e.target === curtain) go(); });
-  setTimeout(go, 450);
+  setTimeout(go, timing.duration + 30);
 });
-// Back/forward from the browser cache: clear any curtain left from leaving.
+// Back/forward from the browser cache: clear a zoom left from leaving.
 window.addEventListener("pageshow", (event) => {
-  if (event.persisted) document.querySelectorAll(".curtain-leave").forEach((el) => el.remove());
+  if (event.persisted) document.querySelectorAll(".step-zoom").forEach((el) => el.remove());
 });
 
-// ---------- Work page heading: the word glitches into the next one every few seconds ----------
+// ---------- Work page heading: the word glitches in once on arrival ----------
 const glitch = document.querySelector("[data-glitch]");
 if (glitch && !reduceMotion) {
   const words = glitch.dataset.glitch.split("|");
@@ -487,11 +482,8 @@ if (glitch && !reduceMotion) {
     };
     requestAnimationFrame(frame);
   };
-  setInterval(() => {
-    if (document.hidden) return;
-    index = (index + 1) % words.length;
-    morph(words[index]);
-  }, 3600);
+  // Once, on arrival (after the intro if it's showing), then it stays still.
+  setTimeout(() => morph(words[index]), root.classList.contains("is-intro") ? 2300 : 450);
 }
 
 // ---------- Contact: the Pitch Kit's "Send brief" arrives with ?type=pitch ----------
@@ -694,7 +686,8 @@ const STRIP_PROJECTS = [ // newest first, as on the Work page
 
 // ---------- About: "We are ___" carousel ----------
 // A small vertical carousel: the current title sits in the middle of a two-line window with half of the
-// previous and next titles peeking out, and every 1.4s the next one swipes up into the middle.
+// previous and next titles peeking out. The titles step through as the section scrolls up the screen
+// (one per stretch of scroll), instead of on a timer, so it only moves when the visitor does.
 // Copies at both ends (last title first, first title last) make the loop seamless: after sliding onto the
 // copy, the track jumps back to the real title without animating.
 // Screen readers get the whole list once from the paragraph's aria-label. Reduced motion: it stays still.
@@ -712,12 +705,18 @@ if (ticker) {
   };
   place(false);
   if (!reduceMotionNow()) {
-    setInterval(() => {
-      if (document.hidden) return;
-      i += 1;
-      place(true);
-      if (i === items.length - 1) setTimeout(() => { i = 1; place(false); }, 520);
-    }, 1400);
+    const n = items.length - 2; // real titles, without the two copies
+    const host = ticker.closest("section") || ticker;
+    let pending = 0;
+    const follow = () => {
+      pending = 0;
+      const r = host.getBoundingClientRect();
+      const p = Math.min(1, Math.max(0, (innerHeight * 0.85 - r.top) / (innerHeight * 0.85 + r.height * 0.6)));
+      const next = 1 + Math.min(n - 1, Math.floor(p * n));
+      if (next !== i) { i = next; place(true); }
+    };
+    addEventListener("scroll", () => { if (!pending) pending = requestAnimationFrame(follow); }, { passive: true });
+    follow();
   }
 }
 
@@ -794,6 +793,65 @@ document.querySelector("[data-back]")?.addEventListener("click", (event) => {
     status.dataset.state = sent ? "ok" : "error";
     status.textContent = sent ? "We heard the knock. We’ll reply within one working day." : "That didn’t send. Please try again.";
     history.replaceState(null, "", location.pathname); // a refresh doesn't repeat the message
+  }
+}
+
+// ---------- Contact: the brief folds into an envelope and gets stamped ----------
+// With JavaScript the form sends in the background (the worker answers JSON when asked). While it sends,
+// the form folds away into an envelope; once the brief is through, the flap closes and the parahouse stamp
+// presses on, then "We heard the knock." If it fails, the form comes back with the reason. Once per brief,
+// so it can afford a little delight. Without JavaScript the native post and ?sent=1 above still work.
+{
+  const form = document.querySelector("[data-contact-form]");
+  if (form && window.fetch && window.FormData) {
+    const status = form.querySelector("[data-status]");
+    const still = reduceMotionNow();
+    const sent = document.createElement("div");
+    sent.className = "sent";
+    sent.hidden = true;
+    sent.innerHTML = `<div class="envelope" aria-hidden="true">
+        <svg class="envelope-body" viewBox="0 0 320 200"><rect x="1" y="1" width="318" height="198" rx="8"/><path d="M1 199 L160 92 L319 199"/></svg>
+        <span class="envelope-flap"></span>
+        <img class="envelope-stamp" src="/assets/img/stamp.svg" alt="" width="300" height="340">
+      </div>
+      <p class="sent-text" role="status">We heard the knock. We’ll reply within one working day.</p>`;
+    form.after(sent);
+    const flap = sent.querySelector(".envelope-flap"), stamp = sent.querySelector(".envelope-stamp"), env = sent.querySelector(".envelope"), text = sent.querySelector(".sent-text");
+    const ease = "cubic-bezier(.23,1,.32,1)";
+    const play = (el, frames, ms, delay = 0) => still ? Promise.resolve() : el.animate(frames, { duration: ms, delay, easing: ease, fill: "both" }).finished;
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (form.classList.contains("is-sending")) return;
+      form.classList.add("is-sending");
+      status.textContent = ""; status.dataset.state = "";
+      const sending = fetch(form.action, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } })
+        .then(async (r) => ({ ok: r.ok, error: r.ok ? "" : (await r.json().catch(() => ({}))).error }))
+        .catch(() => ({ ok: false, error: "" }));
+      // Fold: the form drops back and fades while the envelope arrives open.
+      await play(form, [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(16px) scale(.97)" }], 320);
+      form.hidden = true; sent.hidden = false; text.style.opacity = 0; stamp.style.opacity = 0;
+      sent.scrollIntoView({ block: "center" }); // the form was taller; bring the envelope to the middle while nothing is showing
+      flap.style.transform = "rotateX(180deg)";
+      await play(env, [{ opacity: 0, transform: "translateY(12px) scale(.94)" }, { opacity: 1, transform: "none" }], 380);
+      const result = await sending;
+      if (!result.ok) {
+        sent.hidden = true; form.hidden = false; form.classList.remove("is-sending");
+        await play(form, [{ opacity: 0, transform: "translateY(16px) scale(.97)" }, { opacity: 1, transform: "none" }], 320);
+        form.getAnimations().forEach((a) => a.cancel());
+        status.dataset.state = "error";
+        status.textContent = result.error || "That didn’t send. Please try again.";
+        return;
+      }
+      // Seal and stamp.
+      await play(flap, [{ transform: "rotateX(180deg)" }, { transform: "rotateX(0deg)" }], 420);
+      flap.style.transform = "";
+      stamp.style.opacity = 1;
+      await play(stamp, [{ opacity: 0, transform: "rotate(-14deg) scale(1.9)" }, { opacity: 1, transform: "rotate(-6deg) scale(1)" }], 240);
+      play(env, [{ transform: "translateY(0)" }, { transform: "translateY(3px)" }, { transform: "translateY(0)" }], 220);
+      text.style.opacity = "";
+      play(text, [{ opacity: 0, transform: "translateY(8px)" }, { opacity: 1, transform: "none" }], 400, 120);
+      form.reset();
+    });
   }
 }
 

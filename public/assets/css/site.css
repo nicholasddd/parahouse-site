@@ -471,7 +471,10 @@ html.is-intro .showcase-media { animation-delay: 1.45s; }
 }
 @media (prefers-reduced-motion: no-preference) {
   @view-transition { navigation: auto; }
-  ::view-transition-group(root) { animation-duration: 0s; }
+  /* Pages change with a short crossfade; a project card's zoom dissolves into the project page. */
+  ::view-transition-group(root) { animation-duration: .28s; animation-timing-function: cubic-bezier(.23,1,.32,1); }
+  ::view-transition-old(step-zoom) { animation: step-zoom-out .5s cubic-bezier(.23,1,.32,1) both; }
+  @keyframes step-zoom-out { to { opacity: 0; transform: scale(1.04); } }
 }
 
 /* ---------- 404 ---------- */
@@ -895,3 +898,17 @@ body { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-are
 @media (min-width: 1100px) { .promises { grid-template-columns: repeat(4, 1fr); } }
 .promises li { position: relative; padding: 12px 0 14px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--fg); }
 .promises li::before { content: ""; position: absolute; left: 0; top: -1px; width: 28px; height: 1px; background: var(--brand); } /* a short orange start to each rule, no bullets */
+
+/* Step inside: a project card's image grows to fill the screen before the project page opens (site.js) */
+.step-zoom { position: fixed; inset: 0; z-index: 90; overflow: hidden; pointer-events: none; view-transition-name: step-zoom; will-change: clip-path; }
+.step-zoom img { width: 100%; height: 100%; object-fit: cover; display: block; transform-origin: 50% 50%; }
+
+/* Contact: the brief folds into an envelope and gets stamped (site.js) */
+.sent { display: grid; justify-items: start; gap: 22px; padding: 8px 0 4px; }
+.envelope { position: relative; width: min(340px, 82vw); aspect-ratio: 16 / 10; perspective: 900px; }
+.envelope-body { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.envelope-body rect { fill: #f3ead8; }
+.envelope-body path { fill: none; stroke: rgba(11, 7, 5, .14); stroke-width: 2; }
+.envelope-flap { position: absolute; left: 0; right: 0; top: 0; height: 58%; background: #e8dbc2; clip-path: polygon(0 0, 100% 0, 50% 100%); transform-origin: 50% 0; backface-visibility: visible; border-radius: 8px 8px 0 0; }
+.envelope-stamp { position: absolute; right: 7%; top: 9%; width: 21%; height: auto; transform: rotate(-6deg); filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .25)); }
+.sent-text { margin: 0; font-size: 17px; max-width: 34ch; }
