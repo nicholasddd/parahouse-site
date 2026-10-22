@@ -15,6 +15,15 @@ export default {
       return handleContact(request, env);
     }
 
+    // Live visitor count. Each open tab pings every 30s (no cookies, no IP or personal data kept);
+    // /api/live shows how many tabs pinged in the last minute, to whoever has the private key.
+    if (url.pathname === "/api/ping" && request.method === "POST") {
+      const body = await request.text().catch(() => "");
+      env.PRESENCE.get(env.PRESENCE.idFromName("site")).fetch("https://presence/ping", { method: "POST", body }).catch(() => {});
+      return new Response(null, { status: 204 });
+    }
+    if (url.pathname === "/api/live") return handleLive(url, env);
+
     if (url.pathname.startsWith("/api/")) {
       return json({ error: "Not found." }, 404);
     }
@@ -107,4 +116,77 @@ function json(body, status = 200, headers = {}) {
     status,
     headers: { "Content-Type": "application/json", ...headers },
   });
+}
+
+// ---------- Live visitor count ----------
+async function sha256(text) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function handleLive(url, env) {
+  const key = url.searchParams.get("k") || "";
+  if (!env.LIVE_KEY_HASH || !key || (await sha256(key)) !== env.LIVE_KEY_HASH) {
+    return new Response("Not found.", { status: 404 });
+  }
+  const stub = env.PRESENCE.get(env.PRESENCE.idFromName("site"));
+  if (url.searchParams.has("json")) {
+    const res = await stub.fetch("https://presence/count");
+    return new Response(res.body, { headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
+  }
+  return new Response(LIVE_PAGE, { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", "X-Robots-Tag": "noindex" } });
+}
+
+const LIVE_PAGE = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
+<title>Live visitors · parahouse</title>
+<style>
+body{margin:0;min-height:100svh;display:grid;place-items:center;background:#0b0705;color:#f3ead8;font:16px/1.5 system-ui,sans-serif}
+main{text-align:center;padding:24px}
+.n{font-size:clamp(96px,30vw,220px);font-weight:800;line-height:1;color:#ff5a0f;font-variant-numeric:tabular-nums}
+.l{opacity:.7;margin-top:8px}
+ul{list-style:none;padding:0;margin:28px 0 0;opacity:.8;font-size:14px}
+li{padding:4px 0}
+.t{opacity:.45;font-size:12px;margin-top:24px}
+</style></head><body><main>
+<div class="n" id="n">–</div><div class="l" id="l">on parahouse.co right now</div>
+<ul id="pages"></ul><div class="t" id="t"></div>
+</main><script>
+const n=document.getElementById("n"),l=document.getElementById("l"),pages=document.getElementById("pages"),t=document.getElementById("t");
+async function tick(){
+  try{
+    const r=await fetch(location.pathname+location.search+"&json",{cache:"no-store"});const d=await r.json();
+    n.textContent=d.count;l.textContent=(d.count===1?"person":"people")+" on parahouse.co right now";
+    pages.innerHTML="";Object.entries(d.pages).sort((a,b)=>b[1]-a[1]).forEach(([p,c])=>{const li=document.createElement("li");li.textContent=c+" × "+p;pages.append(li);});
+    t.textContent="Updated "+new Date().toLocaleTimeString();
+  }catch(e){t.textContent="Couldn't update, retrying…";}
+}
+tick();setInterval(tick,5000);
+<\/script></body></html>`;
+
+// One instance for the whole site: open tabs by a random per-tab id, with the page they're on and when they
+// last pinged. Memory only; if Cloudflare restarts it, the count rebuilds within 30 seconds.
+export class Presence {
+  constructor() { this.tabs = new Map(); }
+  async fetch(request) {
+    const url = new URL(request.url);
+    const now = Date.now();
+    if (url.pathname === "/ping") {
+      let d = {};
+      try { d = JSON.parse(await request.text()); } catch {}
+      const id = String(d.id || "").slice(0, 40);
+      if (!id) return new Response(null, { status: 204 });
+      if (d.leave) this.tabs.delete(id);
+      else this.tabs.set(id, { path: String(d.path || "/").slice(0, 120), at: now });
+      if (this.tabs.size > 5000) this.prune(now);
+      return new Response(null, { status: 204 });
+    }
+    if (url.pathname === "/count") {
+      this.prune(now);
+      const pages = {};
+      for (const { path } of this.tabs.values()) pages[path] = (pages[path] || 0) + 1;
+      return Response.json({ count: this.tabs.size, pages });
+    }
+    return new Response("Not found.", { status: 404 });
+  }
+  prune(now) { for (const [id, v] of this.tabs) if (now - v.at > 65000) this.tabs.delete(id); }
 }
