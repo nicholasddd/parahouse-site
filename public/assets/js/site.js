@@ -952,17 +952,3 @@ if (TOUCH && !reduceMotionNow()) {
   }
 }
 
-// ---------- Live visitor count: an anonymous "still here" every 30 seconds ----------
-// A random id per open tab (sessionStorage, no cookies), the page path, nothing else. Only on the live site.
-if (/^(www\.)?parahouse\.co$/.test(location.hostname) && navigator.sendBeacon) {
-  let id = "";
-  try { id = sessionStorage.getItem("ph-tab") || ""; if (!id) { id = Math.random().toString(36).slice(2) + Date.now().toString(36); sessionStorage.setItem("ph-tab", id); } } catch { id = Math.random().toString(36).slice(2); }
-  const send = (leave) => navigator.sendBeacon("/api/ping", JSON.stringify({ id, path: location.pathname, leave }));
-  let timer = 0;
-  const start = () => { send(false); clearInterval(timer); timer = setInterval(() => send(false), 30000); };
-  const stop = () => { clearInterval(timer); send(true); };
-  document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
-  addEventListener("pagehide", stop);
-  addEventListener("pageshow", (e) => { if (e.persisted) start(); });
-  if (!document.hidden) start();
-}

@@ -30,14 +30,14 @@
   ],
   "vars": {
     "CONTACT_TO": "parahouse0@gmail.com",
-    "CONTACT_FROM": "website@parahouse.co",
-    // Live visitor count: SHA-256 of the private viewing key (the key itself lives only with Nicholas).
-    "LIVE_KEY_HASH": "ef36f9d7d85251e09beb9a91f5940c8f5d53a2e12e12422fb2518ac561236a53"
+    "CONTACT_FROM": "website@parahouse.co"
   },
 
-  // Live visitor count: one Durable Object keeps the open tabs heard from in the last minute, in memory.
-  "durable_objects": { "bindings": [{ "name": "PRESENCE", "class_name": "Presence" }] },
-  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Presence"] }],
+  // A live visitor counter (Durable Object "Presence") was added and removed on 2026-10-23; v2 deletes it.
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["Presence"] },
+    { "tag": "v2", "deleted_classes": ["Presence"] }
+  ],
 
   "observability": { "enabled": true }
 }
