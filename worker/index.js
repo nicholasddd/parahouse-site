@@ -19,7 +19,7 @@ export default {
     // /api/live shows how many tabs pinged in the last minute, to whoever has the private key.
     if (url.pathname === "/api/ping" && request.method === "POST") {
       const body = await request.text().catch(() => "");
-      env.PRESENCE.get(env.PRESENCE.idFromName("site")).fetch("https://presence/ping", { method: "POST", body }).catch(() => {});
+      await env.PRESENCE.get(env.PRESENCE.idFromName("site")).fetch("https://presence/ping", { method: "POST", body }).catch(() => {});
       return new Response(null, { status: 204 });
     }
     if (url.pathname === "/api/live") return handleLive(url, env);
