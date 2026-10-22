@@ -440,11 +440,7 @@ document.addEventListener("click", (event) => {
   pic.alt = "";
   zoom.style.setProperty("--hero-h", HH + "px");
   zoom.append(pic);
-  // The rest of the page fades away while the image grows, so only the picture is left when the project opens.
-  const veil = document.createElement("div");
-  veil.className = "step-veil";
-  veil.setAttribute("aria-hidden", "true");
-  document.body.append(veil, zoom);
+  document.body.append(zoom);
   const radius = parseFloat(getComputedStyle(frame).borderRadius) || 0;
   const scale = Math.max(box.width / W, box.height / HH);
   const dx = box.left + box.width / 2 - W / 2, dy = box.top + box.height / 2 - HH / 2;
@@ -453,7 +449,6 @@ document.addEventListener("click", (event) => {
     { clipPath: `inset(${box.top}px ${W - box.right}px ${H - box.bottom}px ${box.left}px round ${radius}px)` },
     { clipPath: `inset(0px 0px ${H - HH}px 0px round 0px)` },
   ], timing);
-  veil.animate([{ opacity: 0 }, { opacity: 1 }], { duration: timing.duration * 0.8, easing: "cubic-bezier(.23,1,.32,1)", fill: "forwards" });
   pic.animate([{ transform: `translate(${dx}px, ${dy}px) scale(${scale})` }, { transform: "none" }], timing);
   let gone = false;
   // Shrink the layer to the hero's size before leaving, so the page swap matches it to the hero box for box.
@@ -462,7 +457,7 @@ document.addEventListener("click", (event) => {
 });
 // Back/forward from the browser cache: clear a zoom left from leaving.
 window.addEventListener("pageshow", (event) => {
-  if (event.persisted) document.querySelectorAll(".step-zoom, .step-veil").forEach((el) => el.remove());
+  if (event.persisted) document.querySelectorAll(".step-zoom").forEach((el) => el.remove());
 });
 
 // ---------- Work page heading: the word glitches in once on arrival ----------
@@ -768,14 +763,28 @@ if (!reduceMotionNow()) {
 // ---------- Back to work: return to the project you were on ----------
 // Came from the Work page: step back in history, so its scroll and filter come back exactly.
 // Otherwise (direct link, or from another page) open Work at this project's card.
+// Stepping out: the project's details fade away, then the hero shrinks back into its card on the Work page
+// (the page swap morphs the hero into the card; the head script names the card when Work is revealed).
 document.querySelector("[data-back]")?.addEventListener("click", (event) => {
+  if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
   let from = null;
   try { from = new URL(document.referrer); } catch {}
-  if (from && from.origin === location.origin && from.pathname === "/portfolio/" && history.length > 1) {
-    event.preventDefault();
-    history.back();
+  const viaHistory = from && from.origin === location.origin && from.pathname === "/portfolio/" && history.length > 1;
+  const hero = document.querySelector(".project-hero");
+  const box = hero?.getBoundingClientRect();
+  const heroOnScreen = box && box.bottom > innerHeight * 0.25;
+  if (reduceMotion || !heroOnScreen) {
+    if (hero) hero.style.viewTransitionName = "none"; // nothing to shrink back from: a plain fade
+    if (viaHistory) { event.preventDefault(); history.back(); }
+    return;
   }
+  event.preventDefault();
+  const href = event.currentTarget.href;
+  try { sessionStorage.setItem("ph-back", location.pathname.split("/")[2]); } catch {}
+  root.classList.add("is-leaving");
+  setTimeout(() => { if (viaHistory) history.back(); else location.href = href; }, 280);
 });
+addEventListener("pageshow", () => root.classList.remove("is-leaving"));
 {
   const card = location.pathname === "/portfolio/" && location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
   if (card && card.classList.contains("work-card")) {

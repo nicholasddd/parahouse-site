@@ -473,7 +473,8 @@ html.is-intro .showcase-media { animation-delay: 1.45s; }
   @view-transition { navigation: auto; }
   /* Pages change with a short crossfade; a project card's zoom dissolves into the project page. */
   ::view-transition-group(root) { animation-duration: .28s; animation-timing-function: cubic-bezier(.23,1,.32,1); }
-  ::view-transition-group(step-zoom), ::view-transition-old(step-zoom), ::view-transition-new(step-zoom) { animation-duration: .35s; }
+  /* The hero morphs between its card and the top of the project page (both ways); 16:10 on both ends. */
+  ::view-transition-group(step-zoom), ::view-transition-old(step-zoom), ::view-transition-new(step-zoom) { animation-duration: .6s; animation-timing-function: cubic-bezier(.77,0,.175,1); }
   ::view-transition-old(step-zoom), ::view-transition-new(step-zoom) { height: 100%; object-fit: cover; }
 }
 
@@ -906,15 +907,16 @@ body { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-are
 .project-hero + .page { padding-top: calc(var(--edge) + 28px); }
 
 /* Step inside: a project card's image grows into the project hero's place before the page opens (site.js) */
-.step-veil { position: fixed; inset: 0; z-index: 89; background: var(--bg); opacity: 0; pointer-events: none; }
+/* Stepping back out: everything but the hero fades, then the hero shrinks into its card (site.js + head script) */
+html.is-leaving :is(.page, .site-footer, .chrome, .topnav, .next-pill, .cursor-dot) { opacity: 0; transition: opacity .26s ease; }
 /* Arriving by a card: the hero is already in place; the details then rise in one after another */
 @keyframes step-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-html.is-stepin .project-hero + .page > * { animation: step-rise .55s cubic-bezier(.23,1,.32,1) both; animation-delay: .5s; }
-html.is-stepin .project-hero + .page > :nth-child(1) { animation-delay: .12s; }
-html.is-stepin .project-hero + .page > :nth-child(2) { animation-delay: .19s; }
-html.is-stepin .project-hero + .page > :nth-child(3) { animation-delay: .26s; }
-html.is-stepin .project-hero + .page > :nth-child(4) { animation-delay: .33s; }
-html.is-stepin :is(.topnav, .menu-toggle, .next-pill) { animation: step-rise .5s cubic-bezier(.23,1,.32,1) .3s both; }
+html.is-stepin .project-hero + .page > * { animation: step-rise .55s cubic-bezier(.23,1,.32,1) both; animation-delay: .62s; }
+html.is-stepin .project-hero + .page > :nth-child(1) { animation-delay: .3s; }
+html.is-stepin .project-hero + .page > :nth-child(2) { animation-delay: .37s; }
+html.is-stepin .project-hero + .page > :nth-child(3) { animation-delay: .44s; }
+html.is-stepin .project-hero + .page > :nth-child(4) { animation-delay: .51s; }
+html.is-stepin :is(.topnav, .menu-toggle, .next-pill) { animation: step-rise .5s cubic-bezier(.23,1,.32,1) .45s both; }
 @media (prefers-reduced-motion: reduce) { html.is-stepin * { animation: none !important; } }
 .step-zoom { position: fixed; inset: 0; z-index: 90; overflow: hidden; pointer-events: none; view-transition-name: step-zoom; will-change: clip-path; }
 .step-zoom img { position: absolute; left: 0; top: 0; width: 100%; height: var(--hero-h, 100%); object-fit: cover; display: block; transform-origin: 50% 50%; }
