@@ -415,8 +415,9 @@ if (root.classList.contains("is-intro")) setTimeout(() => root.classList.remove(
 // ---------- Page changes: no doors after the first visit ----------
 // The doors open once per session (the intro above). After that, links change pages straight away with a
 // short crossfade (a cross-document view transition, see the CSS), and pages are prefetched on hover.
-// A project card is the one exception: its image grows from the card to fill the screen, then dissolves
-// into the project page ("step inside"). Clip-path and transform only, so it stays smooth.
+// A project card is the one exception: its image grows from the card into the exact place of the project
+// page's hero (full width at the top), and the new page opens around it ("step inside"); the picture stays
+// put while the rest of the page fades in. Clip-path and transform only, so it stays smooth.
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const PROJECT_PAGE = /^\/portfolio\/[^/]+\/$/;
 document.addEventListener("click", (event) => {
@@ -430,26 +431,28 @@ document.addEventListener("click", (event) => {
   const box = frame?.getBoundingClientRect();
   if (!img || !box || !box.width || box.bottom < 0 || box.top > innerHeight) return;
   event.preventDefault();
-  const W = innerWidth, H = innerHeight;
+  const W = innerWidth, H = innerHeight, HH = Math.min(H, W * 0.625); // the hero's size (see .project-hero)
   const zoom = document.createElement("div");
   zoom.className = "step-zoom";
   zoom.setAttribute("aria-hidden", "true");
   const pic = document.createElement("img");
   pic.src = img.currentSrc || img.src;
   pic.alt = "";
+  zoom.style.setProperty("--hero-h", HH + "px");
   zoom.append(pic);
   document.body.append(zoom);
   const radius = parseFloat(getComputedStyle(frame).borderRadius) || 0;
-  const scale = Math.max(box.width / W, box.height / H);
-  const dx = box.left + box.width / 2 - W / 2, dy = box.top + box.height / 2 - H / 2;
+  const scale = Math.max(box.width / W, box.height / HH);
+  const dx = box.left + box.width / 2 - W / 2, dy = box.top + box.height / 2 - HH / 2;
   const timing = { duration: TOUCH ? 420 : 520, easing: "cubic-bezier(.77,0,.175,1)", fill: "forwards" };
   zoom.animate([
     { clipPath: `inset(${box.top}px ${W - box.right}px ${H - box.bottom}px ${box.left}px round ${radius}px)` },
-    { clipPath: "inset(0px 0px 0px 0px round 0px)" },
+    { clipPath: `inset(0px 0px ${H - HH}px 0px round 0px)` },
   ], timing);
   pic.animate([{ transform: `translate(${dx}px, ${dy}px) scale(${scale})` }, { transform: "none" }], timing);
   let gone = false;
-  const go = () => { if (!gone) { gone = true; location.href = url.href; } };
+  // Shrink the layer to the hero's size before leaving, so the page swap matches it to the hero box for box.
+  const go = () => { if (!gone) { gone = true; zoom.style.height = HH + "px"; zoom.getAnimations().forEach((a) => a.cancel()); zoom.style.clipPath = "none"; location.href = url.href; } };
   setTimeout(go, timing.duration + 30);
 });
 // Back/forward from the browser cache: clear a zoom left from leaving.
@@ -497,7 +500,7 @@ if (eventType && new URLSearchParams(location.search).get("type") === "pitch") e
 //     (expo-out over 1.5s). Home's black cards get the same opening.
 //  2. Scroll curve, from Lusion's fragment shader:
 //       baseUv.x -= (screenUv.x - 0.5) * (1. - sin(screenUv.y * PI)) * rippleStrength;
-//       rippleStrength = min(0.15, easedScrollStrength * 0.5)
+//       rippleStrength = min(0.15, easedScrollStrength * 0.5)   (ours is about a quarter of that, see k below)
 //     While the page scrolls, every row of an image is stretched sideways about the middle of the screen,
 //     most at the top and bottom of the screen and not at all in the middle, so an image coming up from below
 //     bends like a page over a cylinder, then eases flat when scrolling stops. A transform can't bend rows
@@ -598,7 +601,7 @@ else {
     eased += Math.abs(scrollY - lastY) / innerHeight; lastY = scrollY;
     eased += (0 - eased) * (1 - Math.exp(-10 * dt));
     eased = Math.min(eased, 1);
-    const k = Math.min(0.15, eased * 0.5);
+    const k = Math.min(0.04, eased * 0.14); // a gentle hint of the bend (Lusion's full 0.15 was too much to watch)
     const curving = k >= 0.0005, settle = !curving && curveWas; // one last flat frame when the curve ends
     curveWas = curving;
     const vh = innerHeight; let busy = curving;
