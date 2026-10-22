@@ -495,7 +495,7 @@ if (eventType && new URLSearchParams(location.search).get("type") === "pitch") e
 
 // ---------- Project images: lusion.co's featured-work entry and scroll curve ----------
 // Lusion draws its project images in WebGL. Two parts of it are rebuilt here, with the same numbers:
-//  1. Entry, timed when an image comes on screen (and replayed when it comes back): its visible area opens
+//  1. Entry, timed when an image first comes on screen (once per visit; it stays open after that): its visible area opens
 //     from 70% to 100% with the rounded corners kept, and the picture settles from a 1 / 0.75 zoom
 //     (expo-out over 1.5s). Home's black cards get the same opening.
 //  2. Scroll curve, from Lusion's fragment shader:
@@ -610,7 +610,9 @@ else {
       const visible = rect.height > 0 && rect.bottom > 0 && rect.top < vh;
       // Already on screen when the page opens: show it whole (as on Lusion, the entry plays as cards scroll in)
       if (visible && !it.on) { it.on = true; it.settled = false; it.start = opening ? now - 1500 : now; }
-      else if (!visible && it.on) { it.on = false; it.settled = false; it.dirty = true; }
+      // Scrolled away before the opening finished: start again next time. Once fully open it stays open
+      // until the visitor leaves the page (Nicholas, 2026-10-23).
+      else if (!visible && it.on && !it.settled) { it.on = false; it.dirty = true; }
       const t = it.on ? (now - it.start) / 1000 : 0;
       const revealing = it.on && t < 1.5;
       const settling = it.on && !revealing && !it.settled; // one exact last frame at full size
