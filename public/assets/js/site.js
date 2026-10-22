@@ -440,7 +440,12 @@ document.addEventListener("click", (event) => {
   pic.alt = "";
   zoom.style.setProperty("--hero-h", HH + "px");
   zoom.append(pic);
-  document.body.append(zoom);
+  // The page behind dims in step with the image as it grows (as in Apple Photos): same timing and curve,
+  // so it is fully dark only when the image has reached its place.
+  const veil = document.createElement("div");
+  veil.className = "step-veil";
+  veil.setAttribute("aria-hidden", "true");
+  document.body.append(veil, zoom);
   const radius = parseFloat(getComputedStyle(frame).borderRadius) || 0;
   const scale = Math.max(box.width / W, box.height / HH);
   const dx = box.left + box.width / 2 - W / 2, dy = box.top + box.height / 2 - HH / 2;
@@ -449,6 +454,7 @@ document.addEventListener("click", (event) => {
     { clipPath: `inset(${box.top}px ${W - box.right}px ${H - box.bottom}px ${box.left}px round ${radius}px)` },
     { clipPath: `inset(0px 0px ${H - HH}px 0px round 0px)` },
   ], timing);
+  veil.animate([{ opacity: 0 }, { opacity: 1 }], timing);
   pic.animate([{ transform: `translate(${dx}px, ${dy}px) scale(${scale})` }, { transform: "none" }], timing);
   let gone = false;
   // Shrink the layer to the hero's size before leaving, so the page swap matches it to the hero box for box.
@@ -457,7 +463,7 @@ document.addEventListener("click", (event) => {
 });
 // Back/forward from the browser cache: clear a zoom left from leaving.
 window.addEventListener("pageshow", (event) => {
-  if (event.persisted) document.querySelectorAll(".step-zoom").forEach((el) => el.remove());
+  if (event.persisted) document.querySelectorAll(".step-zoom, .step-veil").forEach((el) => el.remove());
 });
 
 // ---------- Work page heading: the word glitches in once on arrival ----------
