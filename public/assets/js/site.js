@@ -788,13 +788,21 @@ document.querySelector("[data-back]")?.addEventListener("click", (event) => {
   const href = event.currentTarget.href;
   try { sessionStorage.setItem("ph-back", location.pathname.split("/")[2]); } catch {}
   root.classList.add("is-leaving");
-  setTimeout(() => { if (viaHistory) history.back(); else location.href = href; }, 280);
+  // Always a fresh load of Work at this card (it scrolls itself to the card): Chrome cancels the shrink when the
+  // page comes back from the back/forward cache, which made it jump instead of animate.
+  setTimeout(() => { location.href = href; }, 280);
 });
 addEventListener("pageshow", () => root.classList.remove("is-leaving"));
 {
   const card = location.pathname === "/portfolio/" && location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
   if (card && card.classList.contains("work-card")) {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    // Coming back from this project: the hero shrinks into this card, so give the card the very file the hero
+    // just showed (already in the browser's cache) and load it now, or the card sits empty when the image lands.
+    let back = null;
+    try { back = sessionStorage.getItem("ph-back"); } catch {}
+    const pic = card.querySelector("img");
+    if (back === card.id && pic) { pic.loading = "eager"; pic.sizes = "100vw"; pic.fetchPriority = "high"; }
     const centre = () => {
       const was = card.style.transform; card.style.transform = ""; // measure its resting box, not the float
       const box = card.getBoundingClientRect();
