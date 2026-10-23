@@ -976,7 +976,7 @@ if (TOUCH && !reduceMotionNow()) {
       if (!entries.some((e) => e.isIntersecting)) return;
       block.classList.add("is-in");
       io.disconnect();
-      if (TOUCH) setTimeout(() => block.querySelector(".talk-arrow")?.classList.add("is-pulse"), 3100);
+      if (TOUCH) setTimeout(() => block.querySelector(".talk-arrow")?.classList.add("is-pulse"), 2300);
     }, { threshold: 0.35 });
     io.observe(block);
     const pill = block.querySelector(".talk-button");

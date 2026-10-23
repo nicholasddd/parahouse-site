@@ -945,14 +945,11 @@ html.together-anim .together.is-in .together-title .ln > span { transform: none;
 html.together-anim .together-rule { border-top-color: transparent; }
 html.together-anim .together-rule::before { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: var(--line); transform: scaleX(0); transform-origin: left center; transition: transform 1.3s cubic-bezier(.65,0,.35,1) .6s; }
 html.together-anim .together.is-in .together-rule::before { transform: scaleX(1); }
-/* The pill opens out of the end of the line once the line has reached it: a slit on the line opens into the
-   arrow's circle, then the pill stretches left to show its text. */
-html.together-anim .talk-button { clip-path: inset(50% 0 50% calc(100% - 64px) round 999px); transition: background-color .25s ease, color .25s ease, transform .16s var(--ease-out), translate .45s cubic-bezier(.23,1,.32,1); }
-html.together-anim .together.is-in .talk-button { animation: pill-out 1.2s cubic-bezier(.65,0,.35,1) 1.8s both; }
-@keyframes pill-out {
-  0% { clip-path: inset(50% 0 50% calc(100% - 64px) round 999px); }
-  35% { clip-path: inset(0 0 0 calc(100% - 64px) round 999px); }
-  100% { clip-path: inset(0 0 0 0 round 999px); }
-}
+/* The orange arrow sits at the end of the line from the start; the pill then grows left out of it to show
+   its text, as the line arrives. */
+html.together-anim .talk-button { --arrow-clip: inset(8px 8px 8px calc(100% - 56px) round 999px); clip-path: var(--arrow-clip); transition: background-color .25s ease, color .25s ease, transform .16s var(--ease-out), translate .45s cubic-bezier(.23,1,.32,1); }
+@media (max-width: 640px) { html.together-anim .talk-button { --arrow-clip: inset(7px 8px 7px calc(100% - 50px) round 999px); } }
+html.together-anim .together.is-in .talk-button { animation: pill-out .8s cubic-bezier(.65,0,.35,1) 1.3s both; }
+@keyframes pill-out { from { clip-path: var(--arrow-clip); } to { clip-path: inset(0 0 0 0 round 999px); } }
 @keyframes talk-pulse { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.14); } }
 .talk-arrow.is-pulse { animation: talk-pulse .5s cubic-bezier(.23,1,.32,1); }
