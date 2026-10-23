@@ -937,3 +937,15 @@ html.is-stepin :is(.topnav, .menu-toggle, .next-pill) { animation: step-rise .5s
 .envelope-flap { position: absolute; left: 0; right: 0; top: 0; height: 58%; background: #e8dbc2; clip-path: polygon(0 0, 100% 0, 50% 100%); transform-origin: 50% 0; backface-visibility: visible; border-radius: 8px 8px 0 0; }
 .envelope-stamp { position: absolute; right: 7%; top: 9%; width: 21%; height: auto; transform: rotate(-6deg); filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .25)); }
 .sent-text { margin: 0; font-size: 17px; max-width: 34ch; }
+
+/* Footer "Let's work together": arrives once (site.js adds .together-anim to <html>, then .is-in on the block) */
+html.together-anim .together-title .ln { display: block; overflow: hidden; padding-bottom: .04em; margin-bottom: -.04em; }
+html.together-anim .together-title .ln > span { display: block; transform: translateY(105%); transition: transform .9s cubic-bezier(.23,1,.32,1); transition-delay: calc(var(--i) * .08s); }
+html.together-anim .together.is-in .together-title .ln > span { transform: none; }
+html.together-anim .together-rule { border-top-color: transparent; }
+html.together-anim .together-rule::before { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: var(--line); transform: scaleX(0); transform-origin: left center; transition: transform .8s cubic-bezier(.77,0,.175,1) .25s; }
+html.together-anim .together.is-in .together-rule::before { transform: scaleX(1); }
+html.together-anim .talk-button { clip-path: inset(0 0 0 100% round 999px); transition: background-color .25s ease, color .25s ease, transform .16s var(--ease-out), clip-path .6s cubic-bezier(.23,1,.32,1) .85s, translate .45s cubic-bezier(.23,1,.32,1); }
+html.together-anim .together.is-in .talk-button { clip-path: inset(0 0 0 0 round 999px); }
+@keyframes talk-pulse { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.14); } }
+.talk-arrow.is-pulse { animation: talk-pulse .5s cubic-bezier(.23,1,.32,1); }

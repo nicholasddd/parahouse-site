@@ -960,3 +960,40 @@ if (TOUCH && !reduceMotionNow()) {
   }
 }
 
+
+// ---------- Footer: "Let's work together" arrives once ----------
+// The headline rises line by line from behind an edge, the rule draws across like a door sill, then the pill
+// slides out from its end. Plays the first time the block comes on screen (per page view). On a mouse, the
+// pill leans a few pixels toward a nearby cursor and springs back; on touch it gives one soft pulse instead.
+{
+  const block = document.querySelector(".together");
+  if (block && !reduceMotionNow() && "IntersectionObserver" in window) {
+    const title = block.querySelector(".together-title");
+    const lines = title.innerHTML.split(/<br\s*\/?>/i);
+    title.innerHTML = lines.map((l, i) => `<span class="ln"><span style="--i:${i}">${l}</span></span>`).join("");
+    root.classList.add("together-anim");
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      block.classList.add("is-in");
+      io.disconnect();
+      if (TOUCH) setTimeout(() => block.querySelector(".talk-arrow")?.classList.add("is-pulse"), 1300);
+    }, { threshold: 0.35 });
+    io.observe(block);
+    const pill = block.querySelector(".talk-button");
+    if (pill && !TOUCH) {
+      let raf = 0;
+      addEventListener("mousemove", (e) => {
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          const r = pill.getBoundingClientRect();
+          const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+          const reach = Math.max(r.width, r.height) / 2 + 90; // starts leaning ~90px outside the pill
+          if (Math.hypot(dx, dy) > reach) { pill.style.translate = ""; return; }
+          pill.style.translate = `${Math.max(-12, Math.min(12, dx * 0.12)).toFixed(1)}px ${Math.max(-10, Math.min(10, dy * 0.3)).toFixed(1)}px`;
+        });
+      }, { passive: true });
+      pill.addEventListener("mouseleave", () => { setTimeout(() => { if (!pill.matches(":hover")) pill.style.translate = ""; }, 60); });
+    }
+  }
+}
