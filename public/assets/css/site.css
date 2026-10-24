@@ -611,6 +611,7 @@ a.about-portrait span { display: block; margin-top: 10px; }
 .media.mosaic { grid-template-columns: repeat(12, 1fr); }
 .media.mosaic figure { grid-column: span 12; overflow: hidden; border-radius: var(--radius); }
 .media.mosaic img { display: block; width: 100%; height: auto; border-radius: 0; transition: transform .6s var(--ease-out); }
+.media.mosaic video { display: block; width: 100%; height: auto; background: var(--surface); } /* gameplay clips: muted loops that play while on screen (site.js) */
 @media (hover: hover) and (pointer: fine) { .media.mosaic figure:hover img { transform: scale(1.03); } }
 .media.mosaic .h6 { grid-column: span 6; }
 .media.mosaic .t4 { grid-column: span 4; }

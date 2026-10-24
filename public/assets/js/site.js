@@ -964,3 +964,20 @@ if (TOUCH && !reduceMotionNow()) {
     }
   }
 }
+
+// ---------- Project clips: muted loops that play only while on screen ----------
+// Clips load nothing until they come near the screen (preload="none" plus the poster), play while visible and
+// pause when scrolled away. Reduced motion: no autoplay; they show their poster with controls instead.
+{
+  const clips = document.querySelectorAll("video[data-inview-play]");
+  if (clips.length) {
+    if (reduceMotionNow() || !("IntersectionObserver" in window)) clips.forEach((v) => { v.controls = true; });
+    else {
+      const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+        if (e.isIntersecting) e.target.play().catch((err) => { if (err.name === "NotAllowedError") e.target.controls = true; }); // a pause while loading only aborts the play
+        else e.target.pause();
+      }), { threshold: 0.25 });
+      clips.forEach((v) => io.observe(v));
+    }
+  }
+}
