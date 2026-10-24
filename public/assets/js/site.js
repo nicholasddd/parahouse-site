@@ -695,42 +695,6 @@ const STRIP_PROJECTS = [ // newest first, as on the Work page
   }
 }
 
-// ---------- About: "We are ___" carousel ----------
-// A small vertical carousel: the current title sits in the middle of a two-line window with half of the
-// previous and next titles peeking out. The titles step through as the section scrolls up the screen
-// (one per stretch of scroll), instead of on a timer, so it only moves when the visitor does.
-// Copies at both ends (last title first, first title last) make the loop seamless: after sliding onto the
-// copy, the track jumps back to the real title without animating.
-// Screen readers get the whole list once from the paragraph's aria-label. Reduced motion: it stays still.
-const ticker = document.querySelector("[data-ticker]");
-if (ticker) {
-  const track = ticker.querySelector(".we-are-track");
-  track.prepend(track.lastElementChild.cloneNode(true));
-  track.append(track.children[1].cloneNode(true));
-  const items = [...track.children];
-  let i = 1;
-  const place = (animate) => {
-    track.classList.toggle("is-jumping", !animate); // no slide and no fade while jumping
-    track.style.transform = `translateY(calc(0.55em - ${i * 1.1}em))`;
-    items.forEach((el, k) => el.classList.toggle("is-current", k === i));
-  };
-  place(false);
-  if (!reduceMotionNow()) {
-    const n = items.length - 2; // real titles, without the two copies
-    const host = ticker.closest("section") || ticker;
-    let pending = 0;
-    const follow = () => {
-      pending = 0;
-      const r = host.getBoundingClientRect();
-      const p = Math.min(1, Math.max(0, (innerHeight * 0.85 - r.top) / (innerHeight * 0.85 + r.height * 0.6)));
-      const next = 1 + Math.min(n - 1, Math.floor(p * n));
-      if (next !== i) { i = next; place(true); }
-    };
-    addEventListener("scroll", () => { if (!pending) pending = requestAnimationFrame(follow); }, { passive: true });
-    follow();
-  }
-}
-
 // ---------- Services: offer names glitch when their card comes into focus ----------
 // The same letter-by-letter glitch as the Work heading (random glyphs that lock in from left to right),
 // playing once each time the mouse enters a card. Mouse only; screen readers keep the real name.

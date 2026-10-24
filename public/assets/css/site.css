@@ -797,20 +797,21 @@ main { overflow-x: clip; } /* stretched rows may reach past the page edge; never
 .talk-arrow { background: var(--grad); color: #fff; box-shadow: var(--glow-soft); }
 @media (hover: hover) and (pointer: fine) { .talk-button:hover { background: var(--grad); color: #fff; } .talk-button:hover .talk-arrow { background: #fff; color: var(--ember); } }
 
-/* ---------- About: "We are ___", a small vertical carousel of design titles (site.js steps it) ----------
-   The window is two lines tall: the current title sits in the middle, half of the previous one shows above and
-   half of the next below, dimmed and fading out at the edges. */
-.we-are { display: flex; flex-wrap: wrap; align-items: center; column-gap: .32em; margin: clamp(72px, 9vw, 140px) 0 0;
-  font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase;
-  font-size: clamp(26px, 3.9vw, 64px); line-height: 1; letter-spacing: -0.01em; }
-.we-are-ticker { position: relative; display: inline-block; height: 2.2em; overflow: hidden; color: var(--brand-text);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 32%, #000 68%, transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 32%, #000 68%, transparent 100%); }
-.we-are-track { display: flex; flex-direction: column; transform: translateY(-0.55em); transition: transform .5s cubic-bezier(.77, 0, .175, 1); }
-.we-are-track > span { display: block; height: 1.1em; line-height: 1.1; white-space: nowrap; opacity: .35; transition: opacity .5s ease; }
-.we-are-track > span.is-current { opacity: 1; }
-.we-are-track.is-jumping, .we-are-track.is-jumping > span { transition: none; }
-@media (prefers-reduced-motion: reduce) { .we-are-track, .we-are-track > span { transition: none; } }
+/* ---------- Founder: Nicholas's face where an agency decides to trust or to get in touch ----------
+   A small black-and-white headshot with one line beside it (Home intro, Contact, About), plus a credit line on
+   project pages. About stays about parahouse; this is a signature, not a bio. */
+.founder { display: flex; align-items: center; gap: 14px; margin-top: 22px; }
+.founder-photo { flex: none; width: 48px; height: 48px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px var(--line); }
+.page-head .founder { margin-top: 4px; }
+.page-head .founder-photo { width: 56px; height: 56px; }
+.about-text .founder { margin-top: 6px; }
+.founder-text { display: grid; gap: 4px; margin: 0; }
+.founder-note { font-size: 15px; line-height: 1.35; color: var(--fg); }
+.founder-name { font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.founder-link { display: inline-block; margin-left: .8em; padding: 6px 0; color: var(--fg); text-decoration: underline; text-decoration-color: var(--brand); text-underline-offset: .35em; }
+@media (hover: hover) and (pointer: fine) { .founder-link:hover { color: var(--brand-text); } }
+.credit { margin: 0; padding: 4px 0 18px; font-size: 15px; }
+.credit span { margin-right: .8em; font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
 
 /* ---------- Services: an offer card in focus lifts, warms up and its name glitches (site.js) ---------- */
 .offer { position: relative; isolation: isolate; }
