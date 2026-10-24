@@ -1,6 +1,6 @@
 // Parahouse Worker
 // Static files in /public are served by Cloudflare directly (free, no Worker run).
-// This code only runs for /api/* (see run_worker_first in wrangler.jsonc).
+// This code only runs for /api/* and /assets/video/* (see run_worker_first in wrangler.jsonc).
 
 const MAX = { name: 120, email: 200, company: 160, event_type: 80, event_date: 80, message: 5000 };
 
@@ -18,6 +18,8 @@ export default {
     if (url.pathname.startsWith("/api/")) {
       return json({ error: "Not found." }, 404);
     }
+
+    if (url.pathname.startsWith("/assets/video/")) return serveVideo(request, env);
 
     // Anything else falls through to the static site.
     return env.ASSETS.fetch(request);
@@ -109,3 +111,26 @@ function json(body, status = 200, headers = {}) {
   });
 }
 
+
+// Project clips with byte ranges: Safari (and every iPhone) asks for a video in ranges and won't play it
+// without a 206 answer, which static assets don't give. The clips are a few MB, so slicing in memory is fine.
+async function serveVideo(request, env) {
+  const asset = await env.ASSETS.fetch(new Request(new URL(request.url).origin + new URL(request.url).pathname, { method: "GET" }));
+  if (!asset.ok) return asset;
+  const headers = new Headers(asset.headers);
+  headers.set("Accept-Ranges", "bytes");
+  headers.set("Content-Type", "video/mp4");
+  headers.set("Cache-Control", "public, max-age=86400");
+  const range = /^bytes=(\d*)-(\d*)$/.exec(request.headers.get("Range") || "");
+  if (!range) return new Response(request.method === "HEAD" ? null : asset.body, { status: 200, headers });
+  const body = await asset.arrayBuffer();
+  const size = body.byteLength;
+  let start = range[1] === "" ? size - Number(range[2]) : Number(range[1]);
+  let end = range[1] !== "" && range[2] !== "" ? Math.min(Number(range[2]), size - 1) : size - 1;
+  if (Number.isNaN(start) || start < 0 || start >= size || end < start) {
+    return new Response(null, { status: 416, headers: { "Content-Range": `bytes */${size}` } });
+  }
+  headers.set("Content-Range", `bytes ${start}-${end}/${size}`);
+  headers.set("Content-Length", String(end - start + 1));
+  return new Response(request.method === "HEAD" ? null : body.slice(start, end + 1), { status: 206, headers });
+}

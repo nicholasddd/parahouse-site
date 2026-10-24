@@ -18,8 +18,9 @@
     "binding": "ASSETS",
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page",
-    // Only API routes run Worker code; every page and image is served as a static file.
-    "run_worker_first": ["/api/*"]
+    // Only API routes and project video run Worker code; every page and image is served as a static file.
+    // Video goes through the Worker because static assets ignore Range requests, which Safari needs to play it.
+    "run_worker_first": ["/api/*", "/assets/video/*"]
   },
 
   // Contact form: briefs are sent with Cloudflare Email Service, from the parahouse.co routing
