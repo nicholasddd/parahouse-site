@@ -661,6 +661,7 @@ const STRIP_PROJECTS = [ // newest first, as on the Work page
   { slug: "coinw-token2049-afterparty-2025", client: "CoinW", title: "2025 Afterparty", cat: "brand-events" },
   { slug: "audemars-piguet-staff-party", client: "Audemars Piguet", title: "150 Years Staff Party", cat: "brand-events" },
   { slug: "tsubaki-brand-refresh", client: "TSUBAKI", title: "Brand Refresh Activation", cat: "roadshow" },
+  { slug: "zacapa-centenario-23-vr", client: "Zacapa", title: "Centenario 23 VR Experience", cat: "multimedia" },
   { slug: "lvmh-beauty-dinner-and-dance", client: "LVMH Beauty", title: "Dinner and Dance", cat: "brand-events" },
   { slug: "goodwoof-good-pet-fair", client: "Goodwoof", title: "Good Pet Fair", cat: "roadshow" },
   { slug: "coinw-token2049-afterparty-2024", client: "CoinW", title: "2024 Afterparty", cat: "brand-events" },
