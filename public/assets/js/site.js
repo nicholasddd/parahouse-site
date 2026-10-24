@@ -945,6 +945,7 @@ if (TOUCH && !reduceMotionNow()) {
     io.observe(block);
     const pill = block.querySelector(".talk-button");
     if (pill && !TOUCH) {
+      const arrow = pill.querySelector(".talk-arrow");
       let raf = 0;
       addEventListener("mousemove", (e) => {
         if (raf) return;
@@ -952,12 +953,14 @@ if (TOUCH && !reduceMotionNow()) {
           raf = 0;
           const r = pill.getBoundingClientRect();
           const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
-          const reach = Math.max(r.width, r.height) / 2 + 90; // starts leaning ~90px outside the pill
-          if (Math.hypot(dx, dy) > reach) { pill.style.translate = ""; return; }
-          pill.style.translate = `${Math.max(-12, Math.min(12, dx * 0.12)).toFixed(1)}px ${Math.max(-10, Math.min(10, dy * 0.3)).toFixed(1)}px`;
+          const reach = Math.max(r.width, r.height) / 2 + 120; // starts leaning ~120px outside the pill
+          if (Math.hypot(dx, dy) > reach) { pill.style.translate = arrow.style.translate = ""; return; }
+          const clamp = (v, m) => Math.max(-m, Math.min(m, v)).toFixed(1);
+          pill.style.translate = `${clamp(dx * 0.2, 22)}px ${clamp(dy * 0.4, 16)}px`;
+          arrow.style.translate = `${clamp(dx * 0.12, 10)}px ${clamp(dy * 0.2, 8)}px`; // the arrow leans a little further than the pill
         });
       }, { passive: true });
-      pill.addEventListener("mouseleave", () => { setTimeout(() => { if (!pill.matches(":hover")) pill.style.translate = ""; }, 60); });
+      pill.addEventListener("mouseleave", () => { setTimeout(() => { if (!pill.matches(":hover")) pill.style.translate = arrow.style.translate = ""; }, 60); });
     }
   }
 }
