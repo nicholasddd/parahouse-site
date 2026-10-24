@@ -267,6 +267,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .details dd { margin: 2px 0 0; font-size: 16px; }
 @media (hover: hover) and (pointer: fine) { .details a:hover { color: var(--muted); } }
 .form { display: grid; gap: 14px; }
+.form[hidden], .sent[hidden] { display: none; } /* the envelope waits until a brief is sent */
 .form .row { display: grid; gap: 14px; }
 @media (min-width: 640px) { .form .row { grid-template-columns: 1fr 1fr; } }
 .field label { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
@@ -763,13 +764,14 @@ main { overflow-x: clip; } /* stretched rows may reach past the page edge; never
   .offer-cta:hover, .button:hover { background: var(--grad); color: #fff; box-shadow: var(--glow-soft); }
 }
 
-/* ---------- "I would like to explore my options": a pill on the footer rule, red arrow at its end ---------- */
+/* ---------- "Send us your brief": a pill on the footer rule, red arrow at its end ---------- */
 .talk-button {
   position: absolute; right: 0; top: 0; transform: translateY(-50%);
   display: inline-flex; align-items: center; gap: 18px; height: 64px; padding: 0 8px 0 28px; border-radius: 999px;
   background: var(--fg); color: var(--bg); font-family: var(--font); font-size: 18px; font-weight: 500; letter-spacing: -0.01em;
   transition: background-color .25s ease, color .25s ease, transform .16s var(--ease-out);
 }
+.talk-button > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; } /* never pushes the arrow out of the pill */
 .talk-arrow { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--brand); color: var(--brand-ink); transition: background-color .25s ease, color .25s ease; }
 .talk-arrow svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s var(--ease-out); }
 @media (hover: hover) and (pointer: fine) {
@@ -797,21 +799,17 @@ main { overflow-x: clip; } /* stretched rows may reach past the page edge; never
 .talk-arrow { background: var(--grad); color: #fff; box-shadow: var(--glow-soft); }
 @media (hover: hover) and (pointer: fine) { .talk-button:hover { background: var(--grad); color: #fff; } .talk-button:hover .talk-arrow { background: #fff; color: var(--ember); } }
 
-/* ---------- Founder: Nicholas's face where an agency decides to trust or to get in touch ----------
-   A small black-and-white headshot with one line beside it (Home intro, Contact, About), plus a credit line on
-   project pages. About stays about parahouse; this is a signature, not a bio. */
+/* ---------- Founder: one small signature on About ----------
+   A small black-and-white headshot with one line beside it, on About only. About stays about parahouse;
+   this is a signature, not a bio. */
 .founder { display: flex; align-items: center; gap: 14px; margin-top: 22px; }
 .founder-photo { flex: none; width: 48px; height: 48px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px var(--line); }
-.page-head .founder { margin-top: 4px; }
-.page-head .founder-photo { width: 56px; height: 56px; }
 .about-text .founder { margin-top: 6px; }
 .founder-text { display: grid; gap: 4px; margin: 0; }
 .founder-note { font-size: 15px; line-height: 1.35; color: var(--fg); }
 .founder-name { font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
 .founder-link { display: inline-block; margin-left: .8em; padding: 6px 0; color: var(--fg); text-decoration: underline; text-decoration-color: var(--brand); text-underline-offset: .35em; }
 @media (hover: hover) and (pointer: fine) { .founder-link:hover { color: var(--brand-text); } }
-.credit { margin: 0; padding: 4px 0 18px; font-size: 15px; }
-.credit span { margin-right: .8em; font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
 
 /* ---------- Services: an offer card in focus lifts, warms up and its name glitches (site.js) ---------- */
 .offer { position: relative; isolation: isolate; }
@@ -946,11 +944,15 @@ html.together-anim .together.is-in .together-title .ln > span { transform: none;
 html.together-anim .together-rule { border-top-color: transparent; }
 html.together-anim .together-rule::before { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: var(--line); transform: scaleX(0); transform-origin: left center; transition: transform 1.3s cubic-bezier(.65,0,.35,1) .6s; }
 html.together-anim .together.is-in .together-rule::before { transform: scaleX(1); }
-/* The orange arrow sits at the end of the line from the start; the pill then grows left out of it to show
-   its text, as the line arrives. */
-html.together-anim .talk-button { --arrow-clip: inset(8px 8px 8px calc(100% - 56px) round 999px); clip-path: var(--arrow-clip); transition: background-color .25s ease, color .25s ease, transform .16s var(--ease-out), translate .45s cubic-bezier(.23,1,.32,1); }
-@media (max-width: 640px) { html.together-anim .talk-button { --arrow-clip: inset(7px 8px 7px calc(100% - 50px) round 999px); } }
-html.together-anim .together.is-in .talk-button { animation: pill-out .8s cubic-bezier(.65,0,.35,1) 1.3s both; }
-@keyframes pill-out { from { clip-path: var(--arrow-clip); } to { clip-path: inset(0 0 0 0 round 999px); } }
+/* The orange arrow sits at the end of the line from the start and is never clipped (clipping the whole
+   button down to the arrow drew a broken half circle on some screens). Only the cream pill behind it
+   (::before) grows left out of the arrow, and the text fades in as it opens. */
+html.together-anim .talk-button { isolation: isolate; background: transparent; transition: color .25s ease, transform .16s var(--ease-out), translate .45s cubic-bezier(.23,1,.32,1); }
+html.together-anim .talk-button::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 999px; background: var(--fg); clip-path: inset(0 0 0 100% round 999px); transition: background-color .25s ease; }
+@media (hover: hover) and (pointer: fine) { html.together-anim .talk-button:hover::before { background: var(--grad); } }
+html.together-anim .talk-button > span:first-child { opacity: 0; transform: translateX(14px); }
+html.together-anim .together.is-in .talk-button::before { animation: pill-out .8s cubic-bezier(.65,0,.35,1) 1.3s both; }
+html.together-anim .together.is-in .talk-button > span:first-child { opacity: 1; transform: none; transition: opacity .45s ease 1.6s, transform .6s cubic-bezier(.23,1,.32,1) 1.55s; }
+@keyframes pill-out { from { clip-path: inset(0 0 0 100% round 999px); } to { clip-path: inset(0 0 0 0 round 999px); } }
 @keyframes talk-pulse { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.14); } }
 .talk-arrow.is-pulse { animation: talk-pulse .5s cubic-bezier(.23,1,.32,1); }
