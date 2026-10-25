@@ -657,6 +657,7 @@ const STRIP_PROJECTS = [ // newest first, as on the Work page
   { slug: "cetaphil-feel-it-in-30", client: "Cetaphil", title: "Feel It in 30 Roadshow", cat: "roadshow" },
   { slug: "tsubaki-20th-anniversary", client: "TSUBAKI", title: "20th Anniversary", cat: "roadshow" },
   { slug: "ora-5-unveiling", client: "Cycle & Carriage", title: "ORA 5 Unveiling", cat: "exhibition" },
+  { slug: "carlsberg-cny-2026-supermarket-activation", client: "Carlsberg", title: "CNY 2026 Supermarket Activation", cat: "roadshow" },
   { slug: "propw-token2049", client: "PropW", title: "TOKEN2049 Booth", cat: "exhibition" },
   { slug: "coinw-token2049-afterparty-2025", client: "CoinW", title: "2025 Afterparty", cat: "brand-events" },
   { slug: "audemars-piguet-staff-party", client: "Audemars Piguet", title: "150 Years Staff Party", cat: "brand-events" },
