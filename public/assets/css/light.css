@@ -1,0 +1,50 @@
+/* LIGHT PALETTE (Nicholas's choice, 2026-10-26): near-white ivory pages, deep burgundy type and the one dark section (the footer),
+   tangerine only for things that act or stand out. Loaded after site.css on Home, Work, Services, About, Contact and 404;
+   project pages don't load it and stay dark. Never light text on a light background (Nicholas: "a huge no-no"). */
+:root { --bg: #fffcf7; --surface: #f8f1e7; --fg: #36070f; --muted: #7a4a50; --tone: #e04800; --line: #efe6da;
+  --pill: rgba(255, 252, 247, .8); --pill-fg: #36070f; --panel: #fffcf7; --panel-fg: #36070f; --panel-muted: #7a4a50;
+  --brand: #ff6a00; --brand-text: #e04800; --brand-ink: #36070f; --logo: #8a5f64;
+  --grad: linear-gradient(180deg, #ffe8d2 0%, #ffa860 20%, #ff6a00 48%, #c8360a 72%, #36070f 100%);
+  --glow-soft: 0 0 28px rgba(255, 106, 0, .35); color-scheme: light; }
+/* project pages keep their own colour, darkened enough to read on ivory */
+html[style] { --brand-text: color-mix(in srgb, var(--brand) 72%, #1c0307) !important; }
+/* plain ivory behind everything: no fixed glow at the top of the screen */
+body::before { background: var(--bg); }
+.cursor-bubble { --fg: #fffcf7; --muted: #d6b4b0; background: #36070f; }
+/* Home project cards: light cards with burgundy type; on hover (or in view on phones) the photo fades in under a dark veil and the type turns ivory */
+.pcard-link { --line: rgba(54, 7, 15, .12); --pc-ink: #fffcf7; background: #f5ebdd; color: var(--fg); transition: transform var(--pc-ease), color .3s ease; }
+.pcard-logo-img { background: var(--fg); transition: background-color .3s ease; }
+.pcard-sub { color: var(--muted); }
+.bubble { color: var(--pc-ink); }
+.chevron { background: rgba(54, 7, 15, .08); }
+.pcard-outline { border-color: rgba(54, 7, 15, .25); }
+.pcard-media { background: #36070f; } /* dark under the photo, so ivory type never sits on the light card while the photo loads */
+@media (hover: hover) { .pcard-link:hover { --fg: #fffcf7; --muted: rgba(255, 252, 247, .8); --line: rgba(255, 252, 247, .2); --pc-ink: #36070f; } .pcard-link:hover .chevron { background: rgba(255, 252, 247, .2); } }
+@media (hover: none), (pointer: coarse) { .pcard.is-focus .pcard-link { --fg: #fffcf7; --muted: rgba(255, 252, 247, .8); --line: rgba(255, 252, 247, .2); --pc-ink: #36070f; } }
+/* the footer is the occasional dark section: burgundy, with the wordmark fading ivory to tangerine */
+.site-footer { --fg: #fffcf7; --bg: #36070f; --surface: #4a121c; --muted: #d6b4b0; --line: rgba(255, 252, 247, .18); --logo: #d6b4b0;
+  --grad: linear-gradient(180deg, #ffe8d2 0%, #ffa860 40%, #ff6a00 100%);
+  background: #36070f; color: var(--fg);
+  margin-top: clamp(96px, 12vw, 200px); padding-top: clamp(88px, 11vw, 180px); } /* ivory breathing room before the burgundy starts */
+.footer-mark { filter: none; }
+/* contrast: never light on light. Tangerine fills carry dark burgundy text, white only sits on burgundy */
+.talk-arrow, .offer-cta, .offer-tag { background: var(--brand); color: var(--brand-ink); }
+@media (hover: hover) and (pointer: fine) {
+  .offer-cta:hover, .button:hover { background: var(--fg); color: var(--bg); }
+  .site-footer .talk-button:hover, html.together-anim .site-footer .talk-button:hover::before { background: var(--brand); }
+  .site-footer .talk-button:hover { color: var(--brand-ink); }
+  .talk-button:hover .talk-arrow { background: var(--brand-ink); color: var(--brand); }
+  .brand-wall li:hover .brand-logo, .brand-track li:hover .brand-logo { background-color: var(--brand); }
+}
+/* About: the difference section had light text and near-black shapes made for the dark site */
+.pillar-text { color: color-mix(in srgb, var(--fg) 82%, transparent); }
+.pq-base { fill: #f1e6d8; stroke: rgba(54, 7, 15, .1); }
+@media (hover: hover) and (pointer: fine) { .pq:hover .pq-base { fill: #e8d8c6; } }
+/* Services cards: pure white so the orange taglines pop, instead of beige that muddied them */
+.offer { background: #fff; border-color: rgba(54, 7, 15, .1); }
+.offer-tagline { font-weight: 600; }
+/* Top-right menu: no drop shadow on ivory. On Home it sits over the hero photo, so there it is ivory like the hero title, with the soft shadow kept for the photo */
+.topnav a { text-shadow: none; }
+body:has(.showcase) .topnav a { color: #fffcf7; text-shadow: 0 1px 10px rgba(0, 0, 0, .5); }
+body:has(.showcase) .topnav a[aria-current="page"] { color: var(--brand); }
+@media (hover: hover) and (pointer: fine) { body:has(.showcase) .topnav a:hover { color: var(--brand); } }
