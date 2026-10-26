@@ -48,3 +48,5 @@ body::before { background: var(--bg); }
 html.nav-dark .topnav a, html:not(.nav-light) body:has(.showcase) .topnav a { color: #fffcf7; text-shadow: 0 1px 10px rgba(0, 0, 0, .45); }
 html.nav-dark .topnav a[aria-current="page"], html:not(.nav-light) body:has(.showcase) .topnav a[aria-current="page"] { color: var(--brand); }
 @media (hover: hover) and (pointer: fine) { html.nav-dark .topnav a:hover, html:not(.nav-light) body:has(.showcase) .topnav a:hover { color: var(--brand); } }
+/* the menu's colour change fades with the hero crossfade (1.4s, same curve as .showcase-media img) */
+html.nav-fading .topnav a { transition: color 1.4s ease, text-shadow 1.4s ease; }

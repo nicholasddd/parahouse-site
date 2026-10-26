@@ -107,6 +107,12 @@ if (topnav && navImages()) {
       for (let i = 0; i < px.length; i += 4) lum += .2126 * lin(px[i]) + .7152 * lin(px[i + 1]) + .0722 * lin(px[i + 2]);
       lum /= px.length / 4;
       const dark = contrast(IVORY, lum) > contrast(BURGUNDY, lum);
+      const root = document.documentElement;
+      // A change after the first pick fades over the same 1.4s as the showcase crossfade (html.nav-fading)
+      if ((root.classList.contains("nav-dark") || root.classList.contains("nav-light")) && root.classList.contains("nav-dark") !== dark) {
+        root.classList.add("nav-fading");
+        clearTimeout(setTone.t); setTone.t = setTimeout(() => root.classList.remove("nav-fading"), 1500);
+      }
       document.documentElement.classList.toggle("nav-dark", dark);
       document.documentElement.classList.toggle("nav-light", !dark);
     } catch {}
