@@ -516,7 +516,9 @@ document.addEventListener("click", (event) => {
   setTimeout(() => begin(null), 350);
 });
 function stepInside(link, url, img, frame, box, ready) {
-  const W = innerWidth, H = innerHeight, HH = Math.min(H, W * 0.625); // the hero's size (see .project-hero)
+  // The hero's exact box (.project-hero: full width without the scrollbar, height min(100svh, 62.5vw), where vw
+  // includes the scrollbar), so the picture lands on it pixel for pixel and nothing resizes when the page swaps.
+  const W = document.documentElement.clientWidth, H = innerHeight, HH = Math.min(H, innerWidth * 0.625);
   const zoom = document.createElement("div");
   zoom.className = "step-zoom";
   zoom.setAttribute("aria-hidden", "true");
@@ -526,7 +528,7 @@ function stepInside(link, url, img, frame, box, ready) {
   // Where the picture ends: covering the hero box, centred, as .project-hero img shows it.
   const ar = img.naturalWidth && img.naturalHeight ? img.naturalWidth / img.naturalHeight : 1.6;
   const fw = Math.max(W, HH * ar), fh = fw / ar, fx = (W - fw) / 2, fy = (HH - fh) / 2;
-  Object.assign(pic.style, { width: fw + "px", height: fh + "px", left: fx + "px", top: fy + "px", objectFit: "fill", transformOrigin: "0 0" });
+  Object.assign(pic.style, { width: fw + "px", height: fh + "px", maxWidth: "none", left: fx + "px", top: fy + "px", objectFit: "fill", transformOrigin: "0 0" });
   zoom.append(pic);
   // Home cards show the photo under a dark veil: carry the veil and let it lift as the picture grows.
   let shade = null;
