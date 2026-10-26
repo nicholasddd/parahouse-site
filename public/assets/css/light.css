@@ -41,8 +41,10 @@ body::before { background: var(--bg); }
 /* Services cards: pure white so the orange taglines pop, instead of beige that muddied them */
 .offer { background: #fff; border-color: rgba(54, 7, 15, .1); }
 .offer-tagline { font-weight: 600; }
-/* Top-right menu: no drop shadow on ivory. On Home it sits over the hero photo, so there it is ivory like the hero title, with the soft shadow kept for the photo */
+/* Top-right menu: no drop shadow on ivory. Over a picture (project heroes, Home's showcase) site.js samples the image
+   behind the menu and sets html.nav-dark (ivory text, soft shadow, current page in the bright accent) or html.nav-light
+   (burgundy text). Without JavaScript, Home's menu stays ivory over its photo. */
 .topnav a { text-shadow: none; }
-body:has(.showcase) .topnav a { color: #fffcf7; text-shadow: 0 1px 10px rgba(0, 0, 0, .5); }
-body:has(.showcase) .topnav a[aria-current="page"] { color: var(--brand); }
-@media (hover: hover) and (pointer: fine) { body:has(.showcase) .topnav a:hover { color: var(--brand); } }
+html.nav-dark .topnav a, html:not(.nav-light) body:has(.showcase) .topnav a { color: #fffcf7; text-shadow: 0 1px 10px rgba(0, 0, 0, .45); }
+html.nav-dark .topnav a[aria-current="page"], html:not(.nav-light) body:has(.showcase) .topnav a[aria-current="page"] { color: var(--brand); }
+@media (hover: hover) and (pointer: fine) { html.nav-dark .topnav a:hover, html:not(.nav-light) body:has(.showcase) .topnav a:hover { color: var(--brand); } }

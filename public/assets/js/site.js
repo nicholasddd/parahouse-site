@@ -77,6 +77,48 @@ if (showcase && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
   }
 }
 
+// ---------- Top-right menu: ivory or burgundy, whichever reads better on the picture behind it ----------
+// Project heroes and the Home showcase run under the menu. Sample the part of the image that sits behind the
+// menu (object-fit: cover maths) and set html.nav-dark (ivory text) or html.nav-light (burgundy text).
+// Home re-checks each time the showcase moves to the next image.
+const topnav = document.querySelector(".topnav");
+const navImages = () => {
+  const active = document.querySelector("[data-showcase-media] img.active") || document.querySelector("[data-showcase-media] img");
+  return active || document.querySelector(".project-hero img");
+};
+if (topnav && navImages()) {
+  const lin = (v) => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; };
+  const contrast = (a, b) => (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
+  const IVORY = 0.98, BURGUNDY = 0.0047; // relative luminance of #fffcf7 and #36070f
+  const canvas = document.createElement("canvas"); canvas.width = canvas.height = 16;
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  const setTone = () => {
+    const img = navImages();
+    if (!img || !img.complete || !img.naturalWidth) return;
+    const box = img.getBoundingClientRect(), nav = topnav.getBoundingClientRect();
+    if (!box.width || !nav.width) return;
+    const scale = Math.max(box.width / img.naturalWidth, box.height / img.naturalHeight);
+    const ox = (box.width - img.naturalWidth * scale) / 2, oy = (box.height - img.naturalHeight * scale) / 2;
+    const sx = (nav.left - box.left - ox) / scale, sy = (nav.top - box.top - oy) / scale;
+    try {
+      ctx.drawImage(img, Math.max(0, sx), Math.max(0, sy), nav.width / scale, nav.height / scale, 0, 0, 16, 16);
+      const px = ctx.getImageData(0, 0, 16, 16).data;
+      let lum = 0;
+      for (let i = 0; i < px.length; i += 4) lum += .2126 * lin(px[i]) + .7152 * lin(px[i + 1]) + .0722 * lin(px[i + 2]);
+      lum /= px.length / 4;
+      const dark = contrast(IVORY, lum) > contrast(BURGUNDY, lum);
+      document.documentElement.classList.toggle("nav-dark", dark);
+      document.documentElement.classList.toggle("nav-light", !dark);
+    } catch {}
+  };
+  const watch = (img) => img.complete ? setTone() : img.addEventListener("load", setTone, { once: true });
+  watch(navImages());
+  addEventListener("resize", setTone, { passive: true });
+  document.querySelectorAll("[data-showcase-media] img").forEach((img) => {
+    new MutationObserver(() => img.classList.contains("active") && watch(img)).observe(img, { attributes: true, attributeFilter: ["class"] });
+  });
+}
+
 // ---------- Home hero: vertical panels that turn as the mouse runs across them (desktop only) ----------
 // The hero is cut into thin vertical slats, each showing its own slice of the current image, with a faint
 // light line between them. Moving the mouse across pushes the slats near the pointer round their vertical
