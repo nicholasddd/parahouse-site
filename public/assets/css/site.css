@@ -528,7 +528,7 @@ a.room:focus-visible { background: color-mix(in srgb, var(--brand) 12%, transpar
 .work-grid { display: grid; gap: 48px var(--gap); grid-template-columns: 1fr; }
 @media (min-width: 640px) { .work-grid { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 1024px) { .work-grid { grid-template-columns: repeat(3, 1fr); } }
-.work-card { display: grid; gap: 6px; color: var(--fg); }
+.work-card { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; color: var(--fg); } /* never wider than its column: the curve canvas (wider than its picture by design) once held some cards 8px wide, into the gap */
 .work-card[hidden] { display: none; }
 .work-media { display: block; overflow: hidden; border-radius: var(--radius); background: var(--surface); aspect-ratio: 5 / 4; margin-bottom: 10px; }
 .work-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--ease-out); }
