@@ -468,6 +468,34 @@ if (root.classList.contains("is-intro")) setTimeout(() => root.classList.remove(
 // put while the rest of the page fades in. Clip-path and transform only, so it stays smooth.
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const PROJECT_PAGE = /^\/portfolio\/[^/]+\/$/;
+// The hero's file: the one the project page will pick from the same srcset at full width (sizes="100vw").
+// It is fetched and decoded as soon as a card is hovered or touched, so the growing picture is already
+// sharp and the project page finds it in the cache (no blurry picture snapping to the sharp one).
+const heroFile = (img) => {
+  const options = (img.getAttribute("srcset") || "").split(",").map((part) => part.trim().split(/\s+/))
+    .map(([url, w]) => ({ url, w: parseInt(w, 10) })).filter((o) => o.url && o.w).sort((a, b) => a.w - b.w);
+  if (!options.length) return img.currentSrc || img.src;
+  const need = innerWidth * (devicePixelRatio || 1);
+  return new URL((options.find((o) => o.w >= need) || options[options.length - 1]).url, location.href).href;
+};
+const sharp = new Map(); // file -> Promise of a decoded Image
+const fetchSharp = (img) => {
+  const url = heroFile(img);
+  if (!sharp.has(url)) {
+    const pic = new Image();
+    pic.src = url;
+    sharp.set(url, pic.decode().then(() => pic, () => null));
+  }
+  return sharp.get(url);
+};
+const warm = (event) => {
+  const card = event.target.closest?.(".pcard, .work-card");
+  const img = card && card.querySelector("img");
+  if (img) fetchSharp(img);
+};
+document.addEventListener("pointerover", warm, { passive: true });
+document.addEventListener("pointerdown", warm, { passive: true });
+document.addEventListener("focusin", warm);
 document.addEventListener("click", (event) => {
   if (reduceMotion || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
   const link = event.target.closest("a[href]");
@@ -479,12 +507,21 @@ document.addEventListener("click", (event) => {
   const box = frame?.getBoundingClientRect();
   if (!img || !box || !box.width || box.bottom < 0 || box.top > innerHeight) return;
   event.preventDefault();
+  // Start with the sharp file: wait for it (at most 350ms; it's usually ready from the hover), else start
+  // with the card's file and fade the sharp one in over it as soon as it decodes.
+  let started = false;
+  const pending = fetchSharp(img);
+  const begin = (ready) => { if (!started) { started = true; stepInside(link, url, img, frame, box, ready); } };
+  pending.then(begin);
+  setTimeout(() => begin(null), 350);
+});
+function stepInside(link, url, img, frame, box, ready) {
   const W = innerWidth, H = innerHeight, HH = Math.min(H, W * 0.625); // the hero's size (see .project-hero)
   const zoom = document.createElement("div");
   zoom.className = "step-zoom";
   zoom.setAttribute("aria-hidden", "true");
   const pic = document.createElement("img");
-  pic.src = img.currentSrc || img.src;
+  pic.src = ready ? ready.src : img.currentSrc || img.src;
   pic.alt = "";
   // Where the picture ends: covering the hero box, centred, as .project-hero img shows it.
   const ar = img.naturalWidth && img.naturalHeight ? img.naturalWidth / img.naturalHeight : 1.6;
@@ -520,11 +557,22 @@ document.addEventListener("click", (event) => {
   veil.animate([{ opacity: 0 }, { opacity: 1 }], timing);
   pic.animate([{ transform: `translate(${ix - fx}px, ${iy - fy}px) scale(${iw / fw})` }, { transform: "none" }], timing);
   if (shade) shade.animate([{ opacity: 1 }, { opacity: 0 }], timing);
+  if (!ready) fetchSharp(img).then((sharpPic) => {
+    // Late sharp file: same place and motion as the soft one, faded in on top of it
+    if (!sharpPic || !zoom.isConnected) return;
+    const top = pic.cloneNode();
+    top.src = sharpPic.src;
+    pic.after(top);
+    const moving = pic.getAnimations()[0];
+    const anim = top.animate([{ transform: `translate(${ix - fx}px, ${iy - fy}px) scale(${iw / fw})` }, { transform: "none" }], timing);
+    if (moving) anim.currentTime = moving.currentTime;
+    top.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 160, fill: "forwards" });
+  });
   let gone = false;
   // Shrink the layer to the hero's size before leaving, so the page swap matches it to the hero box for box.
   const go = () => { if (!gone) { gone = true; try { sessionStorage.setItem("ph-step", "1"); } catch {} zoom.style.height = HH + "px"; zoom.getAnimations().forEach((a) => a.cancel()); zoom.style.clipPath = "none"; location.href = url.href; } };
   setTimeout(go, timing.duration + 30);
-});
+}
 // Back/forward from the browser cache: clear a zoom left from leaving.
 window.addEventListener("pageshow", (event) => {
   if (event.persisted) document.querySelectorAll(".step-zoom, .step-veil").forEach((el) => el.remove());
