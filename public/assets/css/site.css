@@ -480,6 +480,9 @@ html.is-intro .showcase-media { animation-delay: 1.45s; }
   html.vt-back::view-transition-old(step-zoom) { animation: none; opacity: 1; }
   html.vt-back::view-transition-new(step-zoom) { animation: none; opacity: 0; }
   ::view-transition-old(step-zoom), ::view-transition-new(step-zoom) { height: 100%; object-fit: cover; }
+  /* Back to work: the corners round off as the picture shrinks, so it lands as the card's filleted rectangle */
+  html.vt-back::view-transition-image-pair(step-zoom) { overflow: clip; border-radius: var(--radius); animation: step-round .6s cubic-bezier(.77,0,.175,1) both; }
+  @keyframes step-round { from { border-radius: 0; } }
 }
 
 /* ---------- 404 ---------- */

@@ -486,24 +486,40 @@ document.addEventListener("click", (event) => {
   const pic = document.createElement("img");
   pic.src = img.currentSrc || img.src;
   pic.alt = "";
-  zoom.style.setProperty("--hero-h", HH + "px");
+  // Where the picture ends: covering the hero box, centred, as .project-hero img shows it.
+  const ar = img.naturalWidth && img.naturalHeight ? img.naturalWidth / img.naturalHeight : 1.6;
+  const fw = Math.max(W, HH * ar), fh = fw / ar, fx = (W - fw) / 2, fy = (HH - fh) / 2;
+  Object.assign(pic.style, { width: fw + "px", height: fh + "px", left: fx + "px", top: fy + "px", objectFit: "fill", transformOrigin: "0 0" });
   zoom.append(pic);
+  // Home cards show the photo under a dark veil: carry the veil and let it lift as the picture grows.
+  let shade = null;
+  if (frame.matches(".pcard-media") && +getComputedStyle(frame).opacity > 0.5) {
+    shade = document.createElement("div");
+    shade.style.cssText = "position:absolute;inset:0;background:" + getComputedStyle(frame, "::after").backgroundImage;
+    zoom.append(shade);
+  }
   // The page behind dims in step with the image as it grows (as in Apple Photos): same timing and curve,
   // so it is fully dark only when the image has reached its place.
   const veil = document.createElement("div");
   veil.className = "step-veil";
   veil.setAttribute("aria-hidden", "true");
   document.body.append(veil, zoom);
-  const radius = parseFloat(getComputedStyle(frame).borderRadius) || 0;
-  const scale = Math.max(box.width / W, box.height / HH);
-  const dx = box.left + box.width / 2 - W / 2, dy = box.top + box.height / 2 - HH / 2;
+  const radius = parseFloat(getComputedStyle(frame).borderRadius) || parseFloat(getComputedStyle(link).borderRadius) || 0;
+  // Where it starts: exactly as the card shows it, covering the card's frame times the card's current zoom
+  // (the canvas cards' hover zoom, or the CSS scale on Home's photo), so the first frame matches the card.
+  const host = link.closest(".pcard, .work-card") || link;
+  const m = getComputedStyle(img).transform;
+  const z0 = host.phZoom || (m && m !== "none" ? new DOMMatrix(m).a : 1);
+  const iw = Math.max(box.width, box.height * ar) * z0, ih = iw / ar;
+  const ix = box.left + (box.width - iw) / 2, iy = box.top + (box.height - ih) / 2;
   const timing = { duration: TOUCH ? 420 : 520, easing: "cubic-bezier(.77,0,.175,1)", fill: "forwards" };
   zoom.animate([
     { clipPath: `inset(${box.top}px ${W - box.right}px ${H - box.bottom}px ${box.left}px round ${radius}px)` },
     { clipPath: `inset(0px 0px ${H - HH}px 0px round 0px)` },
   ], timing);
   veil.animate([{ opacity: 0 }, { opacity: 1 }], timing);
-  pic.animate([{ transform: `translate(${dx}px, ${dy}px) scale(${scale})` }, { transform: "none" }], timing);
+  pic.animate([{ transform: `translate(${ix - fx}px, ${iy - fy}px) scale(${iw / fw})` }, { transform: "none" }], timing);
+  if (shade) shade.animate([{ opacity: 1 }, { opacity: 0 }], timing);
   let gone = false;
   // Shrink the layer to the hero's size before leaving, so the page swap matches it to the hero box for box.
   const go = () => { if (!gone) { gone = true; try { sessionStorage.setItem("ph-step", "1"); } catch {} zoom.style.height = HH + "px"; zoom.getAnimations().forEach((a) => a.cancel()); zoom.style.clipPath = "none"; location.href = url.href; } };
@@ -617,6 +633,7 @@ else {
     const radius = parseFloat(getComputedStyle(it.mask).borderTopLeftRadius) || 0;
     const s = 0.7 + 0.3 * b; // visible area
     const zoom = (1 / (0.75 + 0.25 * b)) * (1 + 0.03 * it.hover); // the picture inside, plus the hover zoom
+    it.el.phZoom = zoom; // the step-inside copy starts at exactly this zoom (no jump on click)
     const iw = img.naturalWidth, ih = img.naturalHeight, cover = Math.max(W / iw, H / ih) * zoom;
     const x0 = (W * (1 - s)) / 2, y0 = (H * (1 - s)) / 2, bw = W * s, bh = H * s, R = Math.min(radius, bw / 2, bh / 2);
     const srcX = (X) => ((X - W / 2) / cover) + iw / 2, srcY = (Y) => ((Y - H / 2) / cover) + ih / 2;
