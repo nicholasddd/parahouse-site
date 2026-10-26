@@ -1,13 +1,11 @@
 /* LIGHT PALETTE (Nicholas's choice, 2026-10-26): near-white ivory pages, deep burgundy type and the one dark section (the footer),
-   tangerine only for things that act or stand out. Loaded after site.css on Home, Work, Services, About, Contact and 404;
-   project pages don't load it and stay dark. Never light text on a light background (Nicholas: "a huge no-no"). */
+   tangerine only for things that act or stand out. Loaded after site.css on every page, project pages included
+   (each project page sets its own --brand, plus --brand-text darkened just enough to read on ivory, on its <html>). Never light text on a light background (Nicholas: "a huge no-no"). */
 :root { --bg: #fffcf7; --surface: #f8f1e7; --fg: #36070f; --muted: #7a4a50; --tone: #e04800; --line: #efe6da;
   --pill: rgba(255, 252, 247, .8); --pill-fg: #36070f; --panel: #fffcf7; --panel-fg: #36070f; --panel-muted: #7a4a50;
   --brand: #ff6a00; --brand-text: #e04800; --brand-ink: #36070f; --logo: #8a5f64;
   --grad: linear-gradient(180deg, #ffe8d2 0%, #ffa860 20%, #ff6a00 48%, #c8360a 72%, #36070f 100%);
   --glow-soft: 0 0 28px rgba(255, 106, 0, .35); color-scheme: light; }
-/* project pages keep their own colour, darkened enough to read on ivory */
-html[style] { --brand-text: color-mix(in srgb, var(--brand) 72%, #1c0307) !important; }
 /* plain ivory behind everything: no fixed glow at the top of the screen */
 body::before { background: var(--bg); }
 .cursor-bubble { --fg: #fffcf7; --muted: #d6b4b0; background: #36070f; }
