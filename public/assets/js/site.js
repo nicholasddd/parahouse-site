@@ -825,8 +825,6 @@ addEventListener("pageshow", () => root.classList.remove("is-leaving"));
     };
     centre();
     addEventListener("load", centre, { once: true });
-    card.classList.add("is-returned");
-    requestAnimationFrame(() => card.classList.add("is-fading"));
     history.replaceState(null, "", location.pathname); // keep the address clean
   }
 }
