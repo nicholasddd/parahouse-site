@@ -158,6 +158,10 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
   font-size: clamp(26px, 3.4vw, 52px); line-height: .98;
   text-wrap: balance; color: var(--fg);
 }
+/* Projects heading glitch: the scrambled letters sit over the real words, which hold the size */
+[data-glitch] { position: relative; display: inline-block; }
+[data-glitch].is-glitching { color: transparent; }
+.glitch-layer { position: absolute; inset: 0; overflow: hidden; }
 .statement.small { font-size: clamp(24px, 2.8vw, 42px); }
 .statement sup { font-family: var(--font); font-size: 13px; vertical-align: top; position: relative; top: .4em; margin-left: .6em; font-weight: 400; color: var(--muted); }
 .lede { font-family: var(--font); font-weight: 400; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.45; max-width: 42ch; }
@@ -184,7 +188,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .filters button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
 
 /* ---------- Project page ---------- */
-/* Back to work: stays under the logo while the project scrolls */
+/* Back to projects: stays under the logo while the project scrolls */
 .back { display: inline-flex; margin-bottom: 28px; position: sticky; z-index: 30; top: calc(var(--edge) + clamp(40px, 4.4vw, 56px) + 18px); }
 .meta-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 var(--gap); margin: 0; }
 @media (min-width: 900px) { .meta-grid { grid-template-columns: repeat(4, 1fr); } }
@@ -378,7 +382,7 @@ html.is-intro .showcase-media { animation-delay: 1.45s; }
   ::view-transition-group(root) { animation-duration: .28s; animation-timing-function: cubic-bezier(.23,1,.32,1); }
   /* The hero morphs between its card and the top of the project page (both ways); 16:10 on both ends. */
   ::view-transition-group(step-zoom), ::view-transition-old(step-zoom), ::view-transition-new(step-zoom) { animation-duration: .6s; animation-timing-function: cubic-bezier(.77,0,.175,1); }
-  /* Back to work: the Work page brightens in step with the shrinking image */
+  /* Back to projects: the Work page brightens in step with the shrinking image */
   html.vt-back::view-transition-new(root) { animation-duration: .6s; animation-timing-function: cubic-bezier(.77,0,.175,1); }
   html.vt-back::view-transition-old(root) { animation-duration: .2s; }
   /* one picture all the way down (no crossfade between the hero and the card's own drawing) */
@@ -389,7 +393,7 @@ html.is-intro .showcase-media { animation-delay: 1.45s; }
      with a hero that may not have painted yet) until the real hero replaces it */
   html.is-stepin::view-transition-old(step-zoom) { animation: none; opacity: 1; }
   html.is-stepin::view-transition-new(step-zoom) { animation: none; opacity: 0; }
-  /* Back to work: the corners round off as the picture shrinks, so it lands as the card's filleted rectangle */
+  /* Back to projects: the corners round off as the picture shrinks, so it lands as the card's filleted rectangle */
   html.vt-back::view-transition-image-pair(step-zoom) { overflow: clip; border-radius: var(--radius); animation: step-round .6s cubic-bezier(.77,0,.175,1) both; }
   @keyframes step-round { from { border-radius: 0; } }
 }

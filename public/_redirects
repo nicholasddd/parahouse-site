@@ -1,0 +1,3 @@
+# Old Work URLs moved to /projects/ on 2026-11-05
+/portfolio /projects/ 301
+/portfolio/* /projects/:splat 301

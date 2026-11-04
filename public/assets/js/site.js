@@ -467,7 +467,7 @@ if (root.classList.contains("is-intro")) setTimeout(() => root.classList.remove(
 // page's hero (full width at the top), and the new page opens around it ("step inside"); the picture stays
 // put while the rest of the page fades in. Clip-path and transform only, so it stays smooth.
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const PROJECT_PAGE = /^\/portfolio\/[^/]+\/$/;
+const PROJECT_PAGE = /^\/projects\/[^/]+\/$/;
 // The hero's file: the one the project page will pick from the same srcset at full width (sizes="100vw").
 // It is fetched and decoded as soon as a card is hovered or touched, so the growing picture is already
 // sharp and the project page finds it in the cache (no blurry picture snapping to the sharp one).
@@ -580,33 +580,37 @@ window.addEventListener("pageshow", (event) => {
   if (event.persisted) document.querySelectorAll(".step-zoom, .step-veil").forEach((el) => el.remove());
 });
 
-// ---------- Work page heading: the word glitches in once on arrival ----------
+// ---------- Projects page heading: the words glitch in once on arrival ----------
+// The scramble runs in a layer over the real heading, so the heading keeps its size and line breaks
+// (on a phone, scrambled spaces once joined the words into one line wider than the screen and shook the page).
 const glitch = document.querySelector("[data-glitch]");
 if (glitch && !reduceMotion) {
-  const words = glitch.dataset.glitch.split("|");
+  const to = glitch.dataset.glitch;
   const glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&/<>-_";
-  let index = 0;
-  const morph = (to) => {
-    const from = glitch.textContent;
-    const length = Math.max(from.length, to.length);
+  const layer = document.createElement("span");
+  layer.className = "glitch-layer";
+  layer.textContent = to;
+  const morph = () => {
+    layer.style.color = getComputedStyle(glitch).color;
+    glitch.classList.add("is-glitching");
+    glitch.append(layer);
     const start = performance.now();
     const duration = 650;
     const frame = (now) => {
       const t = Math.min(1, (now - start) / duration);
       let out = "";
-      for (let i = 0; i < length; i++) {
-        const settle = (i / length) * 0.7 + 0.3; // letters lock in from left to right
-        if (t >= settle) out += to[i] || "";
-        else if (t >= settle - 0.35) out += to[i] || from[i] ? glyphs[(Math.random() * glyphs.length) | 0] : "";
-        else out += from[i] || "";
+      for (let i = 0; i < to.length; i++) {
+        const settle = (i / to.length) * 0.7 + 0.3; // letters lock in from left to right
+        out += to[i] === " " || t >= settle ? to[i] : glyphs[(Math.random() * glyphs.length) | 0];
       }
-      glitch.textContent = out;
+      layer.textContent = out;
       if (t < 1) requestAnimationFrame(frame);
+      else { layer.remove(); glitch.classList.remove("is-glitching"); }
     };
     requestAnimationFrame(frame);
   };
   // Once, on arrival (after the intro if it's showing), then it stays still.
-  setTimeout(() => morph(words[index]), root.classList.contains("is-intro") ? 2300 : 450);
+  setTimeout(morph, root.classList.contains("is-intro") ? 2300 : 450);
 }
 
 // ---------- Contact: the Pitch Kit's "Send brief" arrives with ?type=pitch ----------
@@ -785,7 +789,7 @@ const STRIP_PROJECTS = [ // newest first, as on the Work page
   { slug: "1664-brut-private-trade-event", client: "1664", title: "Brut Private Trade Event", cat: "brand-events" },
 ];
 {
-  const here = (location.pathname.match(/^\/portfolio\/([^/]+)\/$/) || [])[1];
+  const here = (location.pathname.match(/^\/projects\/([^/]+)\/$/) || [])[1];
   let last = here;
   try {
     if (here) localStorage.setItem("ph-last-project", here);
@@ -802,7 +806,7 @@ const STRIP_PROJECTS = [ // newest first, as on the Work page
     [...strip.querySelectorAll(".strip-item")].forEach((a, k) => {
       const p = ranked[k];
       if (!p) { a.hidden = true; return; }
-      a.href = `/portfolio/${p.slug}/`;
+      a.href = `/projects/${p.slug}/`;
       a.dataset.label = p.client;
       const img = a.querySelector("img");
       img.src = `/assets/img/projects/${p.slug}/second-800.webp`; // thumbnails are small: the 800px copy is plenty
@@ -813,7 +817,7 @@ const STRIP_PROJECTS = [ // newest first, as on the Work page
 }
 
 // ---------- Services: offer names glitch when their card comes into focus ----------
-// The same letter-by-letter glitch as the Work heading (random glyphs that lock in from left to right),
+// The same letter-by-letter glitch as the Projects heading (random glyphs that lock in from left to right),
 // playing once each time the mouse enters a card. Mouse only; screen readers keep the real name.
 // Touch screens play it when the card comes to the middle of the screen (see "Touch: cards light up" below).
 const offerGlitch = new Map();
@@ -847,7 +851,7 @@ if (!reduceMotionNow()) {
   });
 }
 
-// ---------- Back to work: return to the project you were on ----------
+// ---------- Back to projects: return to the project you were on ----------
 // Came from the Work page: step back in history, so its scroll and filter come back exactly.
 // Otherwise (direct link, or from another page) open Work at this project's card.
 // Stepping out: the project's details fade away, then the hero shrinks back into its card on the Work page
@@ -856,7 +860,7 @@ document.querySelector("[data-back]")?.addEventListener("click", (event) => {
   if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
   let from = null;
   try { from = new URL(document.referrer); } catch {}
-  const viaHistory = from && from.origin === location.origin && from.pathname === "/portfolio/" && history.length > 1;
+  const viaHistory = from && from.origin === location.origin && from.pathname === "/projects/" && history.length > 1;
   const hero = document.querySelector(".project-hero");
   const box = hero?.getBoundingClientRect();
   const heroOnScreen = box && box.bottom > innerHeight * 0.25;
@@ -875,7 +879,7 @@ document.querySelector("[data-back]")?.addEventListener("click", (event) => {
 });
 addEventListener("pageshow", () => root.classList.remove("is-leaving"));
 {
-  const card = location.pathname === "/portfolio/" && location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  const card = location.pathname === "/projects/" && location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
   if (card && card.classList.contains("work-card")) {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     // Coming back from this project: the hero shrinks into this card, so give the card the very file the hero

@@ -1,6 +1,6 @@
 # Project images
 
-One folder per project, named with the project's slug (the same as its page in `public/portfolio/<slug>/`). Newest first:
+One folder per project, named with the project's slug (the same as its page in `public/projects/<slug>/`). Newest first:
 
 ```
 projects/
