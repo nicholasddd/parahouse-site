@@ -37,6 +37,15 @@ if (menuButton && menu) {
   });
 }
 
+// ---------- Studio time (Singapore) ----------
+const clockFormat = new Intl.DateTimeFormat("en-SG", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true, timeZone: "Asia/Singapore" });
+const clocks = document.querySelectorAll("[data-clock]");
+if (clocks.length) {
+  const tick = () => { const now = clockFormat.format(new Date()); clocks.forEach((el) => (el.textContent = now)); };
+  tick();
+  setInterval(tick, 1000);
+}
+
 // ---------- Reveal on scroll (home portfolio) ----------
 const reveals = document.querySelectorAll(".reveal");
 if (reveals.length && "IntersectionObserver" in window) {
@@ -254,7 +263,127 @@ if (workFilters) {
   });
 }
 
+// ---------- Text scramble (after GSAP's ScrambleText, as on fabric.codebydennis.com) ----------
+// Letters turn into random characters and settle back into the text from left to right.
+const SCRAMBLE_CHARS = "XYZxyzabc0$€£";
+const scramble = (el, text, duration = 600) => {
+  if (reduceMotionNow()) { el.textContent = text; return; }
+  cancelAnimationFrame(el._scramble || 0);
+  const start = performance.now();
+  const frame = (now) => {
+    const t = Math.min(1, (now - start) / duration);
+    const settled = Math.floor(t * text.length);
+    let out = text.slice(0, settled);
+    for (let i = settled; i < text.length; i++) {
+      out += text[i] === " " ? " " : SCRAMBLE_CHARS[(Math.random() * SCRAMBLE_CHARS.length) | 0];
+    }
+    el.textContent = out;
+    if (t < 1) el._scramble = requestAnimationFrame(frame);
+  };
+  el._scramble = requestAnimationFrame(frame);
+};
 function reduceMotionNow() { return matchMedia("(prefers-reduced-motion: reduce)").matches; }
+
+// Project cards: name and title scramble on the way in and again on the way out (mouse only;
+// on touch screens a tap would just flicker the text before the page changes).
+if (matchMedia("(hover: hover)").matches) document.querySelectorAll("[data-hover-scramble]").forEach((card) => {
+  const targets = [...card.querySelectorAll("[data-scramble]")];
+  targets.forEach((el) => (el.dataset.text = el.textContent));
+  if (!card.hasAttribute("aria-label")) card.setAttribute("aria-label", targets.map((el) => el.dataset.text || el.textContent).join(", "));
+  const run = () => targets.forEach((el) => scramble(el, el.dataset.text));
+  card.addEventListener("mouseenter", run);
+  card.addEventListener("mouseleave", run);
+});
+
+// Section headings scramble in once as they scroll into view.
+const scrollScramble = document.querySelectorAll("[data-scroll-scramble]");
+if (scrollScramble.length && "IntersectionObserver" in window) {
+  const seen = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      seen.unobserve(entry.target);
+      scramble(entry.target, entry.target.textContent, 900);
+    });
+  }, { rootMargin: "0px 0px -15% 0px" });
+  scrollScramble.forEach((el) => { el.setAttribute("aria-label", el.textContent); seen.observe(el); });
+}
+
+// A small pill follows the cursor over project cards, showing the project's name.
+const cursorTargets = document.querySelectorAll("[data-cursor-text]");
+if (cursorTargets.length && matchMedia("(hover: hover)").matches) {
+  const bubble = document.createElement("div");
+  bubble.className = "cursor-bubble";
+  bubble.setAttribute("aria-hidden", "true");
+  bubble.innerHTML = '<span></span><em>Step inside</em>';
+  document.body.append(bubble);
+  const label = bubble.querySelector("span"), invite = bubble.querySelector("em");
+  let x = 0, y = 0, bx = 0, by = 0, moving = 0, flip = false;
+  const follow = () => {
+    bx += (x - bx) * 0.2; by += (y - by) * 0.2; // eases behind the cursor
+    // Cards on the right half show the pill to the left of the cursor, so it never runs off screen.
+    bubble.style.transform = flip ? `translate3d(calc(${bx - 8}px - 100%), ${by + 20}px, 0)` : `translate3d(${bx + 14}px, ${by + 20}px, 0)`;
+    moving = Math.abs(x - bx) + Math.abs(y - by) > 0.3 ? requestAnimationFrame(follow) : 0;
+  };
+  document.addEventListener("mousemove", (event) => {
+    x = event.clientX; y = event.clientY;
+    if (!moving) moving = requestAnimationFrame(follow);
+  }, { passive: true });
+  cursorTargets.forEach((el) => {
+    el.addEventListener("mouseenter", (event) => {
+      const r = el.getBoundingClientRect();
+      flip = r.left + r.width / 2 > innerWidth / 2;
+      if (!bubble.classList.contains("is-active")) { bx = event.clientX; by = event.clientY; }
+      bubble.classList.add("is-active");
+      invite.hidden = !el.closest("a[href]"); // only project links get "Step inside"
+      scramble(label, el.dataset.cursorText);
+    });
+    el.addEventListener("mouseleave", () => bubble.classList.remove("is-active"));
+  });
+}
+
+// ---------- About: the parahouse difference (tabs and quarters stay in step) ----------
+const pillars = document.querySelector("[data-pillars]");
+if (pillars) {
+  const tabs = [...pillars.querySelectorAll("[data-pillar]")];
+  const quads = [...pillars.querySelectorAll("[data-quad]")];
+  const panels = [...pillars.querySelectorAll('[role="tabpanel"]')];
+  let current = 0, timer = 0;
+  const show = (i) => {
+    current = i;
+    tabs.forEach((t, k) => t.setAttribute("aria-selected", String(k === i)));
+    quads.forEach((q, k) => q.classList.toggle("is-active", k === i));
+    panels.forEach((p, k) => (p.hidden = k !== i));
+    // The glow sits behind whichever piece of the P is active.
+    const box = pillars.getBoundingClientRect(), q = quads[i].getBoundingClientRect();
+    pillars.style.setProperty("--gx", q.left - box.left + q.width / 2 + "px");
+    pillars.style.setProperty("--gy", q.top - box.top + q.height / 2 + "px");
+  };
+  const stop = () => { clearInterval(timer); timer = 0; };
+  tabs.forEach((t, i) => t.addEventListener("click", () => { stop(); show(i); }));
+  quads.forEach((q, i) => q.addEventListener("click", () => { stop(); show(i); }));
+  // With a mouse, hovering a tab or a piece of the P switches to it; touch screens keep tap to switch.
+  if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    [tabs, quads].forEach((list) => list.forEach((el, i) => el.addEventListener("mouseenter", () => { stop(); if (i !== current) show(i); })));
+  }
+  pillars.querySelector('[role="tablist"]').addEventListener("keydown", (event) => {
+    const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+    if (!step) return;
+    stop(); show((current + step + tabs.length) % tabs.length); tabs[current].focus();
+  });
+  // Touch: swipe left or right across the section to change tab.
+  let sx = 0, sy = 0;
+  pillars.addEventListener("touchstart", (e) => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  pillars.addEventListener("touchend", (e) => {
+    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) { stop(); show((current + (dx < 0 ? 1 : -1) + tabs.length) % tabs.length); }
+  }, { passive: true });
+  show(0);
+  if (reduceMotionNow()) {
+    pillars.querySelectorAll("animateTransform").forEach((a) => a.remove());
+  } else {
+    timer = setInterval(() => { if (!document.hidden) show((current + 1) % tabs.length); }, 5000); // cycles until the visitor picks one
+  }
+}
 
 // ---------- FAQ: answers slide open and closed instead of snapping ----------
 // The <details> stays the source of truth (works without JS); script only animates its height.
@@ -286,6 +415,35 @@ document.querySelectorAll("details.faq-item").forEach((item) => {
     run(item.offsetHeight, summary.offsetHeight, false);
   };
 });
+
+// ---------- A small dot that trails the cursor ----------
+// It lags slightly behind the pointer and settles when the pointer stops (no idle drift). No lag with reduced motion.
+if (matchMedia("(hover: hover)").matches) {
+  const dot = document.createElement("div");
+  dot.className = "cursor-dot";
+  dot.setAttribute("aria-hidden", "true");
+  document.body.append(dot);
+  const still = reduceMotionNow();
+  let tx = 0, ty = 0, dx = 0, dy = 0, frame = 0, visible = false;
+  const ease = still ? 1 : 0.14;
+  const step = () => {
+    dx += (tx - dx) * ease; dy += (ty - dy) * ease;
+    // Sits just above and to the right of the pointer, never on it (the cursor pill sits below).
+    dot.style.transform = `translate3d(${dx + 16}px, ${dy - 14}px, 0)`;
+    const settling = Math.abs(tx - dx) + Math.abs(ty - dy) > 0.2;
+    frame = visible && !document.hidden && settling ? requestAnimationFrame(step) : 0;
+  };
+  const wake = () => { if (!frame) frame = requestAnimationFrame(step); };
+  document.addEventListener("mousemove", (event) => {
+    if (!visible) { dx = event.clientX; dy = event.clientY; }
+    tx = event.clientX; ty = event.clientY;
+    visible = true;
+    dot.classList.add("is-visible");
+    wake();
+  }, { passive: true });
+  document.documentElement.addEventListener("mouseleave", () => { visible = false; dot.classList.remove("is-visible"); });
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && visible) wake(); });
+}
 
 // ---------- Intro greeting and page-change curtain ----------
 // First visit in a session: the <head> script shows "Hello" on the curtain; here we cycle it
@@ -421,6 +579,35 @@ function stepInside(link, url, img, frame, box, ready) {
 window.addEventListener("pageshow", (event) => {
   if (event.persisted) document.querySelectorAll(".step-zoom, .step-veil").forEach((el) => el.remove());
 });
+
+// ---------- Work page heading: the word glitches in once on arrival ----------
+const glitch = document.querySelector("[data-glitch]");
+if (glitch && !reduceMotion) {
+  const words = glitch.dataset.glitch.split("|");
+  const glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&/<>-_";
+  let index = 0;
+  const morph = (to) => {
+    const from = glitch.textContent;
+    const length = Math.max(from.length, to.length);
+    const start = performance.now();
+    const duration = 650;
+    const frame = (now) => {
+      const t = Math.min(1, (now - start) / duration);
+      let out = "";
+      for (let i = 0; i < length; i++) {
+        const settle = (i / length) * 0.7 + 0.3; // letters lock in from left to right
+        if (t >= settle) out += to[i] || "";
+        else if (t >= settle - 0.35) out += to[i] || from[i] ? glyphs[(Math.random() * glyphs.length) | 0] : "";
+        else out += from[i] || "";
+      }
+      glitch.textContent = out;
+      if (t < 1) requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  };
+  // Once, on arrival (after the intro if it's showing), then it stays still.
+  setTimeout(() => morph(words[index]), root.classList.contains("is-intro") ? 2300 : 450);
+}
 
 // ---------- Contact: the Pitch Kit's "Send brief" arrives with ?type=pitch ----------
 const eventType = document.getElementById("event_type");
@@ -625,6 +812,41 @@ const STRIP_PROJECTS = [ // newest first, as on the Work page
   }
 }
 
+// ---------- Services: offer names glitch when their card comes into focus ----------
+// The same letter-by-letter glitch as the Work heading (random glyphs that lock in from left to right),
+// playing once each time the mouse enters a card. Mouse only; screen readers keep the real name.
+// Touch screens play it when the card comes to the middle of the screen (see "Touch: cards light up" below).
+const offerGlitch = new Map();
+if (!reduceMotionNow()) {
+  const glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&/<>-_";
+  const mouse = matchMedia("(hover: hover) and (pointer: fine)").matches;
+  document.querySelectorAll(".offer").forEach((card) => {
+    const name = card.querySelector(".offer-name");
+    if (!name) return;
+    const text = name.textContent;
+    name.closest(".offer-title").setAttribute("aria-label", name.closest(".offer-title").textContent.trim());
+    let raf = 0;
+    const play = () => {
+      cancelAnimationFrame(raf);
+      if (!name.style.minWidth) name.style.minWidth = name.getBoundingClientRect().width + "px"; // no jiggle while letters change
+      const start = performance.now(), duration = 520;
+      const frame = (now) => {
+        const t = Math.min(1, (now - start) / duration);
+        let out = "";
+        for (let i = 0; i < text.length; i++) {
+          const settle = (i / text.length) * 0.7 + 0.3;
+          out += text[i] === " " || t >= settle ? text[i] : glyphs[(Math.random() * glyphs.length) | 0];
+        }
+        name.textContent = out;
+        if (t < 1) raf = requestAnimationFrame(frame);
+      };
+      raf = requestAnimationFrame(frame);
+    };
+    offerGlitch.set(card, play);
+    if (mouse) card.addEventListener("mouseenter", play);
+  });
+}
+
 // ---------- Back to work: return to the project you were on ----------
 // Came from the Work page: step back in history, so its scroll and filter come back exactly.
 // Otherwise (direct link, or from another page) open Work at this project's card.
@@ -745,11 +967,29 @@ addEventListener("pageshow", () => root.classList.remove("is-leaving"));
   }
 }
 
+// ---------- About, How we work: the steps light up in turn as they come on screen ----------
+{
+  const steps = [...document.querySelectorAll(".help-steps li")];
+  if (steps.length) {
+    const light = () => {
+      const due = steps.filter((li) => !li.classList.contains("is-lit") && li.getBoundingClientRect().top < innerHeight * 0.7); // well into view, so it's seen lighting
+      due.forEach((li, i) => { li.style.setProperty("--lit-delay", (i * 0.4).toFixed(1) + "s"); li.classList.add("is-lit"); });
+      if (steps.every((li) => li.classList.contains("is-lit"))) removeEventListener("scroll", queue);
+    };
+    let pending = 0;
+    const queue = () => { if (!pending) pending = setTimeout(() => { pending = 0; light(); }, 50); };
+    if (reduceMotionNow()) steps.forEach((li) => li.classList.add("is-lit"));
+    else { addEventListener("scroll", queue, { passive: true }); light(); }
+  }
+}
+
 // ---------- Touch: cards light up as they reach the middle of the screen (the touch version of hover) ----------
-// Home's project cards start dark; the one nearest the middle shows its image and draws its border.
+// Home's project cards start dark; the one nearest the middle shows its image, its name turns orange and
+// scrambles in once. Services cards get their orange border and glow, and the name glitches once.
 if (TOUCH && !reduceMotionNow()) {
   const groups = [
-    { cards: [...document.querySelectorAll(".pcard")] },
+    { cards: [...document.querySelectorAll(".pcard")], enter: (card) => card.querySelectorAll("[data-scramble]").forEach((s) => { s.dataset.text ??= s.textContent; scramble(s, s.dataset.text); }) },
+    { cards: [...document.querySelectorAll(".offer")], enter: (card) => offerGlitch.get(card)?.() },
   ].filter((g) => g.cards.length);
   if (groups.length) {
     let pending = 0;
@@ -767,7 +1007,7 @@ if (TOUCH && !reduceMotionNow()) {
         if (best === g.current) return;
         g.current?.classList.remove("is-focus");
         g.current = best;
-        if (best) best.classList.add("is-focus");
+        if (best) { best.classList.add("is-focus"); g.enter(best); }
       });
     };
     addEventListener("scroll", () => { if (!pending) pending = setTimeout(focus, 60); }, { passive: true });
@@ -776,8 +1016,14 @@ if (TOUCH && !reduceMotionNow()) {
   }
 }
 
-// ---------- Touch: tapping a project card dips it as the page opens ----------
+// ---------- Touch: tapping a project card dips it and shows "Step inside" as the doors close ----------
 if (TOUCH) {
+  document.querySelectorAll(".pcard, .work-card").forEach((card) => {
+    const host = card.querySelector(".work-media") || card;
+    const tag = document.createElement("span");
+    tag.className = "step-inside"; tag.setAttribute("aria-hidden", "true"); tag.textContent = "Step inside";
+    host.append(tag);
+  });
   document.addEventListener("click", (e) => { const card = e.target.closest(".pcard, .work-card"); if (card) card.classList.add("is-stepping"); }, true);
   addEventListener("pageshow", () => document.querySelectorAll(".is-stepping").forEach((c) => c.classList.remove("is-stepping")));
 }
@@ -796,6 +1042,7 @@ if (TOUCH && !reduceMotionNow()) {
 
 // ---------- Footer: "Let's work together" arrives once ----------
 // The headline rises line by line from behind an edge, the first time the block comes on screen (per page view).
+// On a mouse, the pill leans a few pixels toward a nearby cursor and springs back; on touch it gives one soft pulse instead.
 {
   const block = document.querySelector(".together");
   if (block && !reduceMotionNow() && "IntersectionObserver" in window) {
@@ -807,8 +1054,26 @@ if (TOUCH && !reduceMotionNow()) {
       if (!entries.some((e) => e.isIntersecting)) return;
       block.classList.add("is-in");
       io.disconnect();
+      if (TOUCH) setTimeout(() => block.querySelector(".talk-button")?.classList.add("is-pulse"), 2300);
     }, { threshold: 0.35 });
     io.observe(block);
+    const pill = block.querySelector(".talk-button");
+    if (pill && !TOUCH) {
+      let raf = 0;
+      addEventListener("mousemove", (e) => {
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          const r = pill.getBoundingClientRect();
+          const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+          const reach = Math.max(r.width, r.height) / 2 + 120; // starts leaning ~120px outside the pill
+          if (Math.hypot(dx, dy) > reach) { pill.style.translate = ""; return; }
+          const clamp = (v, m) => Math.max(-m, Math.min(m, v)).toFixed(1);
+          pill.style.translate = `${clamp(dx * 0.2, 22)}px ${clamp(dy * 0.4, 16)}px`;
+        });
+      }, { passive: true });
+      pill.addEventListener("mouseleave", () => { setTimeout(() => { if (!pill.matches(":hover")) pill.style.translate = ""; }, 60); });
+    }
   }
 }
 

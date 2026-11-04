@@ -1,6 +1,6 @@
 /* parahouse — site styles
-   Image-led and plain: flat colours (light.css sets the ivory, burgundy and tangerine palette), no gradients,
-   no hairline dividers, no bordered boxes, no small caps labels. Colours and type live in the tokens below. */
+   Image-led: light.css sets the ivory, burgundy and tangerine palette, with one key gradient for the moments
+   that should glow. No hairline dividers, no bordered boxes, no small caps labels. Colours and type live in the tokens below. */
 
 /* Type: Archivo (extended widths) for headings, Geist for everything else.
    SIL Open Font License (see /assets/fonts/OFL-*.txt), self-hosted, Latin subset. */
@@ -26,7 +26,9 @@
   --brand: #ff5a0f;       /* accent: a glowing, saturated orange. Logo, buttons, dots, current page; project pages set their own */
   --brand-ink: #1a0c04;   /* dark text on the tangerine */
   --brand-text: #ff7a33;  /* the orange as text on the dark ground */
-  --curtain: #36070f;     /* intro screen and page-change curtain */
+  --grad: linear-gradient(180deg, #ffc08a 0%, #ff7a1f 14%, #ff5a0f 46%, #f03a0a 72%, #9a1604 100%); /* the key gradient: a hot peach top, a long band of glowing orange, then a short fall to red */
+  --glow-soft: 0 0 32px rgba(255, 90, 15, .45); /* the light the orange gives off */
+  --curtain: linear-gradient(180deg, #1c0603 0%, #7a1c08 100%); /* intro screen and page-change curtain */
   --bg-top: #2e0c05;      /* ember at the top of the background */
   --logo: #7d6a5d;        /* client logos at rest: warm grey; white on hover */
   --wordmark: var(--fg);
@@ -135,7 +137,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
   opacity: 0; transition: opacity 1.4s ease, transform 7s ease-out; transform: scale(1.06);
 }
 .showcase-media img.active { opacity: 1; transform: scale(1); }
-.showcase::after { content: ""; position: absolute; inset: 0; background: #000; opacity: .3; pointer-events: none; } /* a flat shade so the headline reads on any photo */
+.showcase::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.3), rgba(0,0,0,0) 26%), linear-gradient(0deg, rgba(0,0,0,.62), rgba(0,0,0,0) 58%); pointer-events: none; }
 .hero-title {
   position: absolute; z-index: 2; left: var(--edge); right: var(--edge); bottom: calc(var(--edge) + 48px); margin: 0;
   font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase;
@@ -261,14 +263,15 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 
 /* Brand carousel: outlined squares drifting left, without pausing on hover.
    With reduced motion it becomes a still, wrapping grid. */
-.brand-marquee { display: flex; overflow: hidden; padding: clamp(28px, 4vw, 56px) 0; margin: 0 calc(-1 * var(--edge)); }
+.brand-marquee { display: flex; overflow: hidden; padding: clamp(28px, 4vw, 56px) 0; margin: 0 calc(-1 * var(--edge));
+  -webkit-mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
 .home-block.flush .brand-marquee { margin: 0; }
 .brand-track { list-style: none; margin: 0; padding: 0 var(--gap) 0 0; display: flex; gap: var(--gap); flex-shrink: 0; animation: brand-drift 70s linear infinite; }
 .brand-track li { flex: 0 0 auto; width: clamp(190px, 19vw, 300px); height: clamp(90px, 9vw, 130px); display: grid; place-items: center; padding: 0 clamp(30px, 3.6vw, 60px); }
 .brand-track .brand-logo { width: min(100%, calc(64px * var(--w) / var(--h))); }
 @keyframes brand-drift { to { transform: translateX(-100%); } }
 @media (prefers-reduced-motion: reduce) {
-  .brand-marquee { margin: 0; }
+  .brand-marquee { -webkit-mask: none; mask: none; margin: 0; }
   .brand-track { animation: none; flex-wrap: wrap; justify-content: center; flex-shrink: 1; padding: 0; }
   .brand-track[aria-hidden="true"] { display: none; }
 }
@@ -393,9 +396,23 @@ html.is-intro .showcase-media { animation-delay: 1.45s; }
 
 /* ---------- 404 ---------- */
 .notfound { min-height: 60vh; display: grid; align-content: center; gap: 24px; }
-.notfound-links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 12px 32px; }
-.notfound-links a { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(20px, 2.4vw, 34px); line-height: 1; }
-@media (hover: hover) and (pointer: fine) { .notfound-links a:hover { color: var(--brand-text); } }
+/* 404: a floor plan of the house. Walls and door swings are drawn in SVG; each room is a real link laid over it. */
+.floorplan { position: relative; width: 100%; max-width: 980px; aspect-ratio: 600 / 360; margin-top: clamp(12px, 3vw, 40px); }
+.floorplan-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.floorplan .wall { fill: none; stroke: var(--fg); stroke-opacity: .55; stroke-width: 3; stroke-linecap: square; }
+.floorplan .swing { fill: none; stroke: var(--muted); stroke-opacity: .5; stroke-width: 1; stroke-dasharray: 3 4; }
+.floorplan .missing { fill: color-mix(in srgb, var(--brand) 6%, transparent); stroke: var(--brand); stroke-width: 1.5; stroke-dasharray: 6 6; animation: missing-march 1.2s linear infinite; }
+@keyframes missing-march { to { stroke-dashoffset: -12; } }
+.room { position: absolute; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: clamp(8px, 1.4vw, 18px); border-radius: 4px; font-family: var(--font); font-size: clamp(12px, 1.2vw, 15px); font-weight: 500; color: var(--fg); transition: background-color .25s ease, color .25s ease; }
+.room small { font-size: .85em; opacity: .7; }
+a.room:focus-visible { background: color-mix(in srgb, var(--brand) 12%, transparent); color: var(--brand-text); }
+@media (hover: hover) and (pointer: fine) { a.room:hover { background: color-mix(in srgb, var(--brand) 12%, transparent); color: var(--brand-text); } }
+.room-missing { align-items: center; justify-content: center; color: var(--brand-text); }
+.room-missing > span:first-child { font-family: var(--display); font-weight: 700; font-stretch: 125%; font-size: clamp(22px, 3.4vw, 46px); line-height: 1; }
+.room .here { display: inline-flex; align-items: center; gap: 8px; color: var(--fg); }
+.room .here i { width: 8px; height: 8px; border-radius: 50%; background: var(--brand); box-shadow: 0 0 0 0 color-mix(in srgb, var(--brand) 60%, transparent); animation: here-pulse 1.8s ease-out infinite; }
+@keyframes here-pulse { to { box-shadow: 0 0 0 12px transparent; } }
+@media (prefers-reduced-motion: reduce) { .floorplan .missing, .room .here i { animation: none; } }
 
 /* Home: what your agency gets (reuses the About difference list, four across) */
 
@@ -452,6 +469,28 @@ a.about-portrait span { display: block; margin-top: 10px; }
   min-height: clamp(300px, 26vw, 400px); background: #000; color: var(--fg); border-radius: var(--radius);
 }
 .pcard-top { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; padding: 28px 26px; }
+.pcard-link { transition: transform var(--pc-ease); }
+.pcard-outline { position: absolute; inset: 0; border: 1px solid rgba(159, 161, 163, .35); border-radius: var(--radius); opacity: 0; transition: opacity var(--pc-ease); pointer-events: none; }
+.pcard-bubbles { height: 22px; }
+.bubble { position: relative; display: inline-flex; overflow: hidden; padding: 4px 10px 5px; border-radius: 99px; background: var(--fg); color: #000; }
+.bubble span { display: block; white-space: nowrap; font-size: 12.5px; line-height: 1.1; transition: transform var(--pc-ease); }
+.bubble span.copy { position: absolute; left: 10px; top: 4px; transform: translateY(200%); }
+@media (hover: hover) {
+  .pcard-link:hover { transform: translate(7px, -7px); }
+  .pcard-link:hover + .pcard-outline { opacity: 1; }
+  .pcard-link:hover .bubble span { transform: translateY(-200%); }
+  .pcard-link:hover .bubble span.copy { transform: translateY(0); }
+}
+/* The pill that follows the cursor over a project card */
+.cursor-bubble {
+  position: fixed; left: 0; top: 0; z-index: 60; pointer-events: none; display: flex; align-items: center; gap: 6px;
+  padding: 5px 12px 6px 11px; border-radius: 99px; background: #000;
+  color: var(--fg); font-size: 13px; white-space: nowrap; opacity: 0; transition: opacity .2s var(--ease-out) .1s;
+}
+.cursor-bubble.is-active { opacity: 1; transition-delay: 0s; }
+.cursor-bubble em { font-style: normal; color: var(--muted); }
+@media (hover: none) { .cursor-bubble { display: none; } }
+@media (prefers-reduced-motion: reduce) { .pcard-link, .bubble span, .pcard-outline { transition: none; } }
 .pcard-logo { display: flex; align-items: center; height: clamp(64px, 5.6vw, 84px); }
 .pcard-logo-img { display: block; height: 62%; aspect-ratio: var(--w) / var(--h); max-width: 100%; background: #fff; -webkit-mask: var(--src) left center / contain no-repeat; mask: var(--src) left center / contain no-repeat; }
 .pcard-wordmark { font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(20px, 1.7vw, 26px); line-height: 1; }
@@ -486,7 +525,7 @@ a.about-portrait span { display: block; margin-top: 10px; }
 .pcard-link { overflow: hidden; isolation: isolate; }
 .pcard-media { position: absolute; inset: 0; z-index: -1; opacity: 0; transition: opacity var(--pc-ease); pointer-events: none; }
 .pcard-media img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.08); transition: transform .6s var(--ease-out); }
-.pcard-media::after { content: ""; position: absolute; inset: 0; background: #000; opacity: .55; } /* flat shade so the name reads on any photo */
+.pcard-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.7) 0%, rgba(0,0,0,.45) 50%, rgba(0,0,0,.8) 100%); }
 @media (hover: hover) {
   .pcard-link:hover .pcard-media { opacity: 1; }
   .pcard-link:hover .pcard-media img { transform: scale(1); }
@@ -545,7 +584,7 @@ a.about-portrait span { display: block; margin-top: 10px; }
 .faq-item summary:focus-visible { outline: 1px solid var(--fg); outline-offset: 4px; border-radius: 6px; }
 
 /* Offer cards end with a direct ask */
-.offer-cta { justify-self: start; margin-top: 6px; padding: 12px 18px 13px; border-radius: 12px; background: var(--brand); color: var(--brand-ink); font-family: var(--font); font-size: 15px; font-weight: 500; transition: background-color .25s ease, color .25s ease; }
+.offer-cta { justify-self: start; margin-top: 6px; padding: 12px 18px 13px; border-radius: 99px; background: var(--brand); color: var(--brand-ink); font-family: var(--font); font-size: 15px; font-weight: 500; transition: background-color .25s ease, color .25s ease; }
 @media (hover: hover) and (pointer: fine) { .offer-cta:hover { background: var(--fg); color: var(--bg); } }
 
 .intro-link { display: block; width: fit-content; margin-top: 14px; color: var(--fg); text-decoration: underline; text-decoration-color: var(--brand); text-underline-offset: .35em; }
@@ -565,15 +604,20 @@ main { overflow-x: clip; } /* stretched rows may reach past the page edge; never
 /* Hidden until the float-in script places them, so nothing flashes in place first */
 @media (prefers-reduced-motion: no-preference) { .js:not(.float-ready) :is(.pcard, .work-card, .media.mosaic figure) { opacity: 0; } }
 
-/* The giant footer wordmark: solid tangerine */
-.footer-mark { color: var(--brand); }
+/* Two-tone headlines */
+.tone { color: var(--tone); }
+/* The giant footer wordmark carries the key gradient */
+.footer-mark { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
-/* ---------- "Let's talk": a plain button under the footer headline ---------- */
+/* ---------- "Let's talk": a pill under the footer headline ---------- */
 .talk-button {
-  display: inline-flex; align-items: center; height: 56px; margin-top: clamp(28px, 4vw, 48px); padding: 0 28px; border-radius: 12px;
+  display: inline-flex; align-items: center; height: 56px; margin-top: clamp(28px, 4vw, 48px); padding: 0 28px; border-radius: 999px;
+  translate: 0 0;
   background: var(--fg); color: var(--bg); font-family: var(--font); font-size: 18px; font-weight: 500;
-  transition: background-color .25s ease, color .25s ease, transform .16s var(--ease-out);
+  transition: background-color .25s ease, color .25s ease, transform .16s var(--ease-out), translate .45s cubic-bezier(.23,1,.32,1);
 }
+@keyframes talk-pulse { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.06); } }
+.talk-button.is-pulse { animation: talk-pulse .5s cubic-bezier(.23,1,.32,1); }
 
 @media (hover: hover) and (pointer: fine) {
   .talk-button:hover { background: var(--brand); color: var(--brand-ink); }
@@ -583,6 +627,9 @@ main { overflow-x: clip; } /* stretched rows may reach past the page edge; never
 
 /* ---------- Home hero slats (desktop): see site.js. The plain images stay underneath for touch screens. ---------- */
 .has-slats .showcase-media img { visibility: hidden; }
+/* the faint light division at each slat's edge, and a soft glassy sheen */
+.slat::before { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(90deg, rgba(255,255,255,.16) 0, rgba(255,255,255,0) 1.5px, rgba(255,255,255,0) 55%, rgba(255,255,255,.05) 100%); }
 .slats { position: absolute; inset: 0; perspective: 1400px; }
 .slat { position: absolute; top: 0; bottom: 0; will-change: transform; backface-visibility: visible; }
 .slat-face { position: absolute; inset: 0; background-repeat: no-repeat; opacity: 0; transition: opacity 1.4s ease; }
@@ -604,8 +651,17 @@ main { overflow-x: clip; } /* stretched rows may reach past the page edge; never
 .founder-link { margin-left: 1.2em; color: var(--fg); text-decoration: underline; text-decoration-color: var(--brand); text-underline-offset: .35em; }
 @media (hover: hover) and (pointer: fine) { .founder-link:hover { color: var(--brand-text); } }
 
-/* ---------- Services: an offer card's name turns tangerine on hover ---------- */
+/* ---------- Services: an offer card in focus lifts, warms up and its name glitches (site.js) ---------- */
+.offer { position: relative; isolation: isolate; }
+.offer::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; opacity: 0;
+  background: linear-gradient(180deg, rgba(239, 90, 31, .16) 0%, rgba(239, 90, 31, .04) 45%, rgba(239, 90, 31, 0) 100%); transition: opacity .35s ease; }
+.offer-name { display: inline-block; }
+.offer-tag { padding: 4px 10px 5px; border-radius: 99px; background: var(--brand); color: var(--brand-ink); font-family: var(--font); font-weight: 500; font-stretch: 100%; font-size: 12.5px; text-transform: none; }
+@media (prefers-reduced-motion: reduce) { .offer:hover, .offer:focus-within { transform: none; } }
 @media (hover: hover) and (pointer: fine) {
+  .offer { transition: transform .35s var(--ease-out), box-shadow .35s ease; }
+  .offer:hover, .offer:focus-within { transform: translateY(-6px); box-shadow: 0 22px 50px -24px rgba(239, 90, 31, .5); }
+  .offer:hover::before, .offer:focus-within::before { opacity: 1; }
   .offer:hover .offer-name, .offer:focus-within .offer-name { color: var(--brand-text); }
   .offer-name { transition: color .3s ease; }
 }
@@ -637,10 +693,20 @@ html { -webkit-tap-highlight-color: transparent; }
 a, button, summary, label, [role="button"], [role="tab"] { touch-action: manipulation; }
 button, .pill, .button, .offer-cta, .talk-button, .filters button, .next-pill { -webkit-user-select: none; user-select: none; }
 @media (hover: none), (pointer: coarse) {
-  /* Tapping a project card: it dips while the page opens */
+  /* Services: the card in the middle of the screen warms up, like hover on desktop */
+  .offer { transition: box-shadow .4s ease; }
+  .offer.is-focus { box-shadow: 0 22px 50px -24px rgba(255, 90, 15, .5); }
+  .offer.is-focus::before { opacity: 1; }
+  .offer-name { transition: color .4s ease; }
+  .offer.is-focus .offer-name { color: var(--brand-text); }
+  /* Tapping a project card: it dips, and "Step inside" slides up while the doors close */
   .pcard, .work-card { transition: transform .16s var(--ease-out); }
   .pcard:active, .work-card:active, .pcard.is-stepping, .work-card.is-stepping { transform: scale(.98); }
   .work-media { position: relative; }
+  .step-inside { position: absolute; left: 12px; bottom: 12px; z-index: 4; padding: 6px 12px 7px; border-radius: 99px; background: #000; color: #fffcf7;
+    font-family: var(--font); font-size: 13px; pointer-events: none;
+    opacity: 0; transform: translateY(6px); transition: opacity .2s ease, transform .25s var(--ease-out); }
+  .is-stepping .step-inside { opacity: 1; transform: none; }
   /* The P springs apart (site.js adds .is-spring as the doors open, and on tap) */
   .logo.is-spring .p-head { animation: p-head .7s cubic-bezier(.3,1.6,.5,1); }
   .logo.is-spring .p-stem { animation: p-stem .7s cubic-bezier(.3,1.6,.5,1); }
@@ -666,6 +732,7 @@ button, .pill, .button, .offer-cta, .talk-button, .filters button, .next-pill { 
 .chrome { top: max(var(--edge), env(safe-area-inset-top, 0px)); }
 .chrome-left { left: max(calc(var(--edge) - 5px), env(safe-area-inset-left, 0px)); }
 .chrome-right { right: max(var(--edge), env(safe-area-inset-right, 0px)); }
+.next-pill .muted { color: var(--panel-muted); }
 .next-pill { bottom: calc(var(--edge) + env(safe-area-inset-bottom, 0px)); }
 body { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }
 
@@ -684,7 +751,7 @@ body { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-are
 /* Step inside: a project card's image grows into the project hero's place before the page opens (site.js) */
 .step-veil { position: fixed; inset: 0; z-index: 89; background: var(--bg); opacity: 0; pointer-events: none; }
 /* Stepping back out: everything but the hero fades, then the hero shrinks into its card (site.js + head script) */
-html.is-leaving :is(.page, .site-footer, .chrome, .topnav, .next-pill) { opacity: 0; transition: opacity .26s ease; }
+html.is-leaving :is(.page, .site-footer, .chrome, .topnav, .next-pill, .cursor-dot) { opacity: 0; transition: opacity .26s ease; }
 /* Arriving by a card: the hero is already in place; the details then rise in one after another */
 @keyframes step-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 html.is-stepin .project-hero + .page > * { animation: step-rise .55s cubic-bezier(.23,1,.32,1) both; animation-delay: .62s; }
@@ -711,3 +778,55 @@ html.is-stepin :is(.topnav, .menu-toggle, .next-pill) { animation: step-rise .5s
 html.together-anim .together-title .ln { display: block; overflow: hidden; padding-bottom: .04em; margin-bottom: -.04em; }
 html.together-anim .together-title .ln > span { display: block; transform: translateY(105%); transition: transform 1.4s cubic-bezier(.19,1,.22,1); transition-delay: calc(var(--i) * .18s); }
 html.together-anim .together.is-in .together-title .ln > span { transform: none; }
+
+/* ---------- A small dot that trails the cursor ---------- */
+.cursor-dot {
+  position: fixed; left: 0; top: 0; z-index: 70; width: 10px; height: 10px; margin: -5px 0 0 -5px;
+  border-radius: 50%; background: #fff; mix-blend-mode: difference; pointer-events: none;
+  opacity: 0; transition: opacity .2s var(--ease-out);
+}
+.cursor-dot.is-visible { opacity: 1; }
+@media (hover: none) { .cursor-dot { display: none; } }
+
+/* Contact: the small dot on the send button */
+.button .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+/* ---------- About, How we work: each step lights up in turn as it comes on screen (site.js adds .is-lit) ---------- */
+.help-steps li { position: relative; padding-top: 20px; }
+.help-steps li::before { content: ""; position: absolute; left: 0; width: 100%; top: 0; height: 2px; background: var(--brand); box-shadow: 0 0 12px color-mix(in srgb, var(--brand) 60%, transparent); transform: scaleX(0); transform-origin: left; transition: transform .9s cubic-bezier(.65,0,.2,1) var(--lit-delay, 0s); }
+.help-steps li h3, .help-steps li p { transition: opacity .9s ease var(--lit-delay, 0s); }
+.js .help-steps li:not(.is-lit) h3, .js .help-steps li:not(.is-lit) p { opacity: .3; }
+.help-steps li.is-lit::before { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) { .help-steps li::before, .help-steps li h3, .help-steps li p { transition: none; } }
+
+/* ---------- About: the parahouse difference ----------
+   Three pieces of the parahouse P. The active piece fills with a slowly turning tangerine gradient and a glow
+   sits behind it; hovering a piece or a tab switches to it, and the tabs and text change with it. */
+.pillars { position: relative; margin-top: clamp(80px, 10vw, 150px); padding: clamp(56px, 7vw, 110px) var(--edge); overflow: hidden; }
+.pillars::before {
+  content: ""; position: absolute; z-index: 0; width: 70vmax; height: 70vmax; left: 0; top: 0;
+  transform: translate(calc(var(--gx, 30vw) - 50%), calc(var(--gy, 40vh) - 50%)); border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--glow) 45%, transparent), transparent);
+  transition: transform 1.1s cubic-bezier(.65,0,.2,1);
+}
+.pillars-inner { position: relative; z-index: 1; display: grid; gap: clamp(40px, 5vw, 80px); align-items: center; }
+@media (min-width: 900px) { .pillars-inner { grid-template-columns: 1fr 1fr; } }
+.pillars-visual svg { display: block; height: clamp(320px, 58vh, 560px); width: auto; max-width: 100%; margin: 0 auto; overflow: visible; }
+.pq { cursor: pointer; transition: transform .7s cubic-bezier(.65,0,.2,1); }
+.pq.is-active { transform: translate(var(--dx), var(--dy)); }
+.pq-base { fill: #1a1a1a; stroke-linejoin: round; transition: fill .4s ease; }
+@media (hover: hover) and (pointer: fine) { .pq:hover .pq-base { fill: #262626; } }
+.pq-glow { opacity: 0; transition: opacity .7s ease; }
+.pq.is-active .pq-glow { opacity: 1; }
+.pillars-copy { display: grid; gap: 28px; align-content: center; }
+.pillars-title { margin: 0; font-family: var(--display); font-weight: 700; font-stretch: 125%; text-transform: uppercase; font-size: clamp(30px, 4vw, 62px); line-height: .98; max-width: 13ch; }
+.pillar-tabs { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.pillar-tabs button {
+  height: 40px; padding: 0 16px; border: 0; border-radius: 99px; background: var(--surface); cursor: pointer;
+  font-family: var(--font); font-weight: 500; font-size: 15px; color: var(--muted); transition: color .3s ease, background-color .3s ease;
+}
+@media (hover: hover) and (pointer: fine) { .pillar-tabs button:hover { color: var(--fg); } }
+.pillar-tabs button[aria-selected="true"] { background: var(--fg); color: var(--bg); }
+.pillar-text { margin: 0; max-width: 46ch; min-height: 5.2em; font-size: clamp(17px, 1.45vw, 21px); line-height: 1.55; color: rgba(236,236,233,.75); animation: pillar-in .5s ease; }
+@keyframes pillar-in { from { opacity: 0; transform: translateY(6px); } }
+@media (prefers-reduced-motion: reduce) { .pillars::before, .pq, .pq-glow, .pillar-text { transition: none; animation: none; } }

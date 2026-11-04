@@ -73,21 +73,51 @@
 
     </div>
 
-    <div class="page about">
-      <section class="about-help" aria-labelledby="difference">
-        <h2 class="about-help-title" id="difference">Your team, with more hands</h2>
-        <ul class="help-cols three">
-          <li><h3>Your client</h3><p>We work in your templates, alongside your team. We never contact your client.</p></li>
-          <li><h3>Pitch to build</h3><p>Good-looking renders are easy. Buildable ones are harder. We design to real dimensions, so what your client approves is what gets built.</p></li>
-          <li><h3>Capacity</h3><p>No need to hire for a busy season. Bring us in for a pitch, a project or a few months.</p></li>
-        </ul>
-      </section>
-    </div>
+    <section class="pillars" data-pillars aria-labelledby="difference">
+      <div class="pillars-inner">
+        <div class="pillars-visual" aria-hidden="true">
+          <svg viewBox="70 60 335 575">
+            <defs>
+              <linearGradient id="pq-grad" gradientUnits="userSpaceOnUse" x1="90" y1="85" x2="385" y2="615">
+                <stop offset="0" stop-color="#ffc08a"/>
+                <stop offset=".45" stop-color="#ff5a0f"/>
+                <stop offset=".7" stop-color="#ffc08a"/>
+                <stop offset="1" stop-color="#7a2a0c"/>
+                <animateTransform attributeName="gradientTransform" type="rotate" from="0 237 350" to="360 237 350" dur="16s" repeatCount="indefinite"/>
+              </linearGradient>
+            </defs>
+            <g class="pq" data-quad="0" data-cursor-text="Your name" style="--dx: 0px; --dy: -14px">
+              <polygon class="pq-base" points="106.1,158.7 216.0,95.6 365.9,187.3 257.0,248.4"/>
+              <polygon class="pq-glow" points="106.1,158.7 216.0,95.6 365.9,187.3 257.0,248.4" fill="url(#pq-grad)"/>
+            </g>
+            <g class="pq" data-quad="1" data-cursor-text="Pitch to build" style="--dx: -12px; --dy: 7px">
+              <polygon class="pq-base" points="120.6,329.9 229.5,275.5 234.3,597.3 122.6,533.3"/>
+              <polygon class="pq-glow" points="120.6,329.9 229.5,275.5 234.3,597.3 122.6,533.3" fill="url(#pq-grad)"/>
+            </g>
+            <g class="pq" data-quad="2" data-cursor-text="Capacity" style="--dx: 12px; --dy: 7px">
+              <polygon class="pq-base" points="260.6,254.6 369.5,193.5 372.3,365.4 260.6,426.5"/>
+              <polygon class="pq-glow" points="260.6,254.6 369.5,193.5 372.3,365.4 260.6,426.5" fill="url(#pq-grad)"/>
+            </g>
+          </svg>
+        </div>
+        <div class="pillars-copy">
+          <h2 class="pillars-title" id="difference">Your team, with more hands</h2>
+          <ul class="pillar-tabs" role="tablist" aria-label="The parahouse difference">
+            <li role="presentation"><button type="button" role="tab" id="pt-0" aria-controls="pp-0" aria-selected="true" data-pillar="0">Your client</button></li>
+            <li role="presentation"><button type="button" role="tab" id="pt-1" aria-controls="pp-1" aria-selected="false" data-pillar="1">Pitch to build</button></li>
+            <li role="presentation"><button type="button" role="tab" id="pt-2" aria-controls="pp-2" aria-selected="false" data-pillar="2">Capacity</button></li>
+          </ul>
+          <p class="pillar-text" role="tabpanel" id="pp-0" aria-labelledby="pt-0">We work in your templates, alongside your team. We never contact your client.</p>
+          <p class="pillar-text" role="tabpanel" id="pp-1" aria-labelledby="pt-1" hidden>Good-looking renders are easy. Buildable ones are harder. We design to real dimensions, so what your client approves is what gets built.</p>
+          <p class="pillar-text" role="tabpanel" id="pp-2" aria-labelledby="pt-2" hidden>No need to hire for a busy season. Bring us in for a pitch, a project or a few months.</p>
+        </div>
+      </div>
+    </section>
 
     <div class="page about">
       <section class="about-help" aria-labelledby="how">
         <h2 class="about-help-title" id="how">How we work</h2>
-        <ol class="help-cols">
+        <ol class="help-cols help-steps">
           <li><h3>Brief</h3><p>Send the brief, venue, budget and deadline. We agree what we deliver.</p></li>
           <li><h3>Concept</h3><p>Options for your team to shape before your client sees them.</p></li>
           <li><h3>Design and render</h3><p>2D and 3D design and key-view renders, in your templates.</p></li>
@@ -112,6 +142,7 @@
     <p class="footer-mark" aria-hidden="true">parahouse</p>
     <div class="footer-meta">
       <p class="footer-studio">Built in Singapore</p>
+      <p class="footer-clock"><span data-clock>&nbsp;</span> SGT</p>
       <p class="footer-socials"><a class="social-icon" href="https://www.instagram.com/parahouse.co/" target="_blank" rel="noopener" aria-label="parahouse on Instagram"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></a></p>
     </div>
   </footer>

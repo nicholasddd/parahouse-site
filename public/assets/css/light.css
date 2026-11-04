@@ -3,26 +3,36 @@
    (each project page sets its own --brand, plus --brand-text darkened just enough to read on ivory, on its <html>). Never light text on a light background (Nicholas: "a huge no-no"). */
 :root { --bg: #fffcf7; --surface: #f8f1e7; --fg: #36070f; --muted: #7a4a50; --tone: #e04800; --line: #efe6da;
   --pill: rgba(255, 252, 247, .8); --pill-fg: #36070f; --panel: #fffcf7; --panel-fg: #36070f; --panel-muted: #7a4a50;
-  --brand: #ff6a00; --brand-text: #e04800; --brand-ink: #36070f; --logo: #8a5f64; color-scheme: light; }
-/* Home project cards: light cards with burgundy type; on hover (or in view on phones) the photo fades in under a dark shade and the type turns ivory */
-.pcard-link { background: var(--surface); color: var(--fg); transition: color .3s ease; }
+  --brand: #ff6a00; --brand-text: #e04800; --brand-ink: #36070f; --logo: #8a5f64;
+  --grad: linear-gradient(180deg, #ffe8d2 0%, #ffa860 20%, #ff6a00 48%, #c8360a 72%, #36070f 100%);
+  --glow-soft: 0 0 28px rgba(255, 106, 0, .35); color-scheme: light; }
+.cursor-bubble { --fg: #fffcf7; --muted: #d6b4b0; background: #36070f; }
+/* Home project cards: light cards with burgundy type; on hover (or in view on phones) the photo fades in under a dark veil and the type turns ivory */
+.pcard-link { --pc-ink: #fffcf7; background: var(--surface); color: var(--fg); transition: transform var(--pc-ease), color .3s ease; }
+.bubble { color: var(--pc-ink); }
+.pcard-outline { border-color: rgba(54, 7, 15, .25); }
 .pcard-logo-img { background: var(--fg); transition: background-color .3s ease; }
 .pcard-sub { color: var(--muted); }
 .pcard-media { background: #36070f; } /* dark under the photo, so ivory type never sits on the light card while the photo loads */
-@media (hover: hover) { .pcard-link:hover { --fg: #fffcf7; --muted: #fffcf7; } }
-@media (hover: none), (pointer: coarse) { .pcard.is-focus .pcard-link { --fg: #fffcf7; --muted: #fffcf7; } }
-/* the footer is the occasional dark section: burgundy, with a solid tangerine wordmark */
+@media (hover: hover) { .pcard-link:hover { --fg: #fffcf7; --muted: rgba(255, 252, 247, .8); --pc-ink: #36070f; } }
+@media (hover: none), (pointer: coarse) { .pcard.is-focus .pcard-link { --fg: #fffcf7; --muted: rgba(255, 252, 247, .8); --pc-ink: #36070f; } }
+/* the footer is the occasional dark section: burgundy, with the wordmark fading ivory to tangerine */
 .site-footer { --fg: #fffcf7; --bg: #36070f; --surface: #4a121c; --muted: #d6b4b0; --logo: #d6b4b0;
+  --grad: linear-gradient(180deg, #ffe8d2 0%, #ffa860 40%, #ff6a00 100%);
   background: #36070f; color: var(--fg);
   margin-top: clamp(96px, 12vw, 200px); padding-top: clamp(88px, 11vw, 180px); } /* ivory breathing room before the burgundy starts */
 /* contrast: never light on light. Tangerine fills carry dark burgundy text, white only sits on burgundy */
-.offer-cta { background: var(--brand); color: var(--brand-ink); }
+.offer-cta, .offer-tag { background: var(--brand); color: var(--brand-ink); }
 .site-footer .talk-button { background: var(--fg); color: var(--bg); }
 @media (hover: hover) and (pointer: fine) {
   .offer-cta:hover, .button:hover { background: var(--fg); color: var(--bg); }
   .site-footer .talk-button:hover { background: var(--brand); color: var(--brand-ink); }
   .brand-track li:hover .brand-logo { background-color: var(--brand); }
 }
+/* About: the difference section had light text and near-black shapes made for the dark site */
+.pillar-text { color: color-mix(in srgb, var(--fg) 82%, transparent); }
+.pq-base { fill: #f1e6d8; }
+@media (hover: hover) and (pointer: fine) { .pq:hover .pq-base { fill: #e8d8c6; } }
 /* Services cards: a flat warm panel on the ivory page, no border */
 .offer { background: var(--surface); }
 /* Top-right menu: no drop shadow on ivory. Over a picture (project heroes, Home's showcase) site.js samples the image
