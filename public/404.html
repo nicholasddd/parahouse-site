@@ -19,8 +19,7 @@
   <script>window.PH_CURTAINS={"/portfolio/cetaphil-feel-it-in-30/": "#0e204a", "/portfolio/tsubaki-20th-anniversary/": "#4a0e12", "/portfolio/ora-5-unveiling/": "#0e4a46", "/portfolio/carlsberg-cny-2026-supermarket-activation/": "#4a0e12", "/portfolio/propw-token2049/": "#2a0e4a", "/portfolio/coinw-token2049-afterparty-2025/": "#420e4a", "/portfolio/audemars-piguet-staff-party/": "#0e4a3b", "/portfolio/zacapa-centenario-23-vr/": "#4a2c0e", "/portfolio/tsubaki-brand-refresh/": "#4a0e12", "/portfolio/lvmh-beauty-dinner-and-dance/": "#4a0e2f", "/portfolio/goodwoof-good-pet-fair/": "#4a2a0e", "/portfolio/coinw-token2049-afterparty-2024/": "#2e0e4a", "/portfolio/don-julio-ultima-glorifier/": "#4a360e", "/portfolio/1664-brut-private-trade-event/": "#0e164a"}</script>
     <link rel="preload" href="/assets/fonts/geist.woff" as="font" type="font/woff" crossorigin>
   <link rel="preload" href="/assets/fonts/archivo-wide.woff" as="font" type="font/woff" crossorigin>
-  <link rel="preload" href="/assets/fonts/geist-mono.woff" as="font" type="font/woff" crossorigin>
-  <link rel="stylesheet" href="/assets/css/site.css">
+    <link rel="stylesheet" href="/assets/css/site.css">
   <link rel="stylesheet" href="/assets/css/light.css">
   <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/*"},"eagerness":"moderate"}]}</script>
   <script src="/assets/js/site.js" defer></script>
@@ -53,32 +52,21 @@
 
   <main id="main">
     <div class="page notfound">
-      <h1 class="statement">Wrong room.</h1>
-      <p class="lede">This page isn’t part of the house. Pick a room.</p>
-      <div class="floorplan">
-        <svg class="floorplan-lines" viewBox="0 0 600 360" aria-hidden="true">
-          <path class="wall" d="M20 20H580V340H510M470 340H20V20
-            M260 20V120M260 160V200
-            M440 20V60M440 100V200
-            M20 200H100M140 200H300M340 200H500M540 200H580
-            M200 200V250M200 290V340
-            M400 200V250M400 290V340"/>
-          <path class="swing" d="M260 120A40 40 0 0 1 300 160M440 60A40 40 0 0 0 400 100M100 200A40 40 0 0 0 140 240M300 200A40 40 0 0 1 340 240M500 200A40 40 0 0 0 540 240M200 250A40 40 0 0 1 240 290M400 250A40 40 0 0 0 360 290M470 340A40 40 0 0 1 510 300"/>
-          <rect class="missing" x="212" y="212" width="176" height="116" rx="4"/>
-        </svg>
-        <a class="room" href="/portfolio/" style="left:3.333%;top:5.556%;width:40%;height:50%"><span>Work</span></a>
-        <a class="room" href="/services/" style="left:43.333%;top:5.556%;width:30%;height:50%"><span>Services</span></a>
-        <a class="room" href="/about/" style="left:73.333%;top:5.556%;width:23.333%;height:50%"><span>About</span></a>
-        <a class="room" href="/contact/" style="left:3.333%;top:55.556%;width:30%;height:38.889%"><span>Contact</span></a>
-        <div class="room room-missing" style="left:33.333%;top:55.556%;width:33.333%;height:38.889%"><span>404</span><span class="here"><i aria-hidden="true"></i>You are here</span></div>
-        <a class="room" href="/" style="left:66.667%;top:55.556%;width:30%;height:38.889%"><span>Entrance</span><small>Home</small></a>
-      </div>
+      <h1 class="statement">Wrong room</h1>
+      <p class="lede">This page isn’t part of the house. Try one of these:</p>
+      <ul class="notfound-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/portfolio/">Work</a></li>
+        <li><a href="/services/">Services</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
     </div>
   </main>
   <footer class="site-footer">
     <div class="together">
       <h2 class="together-title">Let’s work<br>together</h2>
-      <div class="together-rule"><a class="talk-button" href="/contact/" data-label="Contact"><span>Let’s talk</span><span class="talk-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span></a></div>
+      <a class="talk-button" href="/contact/" data-label="Contact"><span>Let’s talk</span></a>
     </div>
     <div class="footer-strip" aria-label="Recent projects">
         <a href="/portfolio/cetaphil-feel-it-in-30/" class="strip-item s0" data-label="Cetaphil"><img src="/assets/img/projects/cetaphil-feel-it-in-30/second-800.webp" alt="Cetaphil Feel It in 30 Roadshow" width="2000" height="1250" loading="lazy"></a>
@@ -90,9 +78,8 @@
     </div>
     <p class="footer-mark" aria-hidden="true">parahouse</p>
     <div class="footer-meta">
-      <div><span class="label">Studio</span><span>Built in Singapore</span></div>
-      <div><span class="label">Local time</span><span><span data-clock>&nbsp;</span> SGT</span></div>
-      <div class="footer-socials"><span class="label">Socials</span><span><a class="social-icon" href="https://www.instagram.com/parahouse.co/" target="_blank" rel="noopener" aria-label="parahouse on Instagram"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></a></span></div>
+      <p class="footer-studio">Built in Singapore</p>
+      <p class="footer-socials"><a class="social-icon" href="https://www.instagram.com/parahouse.co/" target="_blank" rel="noopener" aria-label="parahouse on Instagram"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></a></p>
     </div>
   </footer>
 </body>
