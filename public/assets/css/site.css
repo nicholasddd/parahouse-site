@@ -313,6 +313,7 @@ h1, h2, h3 { margin: 0; font-weight: 500; }
 .about-text { display: grid; gap: 24px; max-width: 34ch; font-size: 17px; line-height: 1.6; position: relative; }
 .about-text p { margin: 0; }
 @media (min-width: 900px) { .about-text { padding-top: 40px; max-width: calc(34ch - 64px); } }
+@media (max-width: 899px) { .about-text { padding-top: 32px; } }
 .about-portrait { margin: 0; }
 .about-portrait img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--radius); background: var(--surface); }
 .about-portrait figcaption { margin-top: 10px; }
