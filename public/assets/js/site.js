@@ -617,6 +617,11 @@ if (glitch && !reduceMotion) {
 const eventType = document.getElementById("event_type");
 if (eventType && new URLSearchParams(location.search).get("type") === "pitch") eventType.value = "Pitch support";
 
+// ---------- Contact: a package's button on Services arrives with ?package=House%20Call ----------
+const packageField = document.getElementById("package");
+const packageName = new URLSearchParams(location.search).get("package");
+if (packageField && [...packageField.options].some((option) => option.value === packageName)) packageField.value = packageName;
+
 // ---------- Project images: lusion.co's featured-work entry and scroll curve ----------
 // Lusion draws its project images in WebGL. Two parts of it are rebuilt here, with the same numbers:
 //  1. Entry, timed when an image first comes on screen (once per visit; it stays open after that): its visible area opens

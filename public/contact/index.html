@@ -81,7 +81,20 @@
               </select>
             </div>
           </div>
-          <div class="field"><label for="event_date">Deadline or event date (if known)</label><input id="event_date" name="event_date" maxlength="80" placeholder="e.g. Pitch on Friday, event in March"></div>
+          <div class="row">
+            <div class="field"><label for="event_date">Deadline or event date (if known)</label><input id="event_date" name="event_date" maxlength="80" placeholder="e.g. Pitch on Friday, event in March"></div>
+            <div class="field"><label for="package">Package</label>
+              <select id="package" name="package">
+                <option value="">Not sure yet</option>
+                <option>House Call</option>
+                <option>House Party</option>
+                <option>Full House</option>
+                <option>Housemate</option>
+                <option>In-House</option>
+                <option>House Rules</option>
+              </select>
+            </div>
+          </div>
           <div class="field"><label for="message">What do you need?</label><textarea id="message" name="message" required maxlength="5000" placeholder="The brief, the venue, and where you need us: concept, 2D, 3D, renders or drawings."></textarea></div>
           <div class="hp" aria-hidden="true"><label for="website">Leave this empty</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
           <div><button class="button" type="submit">Send brief <span class="dot" aria-hidden="true"></span></button></div>

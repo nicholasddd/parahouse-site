@@ -2,7 +2,7 @@
 // Static files in /public are served by Cloudflare directly (free, no Worker run).
 // This code only runs for /api/* and /assets/video/* (see run_worker_first in wrangler.jsonc).
 
-const MAX = { name: 120, email: 200, company: 160, event_type: 80, event_date: 80, message: 5000 };
+const MAX = { name: 120, email: 200, company: 160, event_type: 80, event_date: 80, package: 40, message: 5000 };
 
 export default {
   async fetch(request, env) {
@@ -66,6 +66,7 @@ async function handleContact(request, env) {
     `Company: ${fields.company || "-"}`,
     `Event type: ${fields.event_type || "-"}`,
     `Event date: ${fields.event_date || "-"}`,
+    `Package: ${fields.package || "-"}`,
     "",
     fields.message,
   ].join("\n");
